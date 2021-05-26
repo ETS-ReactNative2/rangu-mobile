@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   actualStatusText: {
-    color: '#f75175',
-    //color: '#00fc6c',
+    //color: '#f75175',
+    color: '#00fc6c',
     fontWeight: 'bold',
     fontSize: 16,
     marginLeft: 10,
