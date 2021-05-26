@@ -19,7 +19,7 @@ const dishes = [
     dishName: 'Tripple Mother Fucker Hamburger 🍔',
     orderHour: '15:32',
     statusDone: true,
-    comment: 'No pickles and more cheese and uma porrada de coisa que eu acho gostoso, tudinho num delicioso lanche bem feitinho delicia 😋',
+    comment: 'No pickles and more cheese and uma porrada de coisa que eu acho gostoso, tudinho num delicioso lanche bem feitinho delicia 😋!!!',
   },
   {
     key: String(Math.random()),
