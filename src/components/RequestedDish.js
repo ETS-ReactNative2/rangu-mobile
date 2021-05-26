@@ -16,72 +16,107 @@ const dishes = [
     key: String(Math.random()),
     personProfileImg: img1,
     personName: 'Leonardo',
-    dishName: 'Hamburger 🍔',
+    dishName: 'Tripple Mother Fucker Hamburger 🍔',
     orderHour: '15:32',
-    statusDone: false,
+    statusDone: true,
+    comment: 'No pickles and more cheese and uma porrada de coisa que eu acho gostoso, tudinho num delicioso lanche bem feitinho delicia 😋',
   },
   {
     key: String(Math.random()),
     personProfileImg: img2,
-    name: 'Gian',
+    personName: 'Gian',
+    dishName: 'Macarone',
+    orderHour: '15:33',
+    statusDone: false,
+    comment: 'Extra cheese',
   },
   {
     key: String(Math.random()),
     personProfileImg: img3,
-    name: 'Chinchete',
+    personName: 'Chinchete',
+    dishName: 'Espetinho do seu Correia',
+    orderHour: '15:34',
+    statusDone: false,
+    comment: '',
   },
   {
     key: String(Math.random()),
     personProfileImg: img4,
-    name: 'Luiz',
+    personName: 'Luiz',
+    dishName: 'Onion Rings',
+    orderHour: '15:32',
+    statusDone: true,
+    comment: '',
   },
   {
     key: String(Math.random()),
     personProfileImg: img5,
-    name: 'Henrrique',
+    personName: 'Henrrique',
+    dishName: 'Hamburger 🍔',
+    orderHour: '15:32',
+    statusDone: true,
+    comment: 'Double bacon',
   },
   {
     key: String(Math.random()),
     personProfileImg: img6,
-    name: 'Ricardo',
+    personName: 'Ricardo',
+    dishName: 'Hamburger 🍔',
+    orderHour: '15:32',
+    statusDone: false,
+    comment: 'Without salad',
   },
   {
     key: String(Math.random()),
     personProfileImg: img7,
-    name: 'Andre',
+    personName: 'Andre',
+    dishName: 'Caviar',
+    orderHour: '15:32',
+    statusDone: true,
+    comment: '',
   },
 ];
 
 export default function RequestedDish() {
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Image style={styles.profileImage} source={img1} />
-            <Text style={styles.description}>
-              <Text style={styles.bold}>You</Text> ordered <Text style={styles.bold}>Hambunger</Text>
-            </Text>
-          </View>
-
-          <View style={styles.cardBody}>
-            <Text style={styles.observation}>No pickles and more cheese </Text>
-          </View>
-
-          <View style={styles.cardFooter}>
-            <View style={styles.status}>
-              <Text style={styles.statusText}>Status:</Text>
-              <Text style={styles.actualStatusText}>Preparing</Text>
+      {dishes.map((dishe) => (
+        <View style={styles.container} key={dishe.key}>
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <Image style={styles.profileImage} source={dishe.personProfileImg} />
+              <Text style={styles.description}>
+                <Text style={styles.bold}>{dishe.personName}</Text> ordered <Text style={styles.bold}>{dishe.dishName}</Text>
+              </Text>
             </View>
-            <View style={styles.status}>
-              <Ionicons name="ios-time-outline" color="#fff" size={18} />
-              <Text style={styles.time}>15:35</Text>
+            {dishe.comment !== '' ?
+              <View style={styles.cardBody}>
+                <Text style={styles.observation}>{dishe.comment}</Text>
+              </View>
+              : null}
+
+            <View style={styles.cardFooter}>
+              <View style={styles.status}>
+                <Text style={styles.statusText}>Status:</Text>
+                {dishe.statusDone == true ?
+                  <Text style={[styles.actualStatusText, { color: '#00fc6c', }]}>Ready</Text>
+                  :
+                  <Text style={[styles.actualStatusText, { color: '#f75175', }]}>Preparing</Text>
+                }
+
+              </View>
+              <View style={styles.status}>
+                <Ionicons name="ios-time-outline" color="#fff" size={18} />
+                <Text style={styles.time}>{dishe.orderHour}</Text>
+              </View>
+
             </View>
 
           </View>
-
         </View>
-      </View>
+
+      ))}
+
     </ScrollView>
   );
 }
@@ -99,7 +134,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#1e222b",
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 0,
     padding: 15,
   },
   cardHeader: {
@@ -110,6 +145,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     marginLeft: 15,
+    marginRight: 80,
   },
   bold: {
     fontWeight: 'bold',
@@ -135,8 +171,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   actualStatusText: {
-    //color: '#f75175',
-    color: '#00fc6c',
     fontWeight: 'bold',
     fontSize: 16,
     marginLeft: 10,

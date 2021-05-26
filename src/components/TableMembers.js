@@ -15,39 +15,39 @@ import img7 from '../../assets/images/Profile/20210121_17292.jpg';
 const people = [
     {
         key: String(Math.random()),
-        img: img1,
-        name: 'Leonardo',
+        personProfileImg: img1,
+        personName: 'Leonardo',
     },
 
     {
         key: String(Math.random()),
-        img: img5,
-        name: 'Henrrique',
+        personProfileImg: img5,
+        personName: 'Henrrique',
     },
     {
         key: String(Math.random()),
-        img: img6,
-        name: 'Ricardo',
+        personProfileImg: img6,
+        personName: 'Ricardo',
     },
     {
         key: String(Math.random()),
-        img: img7,
-        name: 'Andre',
+        personProfileImg: img7,
+        personName: 'Andre',
     },
     {
         key: String(Math.random()),
-        img: img2,
-        name: 'Gian',
+        personProfileImg: img2,
+        personName: 'Gian',
     },
     {
         key: String(Math.random()),
-        img: img3,
-        name: 'Chinchete',
+        personProfileImg: img3,
+        personName: 'Chinchete',
     },
     {
         key: String(Math.random()),
-        img: img4,
-        name: 'Luiz',
+        personProfileImg: img4,
+        personName: 'Luiz',
     },
 ];
 
@@ -56,8 +56,8 @@ export default function Suggestions() {
         <ScrollView style={styles.container} horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingLeft: 16, }}>
             {people.map((person) => (
                 <TouchableOpacity style={styles.person} key={person.key}>
-                    <Image style={styles.profileImage} source={person.img} />
-                    <Text style={styles.name}>{person.name}</Text>
+                    <Image style={styles.profileImage} source={person.personProfileImg} />
+                    <Text style={styles.name}>{person.personName}</Text>
                 </TouchableOpacity>
             ))}
         </ScrollView >
