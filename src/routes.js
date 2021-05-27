@@ -3,7 +3,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Feather } from '@expo/vector-icons';
 
 
 import StartScreen from '../src/screens/Start';
@@ -14,6 +14,7 @@ import HomeScreen from '../src/screens/Home';
 import MenuScreen from '../src/screens/Menu';
 import NotificationScreen from '../src/screens/Notification';
 import SettingsScreen from '../src/screens/Settings';
+import CheckScreen from '../src/screens/Check';
 
 
 import MenuButton from './components/MenuButton';
@@ -40,9 +41,9 @@ const icons = {
         lib: AntDesign,
         name: 'home',
     },
-    Wallet: {
-        lib: AntDesign,
-        name: 'wallet',
+    Check: {
+        lib: Feather,
+        name: 'check-circle',
     },
     Notifications: {
         lib: Ionicons,
@@ -88,10 +89,10 @@ export function Navigation() {
                 }}
             />
             <Tab.Screen
-                name="Wallet"
-                component={HomeScreen}
+                name="Check"
+                component={CheckScreen}
                 options={{
-                    title: 'Wallet',
+                    title: 'Check',
                 }}
             />
             <Tab.Screen

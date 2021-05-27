@@ -17,7 +17,7 @@ const dishes = [
     personProfileImg: img1,
     personName: 'Leonardo',
     dishName: 'Tripple Mother Fucker Hamburger 🍔',
-    orderHour: '15:32',
+    orderHour: '15:43',
     statusDone: true,
     comment: 'No pickles and more cheese and uma porrada de coisa que eu acho gostoso, tudinho num delicioso lanche bem feitinho delicia 😋!!!',
   },
@@ -26,7 +26,7 @@ const dishes = [
     personProfileImg: img2,
     personName: 'Gian',
     dishName: 'Macarone',
-    orderHour: '15:33',
+    orderHour: '15:42',
     statusDone: false,
     comment: 'Extra cheese',
   },
@@ -35,7 +35,7 @@ const dishes = [
     personProfileImg: img3,
     personName: 'Chinchete',
     dishName: 'Espetinho do seu Correia',
-    orderHour: '15:34',
+    orderHour: '15:39',
     statusDone: false,
     comment: '',
   },
@@ -44,7 +44,7 @@ const dishes = [
     personProfileImg: img4,
     personName: 'Luiz',
     dishName: 'Onion Rings',
-    orderHour: '15:32',
+    orderHour: '15:38',
     statusDone: true,
     comment: '',
   },
@@ -53,7 +53,7 @@ const dishes = [
     personProfileImg: img5,
     personName: 'Henrrique',
     dishName: 'Hamburger 🍔',
-    orderHour: '15:32',
+    orderHour: '15:35',
     statusDone: true,
     comment: 'Double bacon',
   },
@@ -97,17 +97,17 @@ export default function RequestedDish() {
 
             <View style={styles.cardFooter}>
               <View style={styles.status}>
-                <Text style={styles.statusText}>Status:</Text>
+                <Text style={styles.textStatus}>Status:</Text>
                 {dishe.statusDone == true ?
-                  <Text style={[styles.actualStatusText, { color: '#00fc6c', }]}>Ready</Text>
+                  <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Ready</Text>
                   :
-                  <Text style={[styles.actualStatusText, { color: '#f75175', }]}>Preparing</Text>
+                  <Text style={[styles.textActualStatus, { color: '#f75175', }]}>Preparing</Text>
                 }
 
               </View>
               <View style={styles.status}>
                 <Ionicons name="ios-time-outline" color="#fff" size={18} />
-                <Text style={styles.time}>{dishe.orderHour}</Text>
+                <Text style={styles.textTime}>{dishe.orderHour}</Text>
               </View>
 
             </View>
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   observation: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 18,
   },
   cardFooter: {
     marginTop: 15,
@@ -166,19 +166,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  statusText: {
+  textStatus: {
     color: '#fff',
     fontSize: 16,
   },
-  actualStatusText: {
+  textActualStatus: {
     fontWeight: 'bold',
     fontSize: 16,
     marginLeft: 10,
 
   },
-  time: {
+  textTime: {
     color: '#fff',
-    marginLeft: 3,
+    marginLeft: 5,
+    fontSize: 15,
   }
 
 });
