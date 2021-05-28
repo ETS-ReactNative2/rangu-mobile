@@ -85,7 +85,7 @@ export default function RequestedDish() {
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <Image style={styles.profileImage} source={dishe.personProfileImg} />
-              <Text style={styles.description}>
+              <Text style={styles.textDescription}>
                 <Text style={styles.bold}>{dishe.personName}</Text> ordered <Text style={styles.bold}>{dishe.dishName}</Text>
               </Text>
             </View>
@@ -109,9 +109,7 @@ export default function RequestedDish() {
                 <Ionicons name="ios-time-outline" color="#fff" size={18} />
                 <Text style={styles.textTime}>{dishe.orderHour}</Text>
               </View>
-
             </View>
-
           </View>
         </View>
 
@@ -123,7 +121,9 @@ export default function RequestedDish() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingBottom: 16,
   },
   profileImage: {
     borderRadius: 40,
@@ -141,9 +141,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  description: {
+  textDescription: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 17,
     marginLeft: 15,
     marginRight: 80,
   },
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   observation: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 14,
   },
   cardFooter: {
     marginTop: 15,
@@ -168,18 +168,18 @@ const styles = StyleSheet.create({
   },
   textStatus: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
   },
   textActualStatus: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14,
     marginLeft: 10,
 
   },
   textTime: {
     color: '#fff',
     marginLeft: 5,
-    fontSize: 15,
+    fontSize: 14,
   }
 
 });

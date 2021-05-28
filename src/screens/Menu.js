@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        height: 61,
+        height: 55,
         padding: 16,
         flexDirection: 'row',
         alignItems: 'center',
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     textMenu: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: 'bold',
     },
 });

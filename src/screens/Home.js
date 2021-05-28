@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     },
     TableActivity: {
         padding: 16,
+        alignItems: 'center',
     },
     textTableMembers: {
         color: '#fff',
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     },
     textTableActivity: {
         color: '#fff',
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
     },
 });

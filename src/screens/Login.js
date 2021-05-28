@@ -97,7 +97,7 @@ export default function LogintScreen({ navigation }) {
 
                     <View style={styles.containerInputtext}>
 
-                        <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} />
+                        <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#000'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} />
 
                     </View>
                     <View style={styles.containerInputtext}>
@@ -132,7 +132,7 @@ export default function LogintScreen({ navigation }) {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: 'rgba(201, 97, 93, 1)',
+        backgroundColor: 'rgba(104, 5, 0, 1)',
         alignItems: "center",
         justifyContent: "center",
         width: "100%",

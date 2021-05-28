@@ -15,7 +15,7 @@ const foods = [
     {
         key: String(Math.random()),
         foodImg: img1,
-        dishName: 'Big Mac',
+        dishName: 'Mc-Flurry Kopenhagen Trufa Lingua De Gato - Chocolate',
         eta: '5 min',
         price: 'R$ 35.99',
         description: 'Não existe nada igual. Dois hambúrgueres, alface, queijo e molho especial, cebola e picles num pão com gergelim. O sabor de McDonald’s triplamente delicioso. Com três hambúrgueres de carne 100% bovina, queijo derretido, cebola, picles, ketchup e mostarda.',
@@ -79,12 +79,12 @@ export default function DishCards() {
                         <View style={styles.cardHeader}>
                             <Image style={styles.foodImage} source={food.foodImg} />
                             <View style={styles.foodName}>
-                                <Text style={styles.textFoodName} numberOfLines={4}>{food.dishName}</Text>
+                                <Text style={styles.textFoodName} numberOfLines={3}>{food.dishName}</Text>
                             </View>
 
                             <View>
                                 <TouchableOpacity>
-                                    <AntDesign name="pluscircle" color="rgba(255,50,50,1)" size={50} />
+                                    <AntDesign name="pluscircle" color="rgba(255,50,50,1)" size={35} />
                                 </TouchableOpacity>
                             </View>
 
@@ -103,7 +103,7 @@ export default function DishCards() {
 
                             </View>
                             <View style={styles.price}>
-                                <Entypo name="time-slot" color="#fff" size={18} />
+                                <Entypo name="time-slot" color="#fff" size={14} />
                                 <Text style={styles.textEta}>{food.eta}</Text>
                             </View>
 
@@ -120,7 +120,10 @@ export default function DishCards() {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingBottom: 16,
+
     },
     card: {
         backgroundColor: "#1e222b",
@@ -134,8 +137,8 @@ const styles = StyleSheet.create({
     },
     foodImage: {
         borderRadius: 50,
-        height: 100,
-        width: 100
+        height: 85,
+        width: 85,
     },
     foodName: {
         flex: 1,
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
     },
     textFoodName: {
         color: '#fff',
-        fontSize: 25,
+        fontSize: 18,
         marginLeft: 15,
         marginRight: 15,
         fontWeight: 'bold',
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
     },
     textDescription: {
         color: '#fff',
-        fontSize: 17,
+        fontSize: 14,
     },
     cardFooter: {
         marginTop: 15,
@@ -169,18 +172,18 @@ const styles = StyleSheet.create({
     },
     textPrice: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 14,
     },
     textActualPrice: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 14,
         marginLeft: 10,
 
     },
     textEta: {
         color: '#fff',
         marginLeft: 5,
-        fontSize: 15,
+        fontSize: 13,
     }
 
 });
