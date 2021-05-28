@@ -6,6 +6,7 @@ import Members from '../../src/components/TableMembers';
 import RequestedDish from '../components/RequestedDish';
 
 
+
 export default function HomeScreen({ navigation }) {
 
     return (
@@ -22,9 +23,7 @@ export default function HomeScreen({ navigation }) {
             <View style={styles.TableActivity}>
                 <Text style={styles.textTableActivity}>Table Activity</Text>
             </View>
-
             <RequestedDish />
-
         </SafeAreaView>
     );
 

@@ -31,6 +31,15 @@ export default function LogintScreen({ navigation }) {
             })
         )
     }
+    function haddleScan() {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 1,
+                routes: [{ name: 'ScanScreen' },
+                ],
+            })
+        )
+    }
     useEffect(() => {
 
         keyboardDidShowListener = Keyboard.addListener('keyboardWillShow', keyboardDidShow);
@@ -113,6 +122,15 @@ export default function LogintScreen({ navigation }) {
                 }),
 
             ]).start();
+        }
+        else {
+            Animated.timing(opacityAnim, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+
+            setTimeout(haddleScan, 301);
         }
 
     }
