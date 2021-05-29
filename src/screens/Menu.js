@@ -15,7 +15,6 @@ export default function HomeScreen({ navigation }) {
 
         if (food !== undefined || '') {
             modalizeRef.current?.open();
-
         }
     }, [food]);
 

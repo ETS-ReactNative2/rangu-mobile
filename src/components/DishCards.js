@@ -1,8 +1,7 @@
 import React, { useReducer, useRef } from 'react';
-import { Feather, AntDesign, Entypo } from '@expo/vector-icons';
+import { AntDesign, Entypo } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
-import { Modalize } from 'react-native-modalize';
-import DishInfo from './DishInfo';
+
 
 import img1 from '../../assets/images/Food/o-lanche-big-mac-do-mcdonalds-1574807643968_v2_450x337.png';
 import img2 from '../../assets/images/Food/HamburgerComum.jpg';
