@@ -8,28 +8,47 @@ import DishInfo from '../components/DishInfo';
 
 
 export default function HomeScreen({ navigation }) {
+    const [food, setFood] = useState();
     const modalizeRef = useRef(null);
-    function onOpen() {
-        modalizeRef.current?.open();
+
+    useEffect(() => {
+
+        if (food !== undefined || '') {
+            modalizeRef.current?.open();
+
+        }
+    }, [food]);
+
+    function onCloseModal() {
+        setFood('');
     }
+
+    function closeModal() {
+        modalizeRef.current?.close();
+        setFood('');
+    }
+
+
+
     return (
 
         <SafeAreaView style={styles.background}>
             <View style={styles.header}>
                 <View>
-                    <TouchableOpacity onPress={onOpen}>
+                    <TouchableOpacity>
                         <Text style={styles.textMenu}>Menu</Text>
                     </TouchableOpacity>
 
                 </View>
             </View>
 
-            <DishCards />
+            <DishCards dishDetailsCallBack={food => setFood(food)} />
 
-            <Modalize modalStyle={styles.modal} ref={modalizeRef} modalHeight={770} scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: false }}>
-                <DishInfo />
+
+            <Modalize modalStyle={styles.modal} ref={modalizeRef} modalHeight={770} onClose={onCloseModal} scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: true }}>
+                <DishInfo displayInfo={food} closeModal={closeModal} />
+
             </Modalize>
-
 
         </SafeAreaView>
 
@@ -57,5 +76,5 @@ const styles = StyleSheet.create({
     modal: {
         //backgroundColor: "rgba(30, 34, 43, 0.8)",
         backgroundColor: "#1e222b",
-    }
+    },
 });

@@ -20,7 +20,7 @@ const foods = [
         dishName: 'Big Mac',
         eta: '5 min',
         price: 'R$ 35.99',
-        description: 'Não existe nada igual. Dois hambúrgueres, alface, queijo e molho especial, cebola e picles num pão com gergelim. O sabor de McDonald’s triplamente delicioso. Com três hambúrgueres de carne 100% bovina, queijo derretido, cebola, picles, ketchup e mostarda.',
+        description: 'Não existe nada igual. Dois hambúrgueres, alface, queijo e molho especial, cebola e picles num pão com gergelim. O sabor de McDonald’s triplamente delicioso. Com três hambúrgueres de carne 100% bovina, queijo derretido, cebola, picles, ketchup e mostarda. Não existe nada igual. Dois hambúrgueres, alface, queijo e molho especial, cebola e picles num pão com gergelim.',
     },
     {
         key: String(Math.random()),
@@ -72,11 +72,8 @@ const foods = [
     },
 ];
 
-export default function DishCards() {
-    const modalizeRef = useRef(null);
-    function onOpen() {
-        modalizeRef.current?.open();
-    }
+export default function DishCards(props) {
+
 
     return (
         <View>
@@ -91,7 +88,7 @@ export default function DishCards() {
                                 </View>
 
                                 <View>
-                                    <TouchableOpacity onPress={onOpen}>
+                                    <TouchableOpacity onPress={() => props.dishDetailsCallBack(food)}>
                                         <AntDesign name="pluscircle" color="rgba(255,50,50,1)" size={35} />
                                     </TouchableOpacity>
                                 </View>

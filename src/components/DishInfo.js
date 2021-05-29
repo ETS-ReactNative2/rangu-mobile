@@ -1,51 +1,55 @@
 import React from 'react';
-import { Feather, AntDesign, Entypo } from '@expo/vector-icons';
+import { Ionicons, SimpleLineIcons, MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
 
-import img1 from '../../assets/images/Food/o-lanche-big-mac-do-mcdonalds-1574807643968_v2_450x337.png';
-import img2 from '../../assets/images/Food/HamburgerComum.jpg';
-import img3 from '../../assets/images/Food/Macarrãotop.jpg';
-import img4 from '../../assets/images/Food/e88491e60a4f57928fb8a03a44a37c9e.jpg';
-import img5 from '../../assets/images/Food/4589_4k.jpg';
-import img6 from '../../assets/images/Food/kzXpdQfc.png';
-import img7 from '../../assets/images/Food/miniBurgers.jpg';
-const foods = [
-    {
-        key: String(Math.random()),
-        foodImg: img1,
-        dishName: 'Big Mac',
-        eta: '5 min',
-        price: 'R$ 35.99',
-        description: 'Não existe nada igual. Dois hambúrgueres, alface, queijo e molho especial, cebola e picles num pão com gergelim. O sabor de McDonald’s triplamente delicioso. Com três hambúrgueres de carne 100% bovina, queijo derretido, cebola, picles, ketchup e mostarda.',
-    },
-];
+export default function DishInfo(props) {
 
-export default function DishInfo() {
+    function order() {
+        props.closeModal()
+    }
+
+
+
     return (
-        <View >
+        <View styles={{ justifyContent: 'space-between', flexDirection: 'column' }} >
+
+
+
+
             <View style={styles.foodImageContainer}>
-                <Image style={styles.foodImage} source={img1} />
+                <Image style={styles.foodImage} source={props.displayInfo.foodImg} />
             </View>
-            <View style={styles.container}>
-                <ScrollView>
 
-                    <View style={styles.foodName}>
-                        <Text style={styles.textFoodName} numberOfLines={3}>Big Mac</Text>
-                    </View>
-                    <View style={styles.cardBody}>
-                        <Text style={styles.textDescription}>Não existe nada igual. Dois hambúrgueres, alface, queijo e molho especial, cebola e picles num pão com gergelim. O sabor de McDonald’s triplamente delicioso. Com três hambúrgueres de carne 100% bovina, queijo derretido, cebola, picles, ketchup e mostarda.</Text>
-                    </View>
-                    <View style={styles.price}>
-
-                        <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>R$35.90</Text>
-
-                    </View>
+            <View style={styles.description}>
 
 
-                </ScrollView>
-                <View style={styles.cardFooter}>
-                    <Text>Teste</Text>
+                <View style={styles.foodName}>
+                    <Text style={styles.textFoodName} numberOfLines={3}>{props.displayInfo.dishName}</Text>
                 </View>
+
+                <View style={styles.cardBody}>
+                    <Text style={styles.textDescription}>{props.displayInfo.description}</Text>
+                </View>
+
+                <View style={styles.price}>
+                    <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>{props.displayInfo.price}</Text>
+                </View>
+
+            </View>
+
+            <View style={styles.cardFooter}>
+
+                <View style={styles.order}>
+                    <Text style={styles.textOrder}>Order this Dish</Text>
+                </View>
+
+                <TouchableOpacity onPress={order} >
+                    <View style={styles.cartIcon}>
+                        {/* <Ionicons name="ios-cart-sharp" color="#fff" size={30} /> */}
+                        <SimpleLineIcons name="note" color="#fff" size={25} />
+                        {/* <MaterialIcons name="border-color" color="#fff" size={30} /> */}
+                    </View>
+                </TouchableOpacity>
             </View>
 
         </View>
@@ -54,14 +58,15 @@ export default function DishInfo() {
 }
 
 const styles = StyleSheet.create({
-    backGround: {
-
-    },
-    container: {
-
+    description: {
         marginLeft: 20,
         marginRight: 20,
-
+        backgroundColor: "#3C404A",
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: 15,
+        borderRadius: 15,
+        marginTop: 15,
     },
     card: {
         backgroundColor: "#1e222b",
@@ -74,16 +79,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     foodImageContainer: {
-
+        borderRadius: 100
 
     },
     foodImage: {
-        //borderRadius: 100,
         overflow: 'hidden',
+        height: 250,
         width: "100%",
-        //height: "70%",
-        resizeMode: "contain",
-
+        resizeMode: "cover",
     },
     foodName: {
         flex: 1,
@@ -105,30 +108,48 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     cardFooter: {
-        height: 200,
-        marginTop: 15,
+        flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: "#fff"
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: 15,
+        borderRadius: 15,
+        height: 60,
+        marginTop: 20,
+        marginLeft: 20,
+        marginRight: 20,
+        marginBottom: 20,
+        backgroundColor: "#3C404A",
+
+    },
+    order: {
+        flex: 1,
+        marginLeft: 20,
+
+    },
+    textOrder: {
+        fontSize: 20,
+        color: "#fff",
+        fontWeight: "bold",
+    },
+    cartIcon:
+    {
+        height: 40,
+        width: 90,
+        backgroundColor: "#rgba(255,50,50,.8)",
+        borderRadius: 30,
+        alignItems: 'center',
+        justifyContent: "center",
     },
     price: {
         marginTop: 15,
         flexDirection: 'row',
         alignItems: 'center',
     },
-    textPrice: {
-        color: '#fff',
-        fontSize: 19,
-    },
     textActualPrice: {
         fontWeight: 'bold',
         fontSize: 20,
 
     },
-    textEta: {
-        color: '#fff',
-        marginLeft: 5,
-        fontSize: 13,
-    }
 
 });
