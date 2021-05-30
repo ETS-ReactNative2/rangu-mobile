@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TextInput, Touchab
 import Hoshi from '../inputTexts/Hoshi';
 import { AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const images = [
@@ -173,9 +173,10 @@ export default function LogintScreen({ navigation }) {
     }
 
 
+
     return (
 
-        <Animated.View style={[styles.background]} >
+        <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} >
 
             <Animated.View style={[styles.containerBack, { opacity: opacityAnim }]}>
                 <TouchableOpacity style={styles.btBack} onPress={BackScreen}>
@@ -240,7 +241,7 @@ export default function LogintScreen({ navigation }) {
             </Animated.View>
 
 
-        </Animated.View >
+        </LinearGradient >
 
     );
 }
@@ -248,11 +249,9 @@ export default function LogintScreen({ navigation }) {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: 'rgba(201, 97, 93, 1)',
+        //backgroundColor: 'rgba(201, 97, 93, 1)',
         alignItems: "center",
         justifyContent: "center",
-        width: "100%",
-        height: "100%",
     },
     KeyboardAvoidingView: {
         width: "100%",
@@ -302,7 +301,7 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     textSignUp: {
-        color: "#C9615D",
+        color: "#E65F4C",
         fontSize: 35,
     },
     textAlreadyHave: {
@@ -333,5 +332,6 @@ const styles = StyleSheet.create({
     btBack: {
         height: "100%",
         width: "100%",
+        zIndex: 1,
     },
 });

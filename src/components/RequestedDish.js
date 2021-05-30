@@ -12,6 +12,7 @@ import img4 from '../../assets/images/Profile/Luiz.jpeg';
 import img5 from '../../assets/images/Profile/20191214_8154_iOS.jpg';
 import img6 from '../../assets/images/Profile/20191013_00.jpg';
 import img7 from '../../assets/images/Profile/20210121_17292.jpg';
+import img8 from '../../assets//images//Profile/Leo.jpeg'
 
 let dishes = [
   {
@@ -77,6 +78,15 @@ let dishes = [
     statusDone: true,
     comment: '',
   },
+  {
+    key: String(Math.random()),
+    personProfileImg: img8,
+    personName: 'Leozinho',
+    dishName: 'Hot Dog do brabo',
+    orderHour: '4:20',
+    statusDone: true,
+    comment: 'Salsichas extremamente grossas',
+  },
 
 ];
 
@@ -116,7 +126,7 @@ export default function RequestedDish() {
                   {dishe.statusDone == true ?
                     <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Ready</Text>
                     :
-                    <Text style={[styles.textActualStatus, { color: '#f75175', }]}>Preparing</Text>
+                    <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Preparing</Text>
                   }
 
                 </View>

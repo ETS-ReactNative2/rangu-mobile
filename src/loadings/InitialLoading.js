@@ -1,6 +1,7 @@
 import React from "react";
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import Lottie from 'lottie-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import animation1 from '../../assets/animations/loading/food/drink-n-salad.json';
 import animation2 from '../../assets/animations/loading/food/food-choose.json';
@@ -18,11 +19,12 @@ export default function InitialLoading({ visible, children }) {
   if (visible) {
     return (
 
-      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgb(201, 97, 93)" }}>
+
+      <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} >
 
         <Lottie resizemode="contain" source={randomAnim} autoPlay loop />
 
-      </SafeAreaView>
+      </LinearGradient>
     );
   }
   else {
@@ -33,3 +35,13 @@ export default function InitialLoading({ visible, children }) {
     );
   }
 }
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    position: 'absolute',
+  },
+});

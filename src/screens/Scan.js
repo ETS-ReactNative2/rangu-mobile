@@ -4,7 +4,7 @@ import Lottie from 'lottie-react-native';
 //import NfcAnim from '../../assets/animations/nfc/phone-tap.json'
 import NfcAnim from '../../assets/animations/nfc/scan-menu.json'
 import { CommonActions } from '@react-navigation/native';
-//import NfcManager, { NfcEvents } from 'react-native-nfc-manager';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const images = [
@@ -31,23 +31,25 @@ export default function ScanScreen({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={[styles.background]}>
+
+        <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} >
             <Animated.View style={styles.container} >
                 <TouchableOpacity styles={styles.touch} onPress={ScanComplete}>
                     <Lottie style={[styles.anim]} source={NfcAnim} autoPlay loop />
                 </TouchableOpacity>
             </Animated.View>
-        </SafeAreaView>
+        </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: 'rgba(201, 97, 93, 1)',
         alignItems: "center",
         justifyContent: "center",
-
+        width: "100%",
+        height: "100%",
+        position: 'absolute',
     },
     container: {
         alignItems: "center",

@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, Image, TouchableOpacity, ImageBackground, Animated, Platform, } from "react-native";
+import { StyleSheet, Text, Image, TouchableOpacity, ImageBackground, Animated, Platform, View } from "react-native";
 import store from "../services/Storage"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 import InitialLoading from "../loadings/InitialLoading";
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const images = [
     require("../../assets/images/backGroundImageLow.jpg"),
@@ -42,8 +43,9 @@ export default function StartScreen({ navigation, route }) {
 
 
 
-    var backgroundColorAnimated = opacityAnimBackGround.interpolate({ inputRange: [0, 1], outputRange: ["rgba(201,97,93,0.75)", "rgba(201,97,93,1)"] })
-    var delayTimer = 1000
+    //var backgroundColorAnimated1 = opacityAnimBackGround.interpolate({ inputRange: [0, 1], outputRange: ["rgba(215,35,60,0.75)", "rgba(215,35,60,1)"] })
+
+    var delayTimer = 4000
 
 
     useEffect(() => {
@@ -79,15 +81,15 @@ export default function StartScreen({ navigation, route }) {
                     useNativeDriver: true,
                 }),
                 Animated.timing(opacityAnimBackGround, {
-                    toValue: 0,
+                    toValue: 0.75,
                     delay: 550,
                     duration: 400,
                     useNativeDriver: false,
                 }),
             ]).start();
         }, delayTimer);
-
     }, []);
+
 
     function loginPress() {
         //alert("Alhouu");
@@ -144,35 +146,39 @@ export default function StartScreen({ navigation, route }) {
         setTimeout(haddleSignUp, 301);
 
     }
-
     return (
         <InitialLoading visible={initialLoading}>
             <ImageBackground style={styles.backgroundImage} source={images[0]} transition={false}>
 
-                <Animated.View style={[styles.background, { backgroundColor: backgroundColorAnimated }]} >
+                <Animated.View style={[styles.background, { opacity: opacityAnimBackGround }]}>
+                    <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} />
+                </Animated.View>
 
-                    <Animated.View style={[styles.containerLogo, { opacity: opacityAnim }]}>
-                        {/* <Image style={styles.imglogo} source={images[1]} /> */}
-                        <MaterialIcons name="menu-book" size={250} color={'#ffffff'} />
-                    </Animated.View>
 
-                    <Animated.View style={[styles.containerSingUp, { opacity: opacityAnim, transform: [{ translateY: offset.y }, { translateX: lateralSlideRight.x }] },]}>
 
-                        <TouchableOpacity style={styles.btnSingup} onPress={signUpPress}>
-                            <Text style={styles.textSingup}>Sign Up</Text>
-                        </TouchableOpacity>
 
-                    </Animated.View>
+                <Animated.View style={[styles.containerLogo, { opacity: opacityAnim }]}>
+                    {/* <Image style={styles.imglogo} source={images[1]} /> */}
+                    <MaterialIcons name="menu-book" size={250} color={'#ffffff'} />
+                </Animated.View>
 
-                    <Animated.View style={[styles.containerLogin, { opacity: opacityAnim, transform: [{ translateY: offset.y }, { translateX: lateralSlideLeft.x }] },]}>
+                <Animated.View style={[styles.containerSingUp, { opacity: opacityAnim, transform: [{ translateY: offset.y }, { translateX: lateralSlideRight.x }] },]}>
 
-                        <TouchableOpacity style={styles.btnlogin} onPress={loginPress}>
-                            <Text style={styles.textLogin}>Login</Text>
-                        </TouchableOpacity>
-
-                    </Animated.View>
+                    <TouchableOpacity style={styles.btnSingup} onPress={signUpPress}>
+                        <Text style={styles.textSingup}>Sign Up</Text>
+                    </TouchableOpacity>
 
                 </Animated.View>
+
+                <Animated.View style={[styles.containerLogin, { opacity: opacityAnim, transform: [{ translateY: offset.y }, { translateX: lateralSlideLeft.x }] },]}>
+
+                    <TouchableOpacity style={styles.btnlogin} onPress={loginPress}>
+                        <Text style={styles.textLogin}>Login</Text>
+                    </TouchableOpacity>
+
+                </Animated.View>
+
+
 
             </ImageBackground>
         </InitialLoading >
@@ -186,6 +192,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         width: "100%",
         height: "100%",
+        position: 'absolute',
     },
     backgroundImage: {
         flex: 1,

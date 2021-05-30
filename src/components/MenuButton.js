@@ -13,7 +13,7 @@ export default function MenuButton({ onPress, focused }) {
                 colors={
                     focused
                         ? ['#fff', '#ccc']
-                        : ['rgba(255,80,80, 1)', 'rgba(201, 97, 93, 1)']
+                        : ['#D7233C', '#E65F4C']
                 }
                 start={[1, 0.2]}
             >

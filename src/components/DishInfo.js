@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ionicons, SimpleLineIcons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, SimpleLineIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
 
 export default function DishInfo(props) {
@@ -46,8 +46,9 @@ export default function DishInfo(props) {
                 <TouchableOpacity onPress={order} >
                     <View style={styles.cartIcon}>
                         {/* <Ionicons name="ios-cart-sharp" color="#fff" size={30} /> */}
-                        <SimpleLineIcons name="note" color="#fff" size={25} />
+                        {/* <SimpleLineIcons name="note" color="#fff" size={25} /> */}
                         {/* <MaterialIcons name="border-color" color="#fff" size={30} /> */}
+                        <AntDesign name="form" color="#fff" size={30} />
                     </View>
                 </TouchableOpacity>
             </View>
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     {
         height: 40,
         width: 90,
-        backgroundColor: "#rgba(255,50,50,.8)",
+        backgroundColor: "#D7233C",
         borderRadius: 30,
         alignItems: 'center',
         justifyContent: "center",

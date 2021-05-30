@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TextInput, Touchab
 import Hoshi from '../inputTexts/Hoshi';
 import { AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const images = [
@@ -79,6 +80,7 @@ export default function LogintScreen({ navigation }) {
     return (
 
         <Animated.View style={[styles.background]} >
+            <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} />
 
             <Animated.View style={[styles.containerBack, { opacity: opacityAnim }]}>
                 <TouchableOpacity style={styles.btBack} onPress={BackScreen}>
@@ -132,11 +134,11 @@ export default function LogintScreen({ navigation }) {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: 'rgba(104, 5, 0, 1)',
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
         height: "100%",
+        position: 'absolute',
     },
     containerLogo: {
         flex: 1,

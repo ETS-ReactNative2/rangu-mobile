@@ -10,6 +10,7 @@ import img4 from '../../assets/images/Food/e88491e60a4f57928fb8a03a44a37c9e.jpg'
 import img5 from '../../assets/images/Food/4589_4k.jpg';
 import img6 from '../../assets/images/Food/kzXpdQfc.png';
 import img7 from '../../assets/images/Food/miniBurgers.jpg';
+import img8 from '../../assets/images/Food/WICKBOLD_0037_17_POSTS_JUNHO_08.jpg';
 
 
 const foods = [
@@ -67,7 +68,15 @@ const foods = [
         dishName: 'Mini Burgers',
         eta: '36 min',
         price: 'R$ 48.90',
-        description: 'Vários Hamburguinhos topzera! Pra comer em uma pordida!',
+        description: 'Vários Hamburguinhos topzera! Pra comer em uma mordida!',
+    },
+    {
+        key: String(Math.random()),
+        foodImg: img8,
+        dishName: 'Hot Dog do brabo',
+        eta: '1 hora e 9 min',
+        price: 'R$ 69.69',
+        description: 'Ketchup mostarda e duas salsicha, pra quem gosta de tudo em dobro',
     },
 ];
 
@@ -75,7 +84,7 @@ export default function DishCards(props) {
 
 
     return (
-        <View>
+        <View style={{ marginBottom: 55 }}>
             <ScrollView>
                 {foods.map((food) => (
                     <View style={styles.container} key={food.key}>
@@ -88,7 +97,7 @@ export default function DishCards(props) {
 
                                 <View>
                                     <TouchableOpacity onPress={() => props.dishDetailsCallBack(food)}>
-                                        <AntDesign name="pluscircle" color="rgba(255,50,50,1)" size={35} />
+                                        <AntDesign name="pluscircle" color="#D7233C" size={35} />
                                     </TouchableOpacity>
                                 </View>
 
