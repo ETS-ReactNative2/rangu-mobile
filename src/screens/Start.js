@@ -10,7 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const images = [
     require("../../assets/images/backGroundImageLow.jpg"),
-    require("../../assets/images/icon0_alpha.png")
+    require("../../assets/images/ranguimagem_Prancheta_1.png")
 ];
 
 export default function StartScreen({ navigation, route }) {
@@ -154,12 +154,9 @@ export default function StartScreen({ navigation, route }) {
                     <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} />
                 </Animated.View>
 
-
-
-
                 <Animated.View style={[styles.containerLogo, { opacity: opacityAnim }]}>
-                    {/* <Image style={styles.imglogo} source={images[1]} /> */}
-                    <MaterialIcons name="menu-book" size={250} color={'#ffffff'} />
+                    <Image style={styles.imglogo} source={images[1]} />
+                    {/* <MaterialIcons name="menu-book" size={250} color={'#ffffff'} /> */}
                 </Animated.View>
 
                 <Animated.View style={[styles.containerSingUp, { opacity: opacityAnim, transform: [{ translateY: offset.y }, { translateX: lateralSlideRight.x }] },]}>
@@ -198,12 +195,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        width: "100%"
+        width: "100%",
     },
     containerLogo: {
         flex: 1,
         justifyContent: "flex-start",
-        paddingBottom: "0%",
+        paddingTop: "5%",
+    },
+    imglogo: {
+        width: 340,
+        height: 340,
+        resizeMode: "contain",
     },
     container: {
         flex: 1,
@@ -254,12 +256,8 @@ const styles = StyleSheet.create({
         fontSize: 35,
     },
     textLogin: {
-        color: "#C9615D",
+        color: "#E65F4C",
         fontSize: 35,
-    },
-    imglogo: {
-        width: 340,
-        resizeMode: "contain",
     },
 });
 

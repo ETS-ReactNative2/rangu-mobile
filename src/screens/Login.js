@@ -8,7 +8,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const images = [
     require("../../assets/images/icon0_alpha.png"),
-    require("../../assets/images/Icons/Geral/Back_Arrow.png")
 ];
 
 

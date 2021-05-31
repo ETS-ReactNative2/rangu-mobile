@@ -7,20 +7,32 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
 const images = [
-    require("../../assets/images/icon0_alpha.png"),
-    require("../../assets/images/Icons/Geral/Back_Arrow.png")
+    require("../../assets/images/ranguimagem_Prancheta_1.png"),
 ];
 var btpressed = false;
 export default function LogintScreen({ navigation }) {
 
     const keyboardOffsetPlataform = Platform.OS === "ios" ? 10 : -240;
-    const [logosize] = useState(new Animated.Value(340));
-    const [logoOffSet] = useState(new Animated.Value(0));
+    const [logosize] = useState(new Animated.ValueXY({ x: 300, y: 300 }));
+    const [logoOffSet] = useState(new Animated.Value(5));
     const [offsetbutton] = useState(new Animated.Value(80));
     const [opacityAnim] = useState(new Animated.Value(0));
     const [NamesOffSet] = useState(new Animated.Value(0));
     const [AdressOffSet] = useState(new Animated.Value(500));
     const [btText, setBtText] = useState("Next");
+
+    const [name, setName] = useState();
+    const [email, setEmail] = useState();
+    const [phone, setPhone] = useState();
+    const [password, setPassword] = useState();
+    const [rePassword, setRePassword] = useState();
+    const [street, setStreet] = useState();
+    const [district, setDistrict] = useState();
+    const [state, setState] = useState();
+    const [postalCode, setPostalCode] = useState();
+    const [city, setCity] = useState();
+
+
 
     function haddleStartScreen() {
         navigation.dispatch(
@@ -53,12 +65,12 @@ export default function LogintScreen({ navigation }) {
                 useNativeDriver: true,
             }),
 
-            Animated.spring(logoOffSet, {
-                toValue: -40,
-                speed: 4,
-                bounciness: 0,
-                useNativeDriver: true,
-            }),
+            // Animated.spring(logoOffSet, {
+            //     toValue: -40,
+            //     speed: 4,
+            //     bounciness: 0,
+            //     useNativeDriver: true,
+            // }),
 
             Animated.timing(opacityAnim, {
                 toValue: 1,
@@ -72,15 +84,21 @@ export default function LogintScreen({ navigation }) {
 
     function keyboardDidShow() {
         Animated.parallel([
-            Animated.timing(logosize,
+            Animated.timing(logosize.x,
                 {
-                    toValue: 200,
+                    toValue: 165,
+                    duration: 200,
+                    useNativeDriver: false
+                }),
+            Animated.timing(logosize.y,
+                {
+                    toValue: 165,
                     duration: 200,
                     useNativeDriver: false
                 }),
             Animated.timing(logoOffSet,
                 {
-                    toValue: -80,
+                    toValue: 15,
                     duration: 200,
                     useNativeDriver: true
                 }),
@@ -92,15 +110,21 @@ export default function LogintScreen({ navigation }) {
     function keyboardDidHide() {
 
         Animated.parallel([
-            Animated.timing(logosize,
+            Animated.timing(logosize.x,
                 {
-                    toValue: 340,
+                    toValue: 300,
+                    duration: 200,
+                    useNativeDriver: false
+                }),
+            Animated.timing(logosize.y,
+                {
+                    toValue: 300,
                     duration: 200,
                     useNativeDriver: false
                 }),
             Animated.timing(logoOffSet,
                 {
-                    toValue: -40,
+                    toValue: 5,
                     duration: 200,
                     useNativeDriver: true
                 }),
@@ -109,6 +133,16 @@ export default function LogintScreen({ navigation }) {
     }
 
     function SignUpPress() {
+        console.log(name);
+        console.log(email);
+        console.log(phone);
+        console.log(password);
+        console.log(rePassword);
+        console.log(street);
+        console.log(district);
+        console.log(state);
+        console.log(postalCode);
+        console.log(city);
 
         if (!btpressed) {
             btpressed = true
@@ -173,7 +207,6 @@ export default function LogintScreen({ navigation }) {
     }
 
 
-
     return (
 
         <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} >
@@ -185,38 +218,38 @@ export default function LogintScreen({ navigation }) {
             </Animated.View>
 
             <Animated.View style={[styles.containerLogo, { transform: [{ translateY: logoOffSet }], }, { opacity: opacityAnim }]}>
-                <Animated.Image style={{ width: logosize, resizeMode: "contain" }} source={images[0]} />
+                <Animated.Image style={{ width: logosize.x, height: logosize.y, resizeMode: "contain" }} source={images[0]} />
             </Animated.View>
             <KeyboardAvoidingView style={styles.KeyboardAvoidingView} behavior="padding" keyboardVerticalOffset={keyboardOffsetPlataform}>
                 <Animated.View style={[styles.containerInputs, { opacity: opacityAnim }]}>
                     <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                        <Hoshi style={styles.input} label={'Name'} borderColor={'##b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'default'} />
+                        <Hoshi style={styles.input} label={'Name'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setName(value)} boardType={'default'} />
                         <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]} >
-                            <Hoshi style={styles.input} label={'Street'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'default'} />
+                            <Hoshi style={styles.input} label={'Street'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setStreet(value)} boardType={'default'} />
                         </Animated.View>
                     </Animated.View>
                     <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                        <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'email-address'} />
+                        <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setEmail(value)} boardType={'email-address'} />
                         <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'District'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'default'} />
+                            <Hoshi style={styles.input} label={'District'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setDistrict(value)} boardType={'default'} />
                         </Animated.View>
                     </Animated.View>
                     <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                        <Hoshi style={styles.input} label={'Phone'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'numeric'} />
+                        <Hoshi style={styles.input} label={'Phone'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPhone(value)} boardType={'numeric'} />
                         <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'State'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'default'} />
+                            <Hoshi style={styles.input} label={'State'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setState(value)} boardType={'default'} />
                         </Animated.View>
                     </Animated.View>
                     <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                        <Hoshi style={styles.input} label={'Password'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'visible-password'} />
+                        <Hoshi style={styles.input} label={'Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} boardType={'visible-password'} />
                         <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'Postal Code'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'numeric'} />
+                            <Hoshi style={styles.input} label={'Postal Code'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPostalCode(value)} boardType={'numeric'} />
                         </Animated.View>
                     </Animated.View>
                     <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                        <Hoshi style={styles.input} label={'Repeat Password'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'visible-password'} />
+                        <Hoshi style={styles.input} label={'Repeat Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setRePassword(value)} boardType={'visible-password'} />
                         <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'City'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} boardType={'default'} />
+                            <Hoshi style={styles.input} label={'City'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setCity(value)} boardType={'default'} />
                         </Animated.View>
                     </Animated.View>
 

@@ -5,10 +5,10 @@ import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "rea
 export default function DishInfo(props) {
 
     function order() {
+
+
         props.closeModal()
     }
-
-
 
     return (
         <View styles={{ justifyContent: 'space-between', flexDirection: 'column' }} >

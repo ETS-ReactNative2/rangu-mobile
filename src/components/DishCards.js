@@ -82,7 +82,6 @@ const foods = [
 
 export default function DishCards(props) {
 
-
     return (
         <View style={{ marginBottom: 55 }}>
             <ScrollView>

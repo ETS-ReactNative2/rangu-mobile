@@ -10,7 +10,7 @@ import img4 from '../../assets/images/Profile/Luiz.jpeg';
 import img5 from '../../assets/images/Profile/20191214_8154_iOS.jpg';
 import img6 from '../../assets/images/Profile/20191013_00.jpg';
 import img7 from '../../assets/images/Profile/20210121_17292.jpg';
-import img8 from '../../assets//images//Profile/Leo.jpeg'
+import img8 from '../../assets//images//Profile/Leo.jpeg';
 
 
 const people = [

@@ -26,9 +26,6 @@ export default function HomeScreen({ navigation }) {
         modalizeRef.current?.close();
         setFood('');
     }
-
-
-
     return (
 
         <SafeAreaView style={styles.background}>
@@ -43,13 +40,11 @@ export default function HomeScreen({ navigation }) {
 
             <DishCards dishDetailsCallBack={food => setFood(food)} />
 
-
-            <Modalize modalStyle={styles.modal} ref={modalizeRef} modalHeight={770} onClose={onCloseModal} scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: true }}>
+            <Modalize modalStyle={styles.modal} ref={modalizeRef} modalHeight={770} onClose={onCloseModal} scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: true, }}>
                 <DishInfo displayInfo={food} closeModal={closeModal} />
-
             </Modalize>
 
-        </SafeAreaView>
+        </SafeAreaView >
 
     );
 }
@@ -73,7 +68,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     modal: {
-        //backgroundColor: "rgba(30, 34, 43, 0.8)",
         backgroundColor: "#1e222b",
     },
 });
