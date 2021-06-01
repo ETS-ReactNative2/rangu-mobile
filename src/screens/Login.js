@@ -4,10 +4,11 @@ import Hoshi from '../inputTexts/Hoshi';
 import { AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import apiUsers from '../services/api';
 
 
 const images = [
-    require("../../assets/images/icon0_alpha.png"),
+    require("../../assets/images/ranguimagem_Prancheta_1.png")
 ];
 
 
@@ -16,6 +17,10 @@ export default function LogintScreen({ navigation }) {
     const keyboardOffsetPlataform = Platform.OS === "ios" ? -50 : -240;
     const [offsetbutton] = useState(new Animated.Value(80));
     const [opacityAnim] = useState(new Animated.Value(0));
+
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [type, setType] = useState("CLIENT");
 
     function haddleStartScreen() {
         navigation.dispatch(
@@ -66,12 +71,25 @@ export default function LogintScreen({ navigation }) {
         setTimeout(haddleStartScreen, 301);
 
     }
-    function LoginPress() {
+    async function LoginPress() {
         Animated.timing(opacityAnim, {
             toValue: 0,
             duration: 300,
             useNativeDriver: true,
         }).start();
+
+        var response
+
+        response = await apiUsers.post('/login', {
+            email,
+            password,
+            type
+        }).catch(error => {
+            console.log(error.response.data)
+        });
+        console.log(response.data.token)
+        // const { token } = response.data;
+        // await AsyncStorage.setItem('token', token);
 
         setTimeout(haddleScan, 301);
     }
@@ -98,15 +116,15 @@ export default function LogintScreen({ navigation }) {
 
                     <View style={styles.containerInputtext}>
 
-                        <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#000'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} />
+                        <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setEmail(value)} boardType={'email-address'} />
 
                     </View>
                     <View style={styles.containerInputtext}>
-                        <Hoshi style={styles.input} label={'Password'} borderColor={'#b76c94'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} />
+                        <Hoshi style={styles.input} label={'Password'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
                     </View>
                     <Animated.View style={styles.Containerbtforgotpassword}>
 
-                        <TouchableOpacity style={styles.btforgotpassword}>
+                        <TouchableOpacity >
                             <Text style={styles.textforgotpassword}>Forgot your password?</Text>
                         </TouchableOpacity>
 
@@ -144,6 +162,11 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         paddingBottom: "0%",
     },
+    imglogo: {
+        width: 340,
+        height: 340,
+        resizeMode: "contain",
+    },
     containerInputs: {
         alignItems: "center",
         justifyContent: "flex-start",
@@ -176,30 +199,19 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     textLogin: {
-        color: "#C9615D",
+        color: "#E65F4C",
         fontSize: 35,
-    },
-    imglogo: {
-        width: 340,
-        resizeMode: "contain",
     },
     textforgotpassword: {
         color: "#FFFF",
         fontSize: 18,
-        paddingBottom: '3%'
 
     },
     Containerbtforgotpassword: {
         width: "80%",
-        height: "15%",
+        height: "25%",
         paddingTop: '3%',
         alignItems: "flex-end",
-
-    },
-    btforgotpassword: {
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100%",
     },
     containerBack: {
         position: 'absolute',

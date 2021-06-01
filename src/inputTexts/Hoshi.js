@@ -43,6 +43,7 @@ export default class Hoshi extends BaseInput {
       height: inputHeight,
       boardType,
       onChangeText,
+      secureTextEntry,
     } = this.props;
     const { width, focusedAnim, value } = this.state;
     const flatStyles = StyleSheet.flatten(containerStyle) || {};
@@ -75,6 +76,7 @@ export default class Hoshi extends BaseInput {
           onChangeText={onChangeText}
           keyboardType={boardType}
           autoCorrect={false}
+          secureTextEntry={secureTextEntry}
           keyboardAppearance='dark'
           value={value}
           onBlur={this._onBlur}

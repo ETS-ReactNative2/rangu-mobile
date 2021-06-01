@@ -4,6 +4,8 @@ import Hoshi from '../inputTexts/Hoshi';
 import { AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import apiUsers from '../services/api';
 
 
 const images = [
@@ -31,6 +33,7 @@ export default function LogintScreen({ navigation }) {
     const [state, setState] = useState();
     const [postalCode, setPostalCode] = useState();
     const [city, setCity] = useState();
+    const [number, setNumber] = useState("6969");
 
 
 
@@ -132,18 +135,7 @@ export default function LogintScreen({ navigation }) {
         ]).start();
     }
 
-    function SignUpPress() {
-        console.log(name);
-        console.log(email);
-        console.log(phone);
-        console.log(password);
-        console.log(rePassword);
-        console.log(street);
-        console.log(district);
-        console.log(state);
-        console.log(postalCode);
-        console.log(city);
-
+    async function SignUpPress() {
         if (!btpressed) {
             btpressed = true
             setBtText("Sign Up")
@@ -163,6 +155,30 @@ export default function LogintScreen({ navigation }) {
                 duration: 300,
                 useNativeDriver: true,
             }).start();
+
+            var response
+            response = await apiUsers.post('/clients/sign-up', {
+                user: {
+                    name,
+                    email,
+                    phone,
+                    password,
+                },
+                address: {
+                    district,
+                    city,
+                    state,
+                    postalCode,
+                    number,
+                    street
+                }
+            }).catch(error => {
+                console.log(error.response.data);
+                return;
+            });
+
+            // const { token } = response.data;
+            // await AsyncStorage.setItem('token', token);
 
             setTimeout(haddleScan, 301);
         }
@@ -202,10 +218,7 @@ export default function LogintScreen({ navigation }) {
             }).start();
             setTimeout(haddleStartScreen, 301);
         }
-
-
     }
-
 
     return (
 
@@ -241,13 +254,13 @@ export default function LogintScreen({ navigation }) {
                         </Animated.View>
                     </Animated.View>
                     <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                        <Hoshi style={styles.input} label={'Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} boardType={'visible-password'} />
+                        <Hoshi style={styles.input} label={'Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
                         <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
                             <Hoshi style={styles.input} label={'Postal Code'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPostalCode(value)} boardType={'numeric'} />
                         </Animated.View>
                     </Animated.View>
                     <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                        <Hoshi style={styles.input} label={'Repeat Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setRePassword(value)} boardType={'visible-password'} />
+                        <Hoshi style={styles.input} label={'Repeat Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setRePassword(value)} secureTextEntry={true} boardType={'visible-password'} />
                         <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
                             <Hoshi style={styles.input} label={'City'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setCity(value)} boardType={'default'} />
                         </Animated.View>
@@ -282,7 +295,6 @@ export default function LogintScreen({ navigation }) {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        //backgroundColor: 'rgba(201, 97, 93, 1)',
         alignItems: "center",
         justifyContent: "center",
     },

@@ -4,11 +4,11 @@
     "slug": "rangu-front-expo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/ranguiconborda_Prancheta_1.png",
+    "icon": "./assets/images/ranguicon_Prancheta_1.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#D7233C"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,15 +21,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/images/ranguimagem_Prancheta_1.png",
+        "backgroundColor": "#D7233C"
       },
       "permissions": [
         "android.permission.NFC"
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/ranguimagem_Prancheta_1.png"
     },
     "plugins": [
       "react-native-nfc-manager",

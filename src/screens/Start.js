@@ -45,7 +45,7 @@ export default function StartScreen({ navigation, route }) {
 
     //var backgroundColorAnimated1 = opacityAnimBackGround.interpolate({ inputRange: [0, 1], outputRange: ["rgba(215,35,60,0.75)", "rgba(215,35,60,1)"] })
 
-    var delayTimer = 4000
+    var delayTimer = 500
 
 
     useEffect(() => {
