@@ -84,7 +84,7 @@ export default function LogintScreen({ navigation }) {
 
         setTimeout(() => setLoginLoad(true), 301);
 
-        let response
+        let response;
         response = await apiUsers.post('/login', {
             email,
             password,

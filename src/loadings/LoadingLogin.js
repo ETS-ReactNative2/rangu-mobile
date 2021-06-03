@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import animation from '../../assets/animations/loading/generic/food-loading.json';
 
-export default function InitialLoading() {
+export default function LoginLoading() {
 
     return (
 
