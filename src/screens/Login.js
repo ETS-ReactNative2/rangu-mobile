@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TextInput, TouchableOpacity, ImageBackground, Animated, Platform, } from "react-native";
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TouchableOpacity, ImageBackground, Animated, Platform, SafeAreaView } from "react-native";
 import Hoshi from '../inputTexts/Hoshi';
 import { AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import apiUsers from '../services/api';
+import apiUsers from '../services/Api';
+import LoginLoading from '../loadings/LoadingLogin';
+import { save } from '../services/Storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const images = [
@@ -17,6 +20,7 @@ export default function LogintScreen({ navigation }) {
     const keyboardOffsetPlataform = Platform.OS === "ios" ? -50 : -240;
     const [offsetbutton] = useState(new Animated.Value(80));
     const [opacityAnim] = useState(new Animated.Value(0));
+    const [loginLoad, setLoginLoad] = useState(false);
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -78,8 +82,9 @@ export default function LogintScreen({ navigation }) {
             useNativeDriver: true,
         }).start();
 
-        var response
+        setTimeout(() => setLoginLoad(true), 301);
 
+        let response
         response = await apiUsers.post('/login', {
             email,
             password,
@@ -87,131 +92,76 @@ export default function LogintScreen({ navigation }) {
         }).catch(error => {
             console.log(error.response.data)
         });
-        console.log(response.data.token)
-        // const { token } = response.data;
-        // await AsyncStorage.setItem('token', token);
 
-        setTimeout(haddleScan, 301);
+        await AsyncStorage.setItem('token', response.data.token);
+        setTimeout(haddleScan, 0);
     }
 
-    return (
+    if (!loginLoad) {
+        return (
+            <View style={styles.background} >
 
-        <Animated.View style={[styles.background]} >
-            <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} />
+                <LinearGradient style={styles.backgroundLinearGradiant} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} />
 
-            <Animated.View style={[styles.containerBack, { opacity: opacityAnim }]}>
-                <TouchableOpacity style={styles.btBack} onPress={BackScreen}>
-                    <AntDesign name="left" size={45} color="white" />
-                </TouchableOpacity>
-            </Animated.View>
-
-            <Animated.View style={[styles.containerLogo, { opacity: opacityAnim }]}>
-                <Image style={styles.imglogo} source={images[0]} />
-            </Animated.View>
-
-            <KeyboardAvoidingView style={styles.KeyboardAvoidingView} behavior="padding" keyboardVerticalOffset={keyboardOffsetPlataform}>
-
-
-                <Animated.View style={[styles.containerInputs, { opacity: opacityAnim }]}>
-
-                    <View style={styles.containerInputtext}>
-
-                        <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setEmail(value)} boardType={'email-address'} />
-
-                    </View>
-                    <View style={styles.containerInputtext}>
-                        <Hoshi style={styles.input} label={'Password'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
-                    </View>
-                    <Animated.View style={styles.Containerbtforgotpassword}>
-
-                        <TouchableOpacity >
-                            <Text style={styles.textforgotpassword}>Forgot your password?</Text>
-                        </TouchableOpacity>
-
-                    </Animated.View>
-
+                <Animated.View style={[styles.containerBack, { opacity: opacityAnim }]}>
+                    <TouchableOpacity onPress={BackScreen}>
+                        <AntDesign name="left" size={45} color="white" />
+                    </TouchableOpacity>
                 </Animated.View>
 
-            </KeyboardAvoidingView>
+                <Animated.View style={[styles.containerLogo, { opacity: opacityAnim }]}>
+                    <Image style={styles.imglogo} source={images[0]} />
+                </Animated.View>
 
-            <Animated.View style={[styles.containerLogin, { opacity: opacityAnim, transform: [{ translateY: offsetbutton }] }]}>
+                <Animated.View style={styles.containerError}>
+                    <Text style={styles.textError}>Login Error Undefined</Text>
+                </Animated.View>
 
-                <TouchableOpacity style={styles.btnlogin} onPress={LoginPress}>
-                    <Text style={styles.textLogin}>Login</Text>
-                </TouchableOpacity>
+                <View style={styles.KeyboardAvoidingView}>
+                    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardOffsetPlataform}>
+                        <Animated.View style={[styles.containerInputs, { opacity: opacityAnim }]}>
+                            <View style={styles.containerInputtext}>
+                                <Hoshi label={'E-Mail'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setEmail(value)} boardType={'email-address'} />
+                            </View>
+                            <View style={styles.containerInputtext}>
+                                <Hoshi label={'Password'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
+                            </View>
+                            <Animated.View style={styles.Containerbtforgotpassword}>
+                                <TouchableOpacity >
+                                    <Text style={styles.textforgotpassword}>Forgot your password?</Text>
+                                </TouchableOpacity>
+                            </Animated.View>
+                        </Animated.View>
+                    </KeyboardAvoidingView>
+                </View>
 
-            </Animated.View>
+                <Animated.View style={[styles.containerLogin, { opacity: opacityAnim, transform: [{ translateY: offsetbutton }] }]}>
+                    <TouchableOpacity style={styles.btnlogin} onPress={LoginPress}>
+                        <Text style={styles.textLogin}>Login</Text>
+                    </TouchableOpacity>
+                </Animated.View>
 
-
-        </Animated.View>
-
-    );
+            </View>
+        );
+    }
+    else {
+        return (
+            <LoginLoading />
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-    background: {
+    backgroundLinearGradiant: {
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
         width: "100%",
         height: "100%",
         position: 'absolute',
     },
-    containerLogo: {
-        flex: 1,
-        justifyContent: "flex-start",
-        paddingBottom: "0%",
-    },
-    imglogo: {
-        width: 340,
-        height: 340,
-        resizeMode: "contain",
-    },
-    containerInputs: {
-        alignItems: "center",
-        justifyContent: "flex-start",
-        width: "100%",
-        paddingBottom: "0%",
-        height: "50%",
-    },
-    containerInputtext: {
-        alignItems: "center",
-        width: "100%",
-        paddingTop: '5%'
-    },
-    containerLogin: {
-        alignItems: "center",
-        justifyContent: "flex-start",
-        width: "100%",
-        paddingBottom: "0%",
-        marginTop: "10%",
-        height: "15%",
-    },
-    input: {
-        width: "80%",
-    },
-    btnlogin: {
-        backgroundColor: "#FFF",
-        width: "90%",
-        height: "50%",
+    background: {
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 40,
-    },
-    textLogin: {
-        color: "#E65F4C",
-        fontSize: 35,
-    },
-    textforgotpassword: {
-        color: "#FFFF",
-        fontSize: 18,
-
-    },
-    Containerbtforgotpassword: {
-        width: "80%",
-        height: "25%",
-        paddingTop: '3%',
-        alignItems: "flex-end",
+        height: "100%",
     },
     containerBack: {
         position: 'absolute',
@@ -219,12 +169,60 @@ const styles = StyleSheet.create({
         left: "1.5%",
         zIndex: 1,
     },
-    btBack: {
-        height: "100%",
-        width: "100%",
+    containerLogo: {
+        marginBottom: 0,
+        marginTop: 10,
+    },
+    imglogo: {
+        width: 340,
+        height: 340,
+
     },
     KeyboardAvoidingView: {
-        width: "100%",
-        justifyContent: "center",
+        marginBottom: 210,
+        width: 330,
+        height: 160,
     },
+    containerInputs: {
+    },
+    containerInputtext: {
+    },
+    Containerbtforgotpassword: {
+        alignItems: "flex-end",
+        marginTop: 5,
+    },
+    textforgotpassword: {
+        color: "#FFFF",
+        fontSize: 18,
+    },
+    containerError: {
+        backgroundColor: "#FFF",
+        height: 40,
+        width: 330,
+        marginBottom: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 80,
+        opacity: 0,
+    },
+    textError: {
+        color: "#E65F4C",
+        fontWeight: "bold",
+    },
+    containerLogin: {
+    },
+    btnlogin: {
+        backgroundColor: "#FFF",
+        height: 66,
+        width: 380,
+        marginBottom: 60,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 80,
+    },
+    textLogin: {
+        color: "#E65F4C",
+        fontSize: 35,
+    },
+
 });
