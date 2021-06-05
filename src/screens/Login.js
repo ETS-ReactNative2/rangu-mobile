@@ -6,7 +6,6 @@ import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import apiUsers from '../services/Api';
 import LoginLoading from '../loadings/LoadingLogin';
-import { save } from '../services/Storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -20,11 +19,15 @@ export default function LogintScreen({ navigation }) {
     const keyboardOffsetPlataform = Platform.OS === "ios" ? -50 : -240;
     const [offsetbutton] = useState(new Animated.Value(80));
     const [opacityAnim] = useState(new Animated.Value(0));
+    const [errorOpacityAnim] = useState(new Animated.Value(0));
     const [loginLoad, setLoginLoad] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Erro');
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [type, setType] = useState("CLIENT");
+
+    let canLogin = true;
 
     function haddleStartScreen() {
         navigation.dispatch(
@@ -67,11 +70,19 @@ export default function LogintScreen({ navigation }) {
 
     function BackScreen() {
 
-        Animated.timing(opacityAnim, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: true,
-        }).start();
+        Animated.parallel([
+            Animated.timing(opacityAnim, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true,
+            }),
+            Animated.timing(errorOpacityAnim, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true,
+            }),
+        ]).start();
+
         setTimeout(haddleStartScreen, 301);
 
     }
@@ -81,8 +92,13 @@ export default function LogintScreen({ navigation }) {
             duration: 300,
             useNativeDriver: true,
         }).start();
+        Animated.timing(errorOpacityAnim, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+        }).start();
 
-        setTimeout(() => setLoginLoad(true), 301);
+        setTimeout(() => setLoginLoad(true), 300);
 
         let response;
         response = await apiUsers.post('/login', {
@@ -90,12 +106,44 @@ export default function LogintScreen({ navigation }) {
             password,
             type
         }).catch(error => {
-            console.log(error.response.data)
-        });
+            //console.log(error.response.data)
+            canLogin = false;
+            if (error.response.data.code == "422.3") {
+                setErrorMessage("E-mail or password is invalid.");
+                console.log(error.response.data.description);
+            }
+            else if (error.response.data.code == "422.5") {
+                setErrorMessage("User is not active.");
+                console.log(error.response.data.description);
+            }
+            else if (error.response.data.code == "412.5") {
+                setErrorMessage("Password is required.");
+                console.log(error.response.data.description);
+            }
+            else if (error.response.data.code == "412.2") {
+                setErrorMessage("E-mail is required.");
+                console.log(error.response.data.description);
+            }
+            setTimeout(() => setLoginLoad(false), 0);
 
-        await AsyncStorage.setItem('token', response.data.token);
-        setTimeout(haddleScan, 0);
+            Animated.timing(opacityAnim, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+
+            Animated.timing(errorOpacityAnim, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        });
+        if (canLogin) {
+            await AsyncStorage.setItem('token', response.data.token);
+            setTimeout(haddleScan, 0);
+        }
     }
+
 
     if (!loginLoad) {
         return (
@@ -113,8 +161,8 @@ export default function LogintScreen({ navigation }) {
                     <Image style={styles.imglogo} source={images[0]} />
                 </Animated.View>
 
-                <Animated.View style={styles.containerError}>
-                    <Text style={styles.textError}>Login Error Undefined</Text>
+                <Animated.View style={[styles.containerError, { opacity: errorOpacityAnim }]}>
+                    <Text style={styles.textError}>{errorMessage}</Text>
                 </Animated.View>
 
                 <View style={styles.KeyboardAvoidingView}>
@@ -203,7 +251,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 80,
-        opacity: 0,
     },
     textError: {
         color: "#E65F4C",
