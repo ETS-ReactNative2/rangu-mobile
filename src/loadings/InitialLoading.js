@@ -12,7 +12,7 @@ import animation6 from '../../assets/animations/loading/food/yellow-ration-food.
 
 export default function InitialLoading({ visible, children }) {
 
-  const animations = [animation1, animation2, animation3, animation4, animation5, animation6];
+  const animations = [/*animation1,*/ animation2,/* animation3, animation4, animation5, animation6*/];
   var randomAnim = animations[Math.floor(Math.random() * animations.length)];
 
 

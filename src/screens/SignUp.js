@@ -205,30 +205,32 @@ export default function LogintScreen({ navigation }) {
                     console.log(error.response.data.description);
                 }
                 */
-                setTimeout(() => setSignUpLoad(false), 0);
-                btpressed = false;
-                Animated.timing(opacityAnim, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: true,
-                }).start();
+                setTimeout(() => {
+                    btpressed = false;
+                    setBtText("Next");
+                    setSignUpLoad(false);
 
-                Animated.timing(errorOpacityAnim, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: true,
-                }).start();
+                    Animated.timing(opacityAnim, {
+                        toValue: 1,
+                        duration: 300,
+                        useNativeDriver: true,
+                    }).start();
 
-                setBtText("Next")
-                Animated.parallel([
+                    Animated.timing(errorOpacityAnim, {
+                        toValue: 1,
+                        duration: 300,
+                        useNativeDriver: true,
+                    }).start()
+
                     Animated.spring(NamesOffSet, {
                         toValue: 0,
                         speed: 3,
                         bounciness: 3,
                         useNativeDriver: true,
-                    }),
+                    }).start();
 
-                ]).start();
+                }, 2300);
+
             });
 
             if (canSignUp) {

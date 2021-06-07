@@ -124,20 +124,26 @@ export default function LogintScreen({ navigation }) {
                 setErrorMessage("E-mail is required.");
                 console.log(error.response.data.description);
             }
-            setTimeout(() => setLoginLoad(false), 0);
+            setTimeout(() => {
+                setLoginLoad(false);
 
-            Animated.timing(opacityAnim, {
-                toValue: 1,
-                duration: 300,
-                useNativeDriver: true,
-            }).start();
+                Animated.timing(opacityAnim, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }).start();
 
-            Animated.timing(errorOpacityAnim, {
-                toValue: 1,
-                duration: 300,
-                useNativeDriver: true,
-            }).start();
+                Animated.timing(errorOpacityAnim, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }).start()
+
+            }, 2300);
+
+
         });
+
         if (canLogin) {
             await AsyncStorage.setItem('token', response.data.token);
             setTimeout(haddleScan, 0);
