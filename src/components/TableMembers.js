@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Image, ScrollView, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
+import { FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 
@@ -18,42 +19,58 @@ const people = [
         key: String(Math.random()),
         personProfileImg: img1,
         personName: 'Leonardo',
+        autorized: true,
+        owner: true,
     },
 
     {
         key: String(Math.random()),
         personProfileImg: img5,
         personName: 'Henrrique',
+        autorized: false,
+        owner: false,
     },
     {
         key: String(Math.random()),
         personProfileImg: img6,
         personName: 'Ricardo',
+        autorized: true,
+        owner: false,
     },
     {
         key: String(Math.random()),
         personProfileImg: img7,
         personName: 'Andre',
+        autorized: true,
+        owner: false,
     },
     {
         key: String(Math.random()),
         personProfileImg: img8,
         personName: 'Leozinho',
+        autorized: true,
+        owner: false,
     },
     {
         key: String(Math.random()),
         personProfileImg: img2,
         personName: 'Gian',
+        autorized: false,
+        owner: false,
     },
     {
         key: String(Math.random()),
         personProfileImg: img3,
         personName: 'Chinchete',
+        autorized: false,
+        owner: false,
     },
     {
         key: String(Math.random()),
         personProfileImg: img4,
         personName: 'Luiz',
+        autorized: true,
+        owner: false,
     },
 ];
 
@@ -62,7 +79,25 @@ export default function Suggestions() {
         <ScrollView style={styles.container} horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingLeft: 16, }}>
             {people.map((person) => (
                 <TouchableOpacity style={styles.person} key={person.key}>
-                    <Image style={styles.profileImage} source={person.personProfileImg} />
+                    <Image style={[styles.profileImage, person.autorized == false ? {borderColor: '#D9AC25' } : person.owner == true ? {borderColor: '#0ABF04' } : {borderColor: 'transparent', },  ] } source={person.personProfileImg}/>
+
+                    {person.autorized == false ?
+                        <View style={[styles.iconContainer, {backgroundColor: '#D9AC25'}]}>
+                            <FontAwesome name="exclamation" size={20} color="white" />
+                        </View>
+                        :
+                        <></>
+                    }
+
+                    {person.owner == true ?
+                        <View style={[styles.iconContainer, {backgroundColor: '#0ABF04'}]}>
+                            {/* <FontAwesome5 name="crown" size={15} color="#FFF" /> */}
+                            <MaterialCommunityIcons name="crown" size={20} color="white" />
+                        </View>
+                        :
+                        <></>
+                    }
+
                     <Text style={styles.name}>{person.personName}</Text>
                 </TouchableOpacity>
             ))}
@@ -80,8 +115,8 @@ const styles = StyleSheet.create({
     profileImage: {
         borderRadius: 40,
         height: 80,
-        width: 80
-
+        width: 80,
+        borderWidth:3,
     },
     person: {
         width: 80,
@@ -93,5 +128,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 8,
         fontSize: 14,
+    },
+    iconContainer:{
+        borderRadius:100,
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent:'center',
+        width:"30%",
+        height: "18%",
+        alignSelf: 'flex-end',
+        bottom: "19%",
     }
 });
