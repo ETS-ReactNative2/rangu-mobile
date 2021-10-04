@@ -29,6 +29,7 @@ export default function Routes() {
                 <Stack.Screen name="LogintScreen" component={LogintScreen} />
                 <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
                 <Stack.Screen name="ScanScreen" component={ScanScreen} />
+                <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
                 <Stack.Screen name="Navigation" component={Navigation} />
 
             </Stack.Navigator>

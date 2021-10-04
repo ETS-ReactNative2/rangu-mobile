@@ -39,6 +39,14 @@ export default function ScanScreen({ navigation }) {
         )
     }
 
+    function haddleSignUp() {
+        navigation.dispatch(
+            CommonActions.reset({
+                routes: [{ name: 'SettingsScreen' },],
+            })
+        );
+    }
+
     async function ScanComplete(data) {
         console.log(data);
         console.log(BearerToken);
@@ -80,7 +88,7 @@ export default function ScanScreen({ navigation }) {
             
                 <Animated.View style={styles.container} >
                     <Animated.View style={[styles.containeSettings]}>
-                        <TouchableOpacity /*onPress={BackScreen}*/>
+                        <TouchableOpacity onPress={haddleSignUp}>
                             <AntDesign name="setting" size={45} color="white" />
                         </TouchableOpacity>
                     </Animated.View>
