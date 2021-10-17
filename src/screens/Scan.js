@@ -39,37 +39,39 @@ export default function ScanScreen({ navigation }) {
         )
     }
 
-    function haddleSignUp() {
+    function haddleSettings() {
         navigation.dispatch(
             CommonActions.reset({
-                routes: [{ name: 'SettingsScreen' },],
+                index: 1,
+                routes: [{ name: 'SettingsScreen', params: { fromScan: true } },
+                ],
             })
-        );
+        )
     }
 
     async function ScanComplete(data) {
         console.log(data);
         console.log(BearerToken);
 
-        let response;
-        response = await apiUsers.post(
-            '/login', 
-            {
-                email,
-                password,
-                type
-            },
-            {
-                headers: { Authorization: BearerToken }
-            }
-        ).catch(error => {
-            //console.log(error.response.data)
-            canLogin = false;
-            if (error.response.data.code == "422.3") {
-                setErrorMessage("E-mail or password is invalid.");
-                console.log(error.response.data.description);
-            }
-        });
+        // let response;
+        // response = await apiUsers.post(
+        //     '/login', 
+        //     {
+        //         email,
+        //         password,
+        //         type
+        //     },
+        //     {
+        //         headers: { Authorization: BearerToken }
+        //     }
+        // ).catch(error => {
+        //     //console.log(error.response.data)
+        //     canLogin = false;
+        //     if (error.response.data.code == "422.3") {
+        //         setErrorMessage("E-mail or password is invalid.");
+        //         console.log(error.response.data.description);
+        //     }
+        // });
 
         setTimeout(haddleRestaurant, 0);
     }
@@ -88,7 +90,7 @@ export default function ScanScreen({ navigation }) {
             
                 <Animated.View style={styles.container} >
                     <Animated.View style={[styles.containeSettings]}>
-                        <TouchableOpacity onPress={haddleSignUp}>
+                        <TouchableOpacity onPress={haddleSettings}>
                             <AntDesign name="setting" size={45} color="white" />
                         </TouchableOpacity>
                     </Animated.View>

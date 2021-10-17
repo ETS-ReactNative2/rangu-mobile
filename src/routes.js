@@ -14,6 +14,7 @@ import HomeScreen from '../src/screens/Home';
 import MenuScreen from '../src/screens/Menu';
 import NotificationScreen from '../src/screens/Notification';
 import SettingsScreen from '../src/screens/Settings';
+import EditInfoScreen from '../src/screens/EditInfo';
 import CheckScreen from '../src/screens/Check';
 
 
@@ -30,6 +31,7 @@ export default function Routes() {
                 <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
                 <Stack.Screen name="ScanScreen" component={ScanScreen} />
                 <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+                <Stack.Screen name="EditInfoScreen" component={EditInfoScreen} />
                 <Stack.Screen name="Navigation" component={Navigation} />
 
             </Stack.Navigator>
