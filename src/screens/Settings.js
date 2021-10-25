@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, SafeAreaView, Image, ScrollView, TouchableOpacity, ImageBackground, Animated, Platform, } from "react-native";
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
-import Hoshi from '../inputTexts/Hoshi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import img1 from '../../assets/images/Profile/FotoPerfil2_Cortada.jpg';
 const user =
@@ -36,6 +36,16 @@ export default function HomeScreen({ navigation, route }) {
                 ],
             })
         )
+    }
+
+    async function LogOut(){
+        await AsyncStorage.removeItem('token')
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 1,
+                routes: [{ name: 'StartScreen', params: { loading: false } },
+                ],
+            }))
     }
 
     useEffect(() => {
@@ -148,7 +158,7 @@ export default function HomeScreen({ navigation, route }) {
                 </View>
 
                 <View style={styles.containerLogOut}>
-                    <TouchableOpacity>
+                    <TouchableOpacity  onPress={LogOut}>
                         <Text style={styles.textLogOut}>Log Out</Text>
                     </TouchableOpacity>
                 </View>
