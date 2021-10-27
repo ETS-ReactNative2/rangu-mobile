@@ -50,7 +50,8 @@ const icons = {
     },
     Notifications: {
         lib: Ionicons,
-        name: 'ios-notifications-outline',
+        //name: 'ios-notifications-outline',
+        name: 'ios-megaphone-outline',
     },
     Settings: {
         lib: AntDesign,
@@ -110,7 +111,7 @@ export function Navigation() {
                 name="Notifications"
                 component={NotificationScreen}
                 options={{
-                    title: 'Notifications',
+                    title: 'Help',
                 }}
             />
             <Tab.Screen
