@@ -14,6 +14,7 @@ import HomeScreen from '../src/screens/Home';
 import MenuScreen from '../src/screens/Menu';
 import NotificationScreen from '../src/screens/Notification';
 import SettingsScreen from '../src/screens/Settings';
+import EditInfoScreen from '../src/screens/EditInfo';
 import CheckScreen from '../src/screens/Check';
 
 
@@ -29,6 +30,8 @@ export default function Routes() {
                 <Stack.Screen name="LogintScreen" component={LogintScreen} />
                 <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
                 <Stack.Screen name="ScanScreen" component={ScanScreen} />
+                <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+                <Stack.Screen name="EditInfoScreen" component={EditInfoScreen} />
                 <Stack.Screen name="Navigation" component={Navigation} />
 
             </Stack.Navigator>
@@ -47,7 +50,8 @@ const icons = {
     },
     Notifications: {
         lib: Ionicons,
-        name: 'ios-notifications-outline',
+        //name: 'ios-notifications-outline',
+        name: 'ios-megaphone-outline',
     },
     Settings: {
         lib: AntDesign,
@@ -107,7 +111,7 @@ export function Navigation() {
                 name="Notifications"
                 component={NotificationScreen}
                 options={{
-                    title: 'Notifications',
+                    title: 'Help',
                 }}
             />
             <Tab.Screen

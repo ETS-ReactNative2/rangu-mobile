@@ -40,7 +40,7 @@ export default function HomeScreen({ navigation }) {
 
             <DishCards dishDetailsCallBack={food => setFood(food)} />
 
-            <Modalize modalStyle={styles.modal} ref={modalizeRef} modalHeight={770} onClose={onCloseModal} scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: true, }}>
+            <Modalize modalStyle={styles.modal} ref={modalizeRef} modalHeight={770} onClose={onCloseModal} scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: false, }}>
                 <DishInfo displayInfo={food} closeModal={closeModal} />
             </Modalize>
 
