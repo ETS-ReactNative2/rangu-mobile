@@ -96,7 +96,7 @@ export function Navigation() {
                 name="Check"
                 component={CheckScreen}
                 options={{
-                    title: 'Check',
+                    title: 'Check Out',
                 }}
             />
             <Tab.Screen

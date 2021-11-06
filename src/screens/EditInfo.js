@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     },
     saveBtn:
     {
-        backgroundColor: "#0ABF04",
+        backgroundColor: "#2B7320",
         width: "90%",
         height: 50,
         borderRadius: 30,
