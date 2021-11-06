@@ -220,10 +220,10 @@ const styles = StyleSheet.create({
     scroll:
     {
         width: '100%',
+        marginTop:35,
     },
     body:
     {
-        marginTop: 50,
         backgroundColor: "#1e222b",
         borderRadius: 20,
         width: "90%",
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     },
     containerLogOut:
     {
-        marginTop: 25,
+        marginTop: 55,
         marginBottom:30
     },
     textLogOut:
