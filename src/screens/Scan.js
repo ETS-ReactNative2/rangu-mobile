@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiUsers from '../services/Api';
+import apiUsers from '../services/api.js';
 
 import QrCodeScanner from '../components/QrCodeScanner';
 
@@ -94,7 +94,7 @@ export default function ScanScreen({ navigation }) {
                             <AntDesign name="setting" size={45} color="white" />
                         </TouchableOpacity>
                     </Animated.View>
-                    <TouchableOpacity styles={styles.touch} /*onPress={ScanComplete}*/>
+                    <TouchableOpacity styles={styles.touch} onPress={haddleRestaurant}>
                         <Lottie style={[styles.anim]} source={NfcAnim} autoPlay loop />
                     </TouchableOpacity>
                     <Animated.View style={[styles.containeQrBt]}>
