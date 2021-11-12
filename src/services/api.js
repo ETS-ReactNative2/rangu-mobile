@@ -12,8 +12,8 @@ const apiOrders = axios.create({
     baseURL: 'https://rangu-orders.herokuapp.com/api/rangu/v1'
 })
 
+export default apiUsers;
 export {
-    apiUsers,
     apiMenu,
     apiOrders,
   };
