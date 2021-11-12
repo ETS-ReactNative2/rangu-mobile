@@ -1,6 +1,8 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
+import apiMenu from '../services/api.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 import img1 from '../../assets/images/Food/o-lanche-big-mac-do-mcdonalds-1574807643968_v2_450x337.png';
@@ -11,6 +13,9 @@ import img5 from '../../assets/images/Food/4589_4k.jpg';
 import img6 from '../../assets/images/Food/kzXpdQfc.png';
 import img7 from '../../assets/images/Food/miniBurgers.jpg';
 import img8 from '../../assets/images/Food/WICKBOLD_0037_17_POSTS_JUNHO_08.jpg';
+
+
+
 
 
 const foods = [
@@ -81,6 +86,45 @@ const foods = [
 ];
 
 export default function DishCards(props) {
+
+    const [BearerToken, setBearerToken] = useState();
+// useEffect(() => {
+//     (async () => {
+//         setBearerToken(await AsyncStorage.getItem('token'));
+//     })();
+
+//     async function LoadDishes() {
+//         //console.log(BearerToken);
+
+        
+//         const response = await apiMenu.get('/dishes',{},
+//             {
+//             /*Authorization: BearerToken*/ restaurantId: "3ce10558-5de9-42f1-8317-28aaa94268d4"
+//             }
+//         ).catch(error => {
+//             console.log(error)
+//             // if (error.response.data.code == "422.3") {
+//             //     setErrorMessage("E-mail or password is invalid.");
+//             //     console.log(error.response.data.description);
+//             // }
+//         });
+//         //console.log(response.data);
+//         // setTimeout(haddleRestaurant, 0);
+//     }
+//     LoadDishes();
+
+// },);
+
+    useEffect(() => {
+        async function loadData() {
+
+            const response = await apiMenu.get('/dishes', {
+                headers: { restaurantId: "3ce10558-5de9-42f1-8317-28aaa94268d4" }
+            });
+            console.log(response.data);
+        }
+        loadData();
+    }, []);
 
     return (
         <View style={{ marginBottom: 55 }}>

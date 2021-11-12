@@ -94,7 +94,7 @@ export default function ScanScreen({ navigation }) {
                             <AntDesign name="setting" size={45} color="white" />
                         </TouchableOpacity>
                     </Animated.View>
-                    <TouchableOpacity styles={styles.touch} /*onPress={ScanComplete}*/>
+                    <TouchableOpacity styles={styles.touch} onPress={haddleRestaurant}>
                         <Lottie style={[styles.anim]} source={NfcAnim} autoPlay loop />
                     </TouchableOpacity>
                     <Animated.View style={[styles.containeQrBt]}>
