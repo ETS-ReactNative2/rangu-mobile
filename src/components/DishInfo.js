@@ -17,14 +17,14 @@ export default function DishInfo(props) {
 
 
             <View style={styles.foodImageContainer}>
-                <Image style={styles.foodImage} source={props.displayInfo.foodImg} />
+                <Image style={styles.foodImage} source={{uri:props.displayInfo.image}} />
             </View>
 
             <View style={styles.description}>
 
 
                 <View style={styles.foodName}>
-                    <Text style={styles.textFoodName} numberOfLines={3}>{props.displayInfo.dishName}</Text>
+                    <Text style={styles.textFoodName} numberOfLines={3}>{props.displayInfo.name}</Text>
                 </View>
 
                 <View style={styles.cardBody}>
@@ -32,7 +32,7 @@ export default function DishInfo(props) {
                 </View>
 
                 <View style={styles.price}>
-                    <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>{props.displayInfo.price}</Text>
+                    <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>R$ {props.displayInfo.price ? props.displayInfo.price.toFixed(2):'????'}</Text>
                 </View>
 
             </View>

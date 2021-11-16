@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiUsers from '../services/api.js';
+import apiUsers from '../services/apiUsers.js';
 
 import QrCodeScanner from '../components/QrCodeScanner';
 

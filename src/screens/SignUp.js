@@ -6,7 +6,7 @@ import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginLoading from '../loadings/LoadingLogin';
-import apiUsers from '../services/api.js';
+import apiUsers from '../services/apiUsers.js';
 
 
 const images = [

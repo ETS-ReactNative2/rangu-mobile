@@ -4,7 +4,7 @@ import Hoshi from '../inputTexts/Hoshi';
 import { AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import apiUsers from '../services/api.js';
+import apiUsers from '../services/apiUsers';
 import LoginLoading from '../loadings/LoadingLogin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
