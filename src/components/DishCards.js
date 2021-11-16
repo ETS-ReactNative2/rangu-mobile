@@ -86,47 +86,39 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function DishCards(props) {
 
-    let canDisplayCard = true;
     const [BearerToken, setBearerToken] = useState();
     const [foods, setFoods] = useState([]);
     const [categorys, setcategorys] = useState([]);
+    let categorysLet;
+    let foodsLet;
 
 
     useEffect(() => {
         (async () => {
             setBearerToken(await AsyncStorage.getItem('token'));
         })();
+        //console.log(BearerToken);
 
-        async function LoadDishes() {
-            //console.log(BearerToken);
-
-            let response = await apiMenu.get('/dishes', { headers: { restaurantId: "3ce10558-5de9-42f1-8317-28aaa94268d4" } }
-            ).then(response => {
-
-
-                console.log(response.data);
-                setFoods(response.data);
-                let list = [];
-                foods.map(cat => list.push(cat.category));
-                setcategorys([...new Set(list)]);
-                console.log(categorys);
-
-
-            }).catch(error => {
-                canDisplayCard = false;
-                console.log(error)
-                // if (error.response.data.code == "422.3") {
-                //     setErrorMessage("E-mail or password is invalid.");
-                //     console.log(error.response.data.description);
-                // }
-            });
-
-
-
-        }
         LoadDishes();
 
     }, []);
+
+    async function LoadDishes() {
+        try {
+            let response = await apiMenu.get('/dishes', { headers: { restaurantId: "3ce10558-5de9-42f1-8317-28aaa94268d4" } })
+
+            foodsLet = response.data;
+            console.log(foodsLet);
+            setFoods(foodsLet);
+
+            categorysLet = [... new Set(foodsLet.map(cat => cat.category))];
+            console.log(categorysLet);
+            setcategorys(categorysLet);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 
@@ -135,15 +127,16 @@ export default function DishCards(props) {
             <ScrollView>
 
                 {categorys.map((category, index) => (
-                    <>
+                    <View key={index}>
+
                         <View style={styles.container} key={index}>
-                            <View style={styles.card}>
-                                <Text style={styles.textFoodName} numberOfLines={3}>{category}</Text>
+                            <View style={styles.cardCategory}>
+                                <Text style={styles.textCategoryName} numberOfLines={3}>{category}</Text>
                             </View>
                         </View>
 
-                        {foods.filter(food => food.category === category).map((food) => (
-                            <View style={styles.container} key={food.id}>
+                        {foods.filter(food => food.category === category).map((food, index) => (
+                            <View style={styles.container} key={index}>
                                 <View style={styles.card}>
                                     <View style={styles.cardHeader}>
                                         <Image style={styles.foodImage} source={{ uri: food.image }} />
@@ -183,7 +176,7 @@ export default function DishCards(props) {
                             </View>
 
                         ))}
-                    </>
+                    </View>
                 ))}
 
             </ScrollView>
@@ -198,6 +191,22 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         paddingRight: 16,
         paddingBottom: 16,
+
+    },
+    cardCategory: {
+        backgroundColor: "#465063",
+        borderRadius: 8,
+        marginBottom: 0,
+        padding: 15,
+    },
+    textCategoryName: {
+        color: '#fff',
+        fontSize: 18,
+        marginLeft: 15,
+        marginRight: 15,
+        fontWeight: 'bold',
+        overflow: 'scroll',
+        textAlign:'center',
 
     },
     card: {
