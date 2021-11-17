@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { Ionicons, SimpleLineIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, SafeAreaView, TextInput } from "react-native";
+import apiOrders from '../services/apiOrders.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function OrderItModal(props) {
 
-    const [comment, onChangeComment] = React.useState('');
+    const [BearerToken, setBearerToken] = useState();
+    const [comment, onChangeComment] = useState('');
+
+    useEffect(() => {
+
+        AsyncStorage.getItem('token')
+            .then(value => {
+                //console.log(value);
+                setBearerToken(value);
+
+            }).catch(err => {
+                console.log(err);
+
+            });
+
+    }, []);
 
     function closePopUp() {
 
         props.closeModalPopUp()
     }
 
-    function confirmOrder() {
+    async function confirmOrder() {
+
+        
+        try {
+            let response = await apiOrders.post('/orders',{ dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": "2787bcaa-3216-4c6a-a165-4b0851e81f94", "restaurantId": "3ce10558-5de9-42f1-8317-28aaa94268d4", "tableId": "25916895-3216-4c6a-a165-4b0851e81f94" } })
+            console.log(response.data);
+
+        } catch (error) {
+            console.log(error);
+        }
 
         props.orderConfirmed()
     }
@@ -20,7 +46,7 @@ export default function OrderItModal(props) {
         <SafeAreaView>
             <View style={styles.container}>
 
-            <View style={styles.foodName}>
+                <View style={styles.foodName}>
                     <Text style={styles.textFoodName} numberOfLines={3}>{props.displayInfo.name}</Text>
                 </View>
 
@@ -30,13 +56,13 @@ export default function OrderItModal(props) {
                         numberOfLines={4}
                         onChangeText={text => onChangeComment(text)}
                         value={comment}
-                        style={ styles.textInput}
+                        style={styles.textInput}
                         editable
                         maxLength={255}
                         blurOnSubmit
                         placeholder={'Additional infos'}
-                        placeholderTextColor= {"#1e222b"}
-                        keyboardAppearance = {'dark'}>
+                        placeholderTextColor={"#1e222b"}
+                        keyboardAppearance={'dark'}>
                     </TextInput>
                 </View>
 
@@ -62,9 +88,9 @@ const styles = StyleSheet.create({
         height: 350,
     },
     foodName: {
-        alignItems:'center',
-        marginTop:20,
-        marginBottom:5,
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 5,
     },
     textFoodName: {
         color: '#fff',
@@ -77,7 +103,7 @@ const styles = StyleSheet.create({
         margin: 15,
         borderRadius: 10,
     },
-    textInput:{
+    textInput: {
         padding: 10,
         height: 150,
         fontSize: 16,

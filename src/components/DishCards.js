@@ -94,9 +94,14 @@ export default function DishCards(props) {
 
 
     useEffect(() => {
-        (async () => {
-            setBearerToken(await AsyncStorage.getItem('token'));
-        })();
+
+        AsyncStorage.getItem('token').then(value => {
+            setBearerToken(value);
+        })
+            .catch(err => {
+                console.log(err);
+            });
+
         //console.log(BearerToken);
 
         LoadDishes();
@@ -206,7 +211,7 @@ const styles = StyleSheet.create({
         marginRight: 15,
         fontWeight: 'bold',
         overflow: 'scroll',
-        textAlign:'center',
+        textAlign: 'center',
 
     },
     card: {

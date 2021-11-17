@@ -146,6 +146,7 @@ export default function LogintScreen({ navigation }) {
 
         if (canLogin) {
             await AsyncStorage.setItem('token', response.data.token);
+            //console.log(response.data.token);
             setTimeout(haddleScan, 0);
         }
     }
