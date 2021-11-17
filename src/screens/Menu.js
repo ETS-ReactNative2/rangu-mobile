@@ -67,7 +67,7 @@ export default function HomeScreen({ navigation }) {
                 <DishInfo displayInfo={food} closeModal={closeModal} openModalPopUp={openModalPopUp} />
             </Modalize>
 
-            <Modal animationOut={animationOut} isVisible={isModalPopUpVisible} avoidKeyboard={true} animationInTiming = {400} animationOutTiming = {400} >
+            <Modal animationOut={animationOut} isVisible={isModalPopUpVisible} avoidKeyboard={true} animationInTiming={400} animationOutTiming={400} >
                 <OrderItModal displayInfo={food} closeModalPopUp={closeModalPopUp} orderConfirmed={orderConfirmed} />
             </Modal>
 
