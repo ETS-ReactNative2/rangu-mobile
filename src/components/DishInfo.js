@@ -7,7 +7,7 @@ export default function DishInfo(props) {
     function order() {
 
 
-        props.closeModal()
+        props.openModalPopUp()
     }
 
     return (
