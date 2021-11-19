@@ -4,7 +4,7 @@ import Hoshi from '../inputTexts/Hoshi';
 import { AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import apiUsers from '../services/apiUsers';
+import apiOauth from '../services/apiOauth.js';
 import LoginLoading from '../loadings/LoadingLogin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -101,7 +101,7 @@ export default function LogintScreen({ navigation }) {
         setTimeout(() => setLoginLoad(true), 300);
 
         let response;
-        response = await apiUsers.post('/login', {
+        response = await apiOauth.post('/login', {
             email,
             password,
             type
@@ -146,7 +146,9 @@ export default function LogintScreen({ navigation }) {
 
         if (canLogin) {
             await AsyncStorage.setItem('token', response.data.token);
-            //console.log(response.data.token);
+            await AsyncStorage.setItem('userid', response.data.userId);
+            console.log(response.data.token);
+            console.log(response.data.userId);
             setTimeout(haddleScan, 0);
         }
     }

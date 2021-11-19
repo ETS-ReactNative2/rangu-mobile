@@ -110,7 +110,7 @@ export default function DishCards(props) {
 
     async function LoadDishes() {
         try {
-            let response = await apiMenu.get('/dishes', { headers: { restaurantId: "3ce10558-5de9-42f1-8317-28aaa94268d4" } })
+            let response = await apiMenu.get('/dishes', { headers: { restaurantId: "30face97-6047-46a7-a092-1888c945ac2a" } })
 
             foodsLet = response.data;
             console.log(foodsLet);

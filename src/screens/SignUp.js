@@ -171,12 +171,10 @@ export default function LogintScreen({ navigation }) {
 
             let response
             response = await apiUsers.post('/clients/sign-up', {
-                user: {
-                    name,
-                    email,
-                    phone,
-                    password,
-                },
+                name,
+                email,
+                phone,
+                password,
                 address: {
                     district,
                     city,

@@ -7,14 +7,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function OrderItModal(props) {
 
     const [BearerToken, setBearerToken] = useState();
+    const [userId, setUserId] = useState();
     const [comment, onChangeComment] = useState('');
 
     useEffect(() => {
 
         AsyncStorage.getItem('token')
             .then(value => {
-                //console.log(value);
                 setBearerToken(value);
+                console.log('BearerToken: ' + value);
+
+            }).catch(err => {
+                console.log(err);
+
+            });
+
+            AsyncStorage.getItem('userid')
+            .then(value => {
+                setUserId(value);
+                console.log('UserId: ' + value);
 
             }).catch(err => {
                 console.log(err);
@@ -32,7 +43,8 @@ export default function OrderItModal(props) {
 
         
         try {
-            let response = await apiOrders.post('/orders',{ dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": "2787bcaa-3216-4c6a-a165-4b0851e81f94", "restaurantId": "3ce10558-5de9-42f1-8317-28aaa94268d4", "tableId": "25916895-3216-4c6a-a165-4b0851e81f94" } })
+            console.log('UserId Request: ' + userId);
+            let response = await apiOrders.post('/orders',{ dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": userId, "restaurantId": "3ce10558-5de9-42f1-8317-28aaa94268d4", "tableId": "25916895-3216-4c6a-a165-4b0851e81f94" } })
             console.log(response.data);
 
         } catch (error) {
