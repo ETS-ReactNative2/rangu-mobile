@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, SafeAreaView, Image, Scro
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
 
 import img1 from '../../assets/images/Profile/FotoPerfil2_Cortada.jpg';
 const user =
@@ -20,6 +21,8 @@ const user =
 }
 
 export default function HomeScreen({ navigation, route }) {
+
+    const [personProfileImg, setpersonProfileImg] = useState(null);
 
     const params = route.params;
     const [fromScan, setfromScan] = useState(false);
@@ -39,13 +42,44 @@ export default function HomeScreen({ navigation, route }) {
     }
 
     async function LogOut(){
-        await AsyncStorage.removeItem('token')
+        await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('userid');
         navigation.dispatch(
             CommonActions.reset({
                 index: 1,
                 routes: [{ name: 'StartScreen', params: { loading: false } },
                 ],
             }))
+    }
+
+    async function changeProfileImage(){
+
+        (async () => {
+            if (Platform.OS !== 'web') {
+              const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+              if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+              }
+            }
+          })();
+
+
+          (async () => {
+            let result = await ImagePicker.launchImageLibraryAsync({
+              mediaTypes: ImagePicker.MediaTypeOptions.Images,
+              allowsEditing: true,
+              aspect: [1, 1],
+              quality: 1,
+              base64: true
+            });
+        
+            console.log(result);
+        
+            if (!result.cancelled) {
+                setpersonProfileImg(result.base64);
+            }
+          })();
+
     }
 
     useEffect(() => {
@@ -81,8 +115,8 @@ export default function HomeScreen({ navigation, route }) {
                 </View>
             </View>
             <View style={styles.profileImageContainer}>
-                <Image style={[styles.profileImage]} source={user.personProfileImg} />
-                <TouchableOpacity style={[styles.iconContainer]}>
+                <Image style={[styles.profileImage]} source={personProfileImg ? {uri: `data:image/gif;base64,${personProfileImg}`}  : user.personProfileImg} />
+                <TouchableOpacity onPress={changeProfileImage} style={[styles.iconContainer]}>
                     <View>
                         <MaterialIcons name="edit" size={30} color="black" />
                     </View>

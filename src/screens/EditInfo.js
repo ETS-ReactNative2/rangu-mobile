@@ -11,19 +11,21 @@ export default function HomeScreen({ navigation, route }) {
     const params = route.params;
 
     function haddleSettingsScreen() {
-        if(fromScan)
-        {
-            navigation.dispatch(
-                CommonActions.reset({
-                    index: 1,
-                    routes: [{ name: 'SettingsScreen', params: { fromScan: fromScan } },],
-                })
-            )
-        }
-        else
-        {
-            navigation.pop();
-        }
+        // if(fromScan)
+        // {
+        //     navigation.dispatch(
+        //         CommonActions.reset({
+        //             index: 1,
+        //             routes: [{ name: 'SettingsScreen', params: { fromScan: fromScan } },],
+        //         })
+        //     )
+        // }
+        // else
+        // {
+        //     navigation.pop();
+        // }
+
+        navigation.pop();
 
     }
 
