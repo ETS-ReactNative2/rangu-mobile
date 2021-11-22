@@ -37,7 +37,7 @@ export default function LogintScreen({ navigation }) {
     const [state, setState] = useState();
     const [postalCode, setPostalCode] = useState();
     const [city, setCity] = useState();
-    const [number, setNumber] = useState("6969");
+    const [number, setNumber] = useState("0000");
 
     let canSignUp = true;
 

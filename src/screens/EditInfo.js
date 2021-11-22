@@ -5,10 +5,12 @@ import { FontAwesome, MaterialIcons, MaterialCommunityIcons, Feather, AntDesign 
 import Hoshi from '../inputTexts/Hoshi';
 
 
-export default function HomeScreen({ navigation, route }) {
+export default function HomeScreen({ navigation, route, props }) {
 
     const [fromScan, setfromScan] = useState(false);
     const params = route.params;
+
+    const [value, setValue] = useState();
 
     function haddleSettingsScreen() {
         // if(fromScan)
@@ -36,8 +38,16 @@ export default function HomeScreen({ navigation, route }) {
                 setfromScan(true);
             }
         }
+
+        setValue(params.currentValue);
         
     }, []);
+
+    function editCallBck(){
+
+        params.getback(value, params.id);
+        navigation.pop();
+    }
 
     return (
 
@@ -57,12 +67,12 @@ export default function HomeScreen({ navigation, route }) {
             </View>
             <ScrollView style={[styles.scroll]} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
                 <View style={[styles.inputContainer]}>
-                    <Hoshi style={styles.input} label={params.item} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} /*onChangeText={(value) => setName(value)}*/ boardType={'default'} />
+                    <Hoshi style={styles.input} label={params.item} value={value} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setValue(value)} boardType={'default'} />
                 </View>
                 <View style={[styles.textInfoContainer]} >
                     <Text style={[styles.textInfo]}>Change the information you want and click the save button</Text>
                 </View>
-                <TouchableOpacity style={[styles.saveBtn]}>
+                <TouchableOpacity onPress={editCallBck} style={[styles.saveBtn]}>
                     <Text style={[styles.textSave]}>Save</Text>
                 </TouchableOpacity>
             </ScrollView>

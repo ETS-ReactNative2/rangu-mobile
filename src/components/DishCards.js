@@ -113,11 +113,11 @@ export default function DishCards(props) {
             let response = await apiMenu.get('/dishes', { headers: { restaurantId: "30face97-6047-46a7-a092-1888c945ac2a" } })
 
             foodsLet = response.data;
-            console.log(foodsLet);
+            //console.log(foodsLet);
             setFoods(foodsLet);
 
             categorysLet = [... new Set(foodsLet.map(cat => cat.category))];
-            console.log(categorysLet);
+            //console.log(categorysLet);
             setcategorys(categorysLet);
 
         } catch (error) {

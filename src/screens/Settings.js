@@ -4,9 +4,11 @@ import { FontAwesome, MaterialIcons, MaterialCommunityIcons, Feather, AntDesign 
 import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import apiUsers from '../services/apiUsers.js';
 
 import img1 from '../../assets/images/Profile/FotoPerfil2_Cortada.jpg';
-const user =
+
+/*const user =
 {
     key: String(Math.random()),
     personProfileImg: img1,
@@ -19,17 +21,68 @@ const user =
     personZip: '13083-745',
     personCity: 'Campinas'
 }
+*/
 
 export default function HomeScreen({ navigation, route }) {
-
-    const [personProfileImg, setpersonProfileImg] = useState(null);
 
     const params = route.params;
     const [fromScan, setfromScan] = useState(false);
 
-    function haddleEdit(item) {
-        navigation.push('EditInfoScreen', { item: item, preParams:params})
+    const [personProfileImg, setpersonProfileImg] = useState();
+    const [personName, setpersonName] = useState('Leonardo M. Mariotto');
+    const [personEmail, setpersonEmail] = useState('leonardo_mariotto@yahoo.com.br');
+    const [personPhone, setpersonPhone] = useState('+55 (19) 981824269');
+    const [personStreet, setpersonStreet] = useState('Rua Dr. Ruy Viccente de Mello, 687');
+    const [personDistrict, setpersonDistrict] = useState('Cidade Univercitária');
+    const [personState, setpersonState] = useState('São Paulo');
+    const [personZip, setpersonZip] = useState('13083-745');
+    const [personCity, setpersonCity] = useState('Campinas');
+
+    let userId = '';
+
+
+    useEffect(() => {
+
+
+        LoadClient();
+
+    }, []);
+
+    async function LoadClient() {
+        try {
+            await AsyncStorage.getItem('userid')
+                .then(value => {
+                    userId = value;
+                    //console.log('UserId: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
+            let response
+            response = await apiUsers.get('/clients/' + userId, {});
+            console.log(response.data);
+            setpersonProfileImg(response.data.picture);
+            setpersonName(response.data.name);
+            setpersonEmail(response.data.email);
+            setpersonPhone(response.data.phone);
+            setpersonStreet(response.data.address.street);
+            setpersonDistrict(response.data.address.district);
+            setpersonState(response.data.address.state);
+            setpersonZip(response.data.address.postalCode);
+            setpersonCity(response.data.address.city);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+
+    // useEffect(() => {
+
+
+    // }, [personProfileImg, personName, personEmail, personPhone, personPhone, personStreet, personDistrict, personState, personZip, personCity]);
 
     function haddleScanScreen() {
         navigation.dispatch(
@@ -41,7 +94,7 @@ export default function HomeScreen({ navigation, route }) {
         )
     }
 
-    async function LogOut(){
+    async function LogOut() {
         await AsyncStorage.removeItem('token');
         await AsyncStorage.removeItem('userid');
         navigation.dispatch(
@@ -52,45 +105,146 @@ export default function HomeScreen({ navigation, route }) {
             }))
     }
 
-    async function changeProfileImage(){
+    function haddleEdit(item, id, currentValue) {
+        navigation.push('EditInfoScreen', { item: item, id: id, currentValue: currentValue, preParams: params, getback: (value, id) => editReciveBack(value, id) })
+    }
+
+    async function editReciveBack(value, id) {
+
+        let personProfileImgLet = personProfileImg;
+        let personNameLet = personName;
+        let personEmailLet = personEmail;
+        let personPhoneLet = personPhone;
+        let personStreetLet = personStreet;
+        let personDistrictLet = personDistrict;
+        let personStateLet = personState;
+        let personZipLet = personZip;
+        let personCityLet = personCity;
+
+        if (value || !value === '') {
+            console.log('Editando Infos');
+            switch (id) {
+                case 0:
+                    setpersonName(value);
+                    personNameLet = value;
+                    break;
+
+                case 1:
+                    setpersonEmail(value);
+                    personEmailLet = value;
+                    break;
+
+                case 2:
+                    setpersonPhone(value);
+                    personPhoneLet = value;
+                    break;
+
+                case 3:
+                    setpersonStreet(value);
+                    personStreetLet = value;
+                    break;
+
+                case 4:
+                    setpersonDistrict(value);
+                    personDistrictLet = value;
+                    break;
+
+                case 5:
+                    setpersonState(value);
+                    personStateLet = value;
+                    break;
+
+                case 6:
+                    setpersonZip(value);
+                    personZipLet = value;
+                    break;
+
+                case 7:
+                    setpersonCity(value);
+                    personCityLet = value;
+                    break;
+
+                default:
+                    console.log('Id Inexisteste')
+                    break;
+            }
+
+
+            try {
+                await AsyncStorage.getItem('userid')
+                    .then(value => {
+                        userId = value;
+                        //console.log('UserId: ' + value);
+
+                    }).catch(err => {
+                        console.log(err);
+
+                    });
+
+                let response
+                response = await apiUsers.put('/clients/' + userId, {
+                    addressUpdate: {
+                        city: personCityLet,
+                        district: personDistrictLet,
+                        number: "0000",
+                        postalCode: personZipLet,
+                        state: personStateLet,
+                        street: personStreetLet,
+                    },
+                    name: personNameLet,
+                    phone: personPhoneLet,
+                    picture: 'Image link',
+                }
+                );
+                console.log(response.status);
+
+            } catch (error) {
+                console.log(error.response.data.code);
+            }
+
+        }
+    }
+
+
+    async function changeProfileImage() {
 
         (async () => {
             if (Platform.OS !== 'web') {
-              const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-              if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
-              }
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
             }
-          })();
+        })();
 
 
-          (async () => {
+        (async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
-              mediaTypes: ImagePicker.MediaTypeOptions.Images,
-              allowsEditing: true,
-              aspect: [1, 1],
-              quality: 1,
-              base64: true
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1,
+                base64: true
             });
-        
+
             console.log(result);
-        
+
             if (!result.cancelled) {
                 setpersonProfileImg(result.base64);
             }
-          })();
+        })();
 
     }
 
     useEffect(() => {
 
         if (params !== undefined) {
-           
+
             if (params.fromScan) {
                 setfromScan(true);
             }
         }
-        
+
     }, []);
 
 
@@ -115,7 +269,7 @@ export default function HomeScreen({ navigation, route }) {
                 </View>
             </View>
             <View style={styles.profileImageContainer}>
-                <Image style={[styles.profileImage]} source={personProfileImg ? {uri: `data:image/gif;base64,${personProfileImg}`}  : user.personProfileImg} />
+                <Image style={[styles.profileImage]} source={personProfileImg ? { uri: `data:image/gif;base64,${personProfileImg}` } : img1} />
                 <TouchableOpacity onPress={changeProfileImage} style={[styles.iconContainer]}>
                     <View>
                         <MaterialIcons name="edit" size={30} color="black" />
@@ -129,22 +283,22 @@ export default function HomeScreen({ navigation, route }) {
                     <View style={styles.celulaContainer}>
                         <View style={styles.celula}>
                             <Text style={styles.text}>Name:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Name')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personName}</Text>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Name', 0, personName)}>
+                                <Text style={styles.textInfo} numberOfLines={1}>{personName}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
                             <Text style={styles.text}>E-Mail:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('E-Mail')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personEmail}</Text>
+                            <TouchableOpacity style={styles.editBtn} /*onPress={() => haddleEdit('E-Mail', 1, personEmail )}*/>
+                                <Text style={[styles.textInfo, { color: '#919197' }]} numberOfLines={1}>{personEmail}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
                             <Text style={styles.text}>Phone:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Phone')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personPhone}</Text>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Phone', 2, personPhone)}>
+                                <Text style={styles.textInfo} numberOfLines={1}>{personPhone}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
@@ -155,36 +309,36 @@ export default function HomeScreen({ navigation, route }) {
                     <View style={styles.celulaContainer}>
                         <View style={styles.celula}>
                             <Text style={styles.text}>Street:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Street')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personStreet}</Text>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Street', 3, personStreet)}>
+                                <Text style={styles.textInfo} numberOfLines={1}>{personStreet}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
                             <Text style={styles.text}>District:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('District')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personDistrict}</Text>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('District', 4, personDistrict)}>
+                                <Text style={styles.textInfo} numberOfLines={1}>{personDistrict}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
                             <Text style={styles.text}>State:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('State')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personState}</Text>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('State', 5, personState)}>
+                                <Text style={styles.textInfo} numberOfLines={1}>{personState}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
                             <Text style={styles.text}>CEP:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('CEP')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personZip}</Text>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('CEP', 6, personZip)}>
+                                <Text style={styles.textInfo} numberOfLines={1}>{personZip}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
                             <Text style={styles.text}>City:</Text>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('City')}>
-                                <Text style={styles.textInfo} numberOfLines={1}>{user.personCity}</Text>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('City', 7, personCity)}>
+                                <Text style={styles.textInfo} numberOfLines={1}>{personCity}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
@@ -192,7 +346,7 @@ export default function HomeScreen({ navigation, route }) {
                 </View>
 
                 <View style={styles.containerLogOut}>
-                    <TouchableOpacity  onPress={LogOut}>
+                    <TouchableOpacity onPress={LogOut}>
                         <Text style={styles.textLogOut}>Log Out</Text>
                     </TouchableOpacity>
                 </View>
@@ -254,7 +408,7 @@ const styles = StyleSheet.create({
     scroll:
     {
         width: '100%',
-        marginTop:35,
+        marginTop: 35,
     },
     body:
     {
@@ -312,7 +466,7 @@ const styles = StyleSheet.create({
     containerLogOut:
     {
         marginTop: 55,
-        marginBottom:30
+        marginBottom: 30
     },
     textLogOut:
     {
