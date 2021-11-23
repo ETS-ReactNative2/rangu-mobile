@@ -5,8 +5,10 @@ import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import apiUsers from '../services/apiUsers.js';
+import { RNS3 } from 'react-native-aws3';
+import { optionsProfileS3 } from '../services/s3Config';
 
-import img1 from '../../assets/images/Profile/FotoPerfil2_Cortada.jpg';
+import img1 from '../../assets/images/Profile/DefaultProfileImg.png';
 
 /*const user =
 {
@@ -29,17 +31,17 @@ export default function HomeScreen({ navigation, route }) {
     const [fromScan, setfromScan] = useState(false);
 
     const [personProfileImg, setpersonProfileImg] = useState();
-    const [personName, setpersonName] = useState('Leonardo M. Mariotto');
-    const [personEmail, setpersonEmail] = useState('leonardo_mariotto@yahoo.com.br');
-    const [personPhone, setpersonPhone] = useState('+55 (19) 981824269');
-    const [personStreet, setpersonStreet] = useState('Rua Dr. Ruy Viccente de Mello, 687');
-    const [personDistrict, setpersonDistrict] = useState('Cidade Univercitária');
-    const [personState, setpersonState] = useState('São Paulo');
-    const [personZip, setpersonZip] = useState('13083-745');
-    const [personCity, setpersonCity] = useState('Campinas');
+    const [personName, setpersonName] = useState('....');
+    const [personEmail, setpersonEmail] = useState('....');
+    const [personPhone, setpersonPhone] = useState('....');
+    const [personStreet, setpersonStreet] = useState('....');
+    const [personDistrict, setpersonDistrict] = useState('....');
+    const [personState, setpersonState] = useState('....');
+    const [personZip, setpersonZip] = useState('....');
+    const [personCity, setpersonCity] = useState('....');
 
     let userId = '';
-
+    let profileImgLoaded = false;
 
     useEffect(() => {
 
@@ -62,7 +64,7 @@ export default function HomeScreen({ navigation, route }) {
 
             let response
             response = await apiUsers.get('/clients/' + userId, {});
-            console.log(response.data);
+            //console.log(response.data);
             setpersonProfileImg(response.data.picture);
             setpersonName(response.data.name);
             setpersonEmail(response.data.email);
@@ -72,6 +74,7 @@ export default function HomeScreen({ navigation, route }) {
             setpersonState(response.data.address.state);
             setpersonZip(response.data.address.postalCode);
             setpersonCity(response.data.address.city);
+            profileImgLoaded = true;
 
         } catch (error) {
             console.log(error);
@@ -106,10 +109,12 @@ export default function HomeScreen({ navigation, route }) {
     }
 
     function haddleEdit(item, id, currentValue) {
-        navigation.push('EditInfoScreen', { item: item, id: id, currentValue: currentValue, preParams: params, getback: (value, id) => editReciveBack(value, id) })
+        navigation.push('EditInfoScreen', { item: item, id: id, currentValue: currentValue, preParams: params, getback: (value, id) => editProfile(value, id) })
     }
 
-    async function editReciveBack(value, id) {
+    async function editProfile(value, id) {
+
+        //if (profileImgLoaded) {
 
         let personProfileImgLet = personProfileImg;
         let personNameLet = personName;
@@ -163,18 +168,21 @@ export default function HomeScreen({ navigation, route }) {
                     setpersonCity(value);
                     personCityLet = value;
                     break;
+                case 8:
+                    setpersonProfileImg(value);
+                    personProfileImgLet = value;
+                    console.log('Image Update: ', personProfileImgLet);
+                    break;
 
                 default:
                     console.log('Id Inexisteste')
                     break;
             }
 
-
             try {
                 await AsyncStorage.getItem('userid')
                     .then(value => {
                         userId = value;
-                        //console.log('UserId: ' + value);
 
                     }).catch(err => {
                         console.log(err);
@@ -193,7 +201,7 @@ export default function HomeScreen({ navigation, route }) {
                     },
                     name: personNameLet,
                     phone: personPhoneLet,
-                    picture: 'Image link',
+                    picture: personProfileImgLet,
                 }
                 );
                 console.log(response.status);
@@ -203,36 +211,74 @@ export default function HomeScreen({ navigation, route }) {
             }
 
         }
+        // }
+
     }
 
 
     async function changeProfileImage() {
 
-        (async () => {
+        //if (profileImgLoaded) {
             if (Platform.OS !== 'web') {
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (status !== 'granted') {
                     alert('Sorry, we need camera roll permissions to make this work!');
                 }
             }
-        })();
 
-
-        (async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [1, 1],
                 quality: 1,
-                base64: true
             });
 
             console.log(result);
 
             if (!result.cancelled) {
-                setpersonProfileImg(result.base64);
+
+                await AsyncStorage.getItem('userid')
+                    .then(value => {
+                        userId = value;
+                        //console.log('UserId: ' + value);
+
+                    }).catch(err => {
+                        console.log(err);
+
+                    });
+
+                let currentName = personProfileImg;
+                let numberFoto = currentName.replace('https://rangu-ohio.s3.amazonaws.com/profileImg%2F' + userId, "").replace(".jpg","").replace("-","");
+                numberFoto ++;
+
+                setpersonProfileImg(result.uri);
+
+                const file = {
+                    uri: result.uri,
+                    name: userId + '-' + numberFoto + '.jpg',
+                    type: "image/jpeg"
+                }
+                console.log('Eviando imagem para S3');
+
+                try {
+
+                    await RNS3.put(file, optionsProfileS3).progress((progress) =>
+                        console.log('Uploading: ', progress.percent))
+                        .then(response => {
+                            if (response.status !== 201) {
+                                //throw new Error("Failed to upload image to S3");
+                            }
+                            console.log(response.percent);
+                            editProfile(response.body.postResponse.location, 8)
+                        });
+
+                } catch (error) {
+                    console.log(error);
+                }
+
+
             }
-        })();
+       // }
 
     }
 
@@ -269,7 +315,7 @@ export default function HomeScreen({ navigation, route }) {
                 </View>
             </View>
             <View style={styles.profileImageContainer}>
-                <Image style={[styles.profileImage]} source={personProfileImg ? { uri: `data:image/gif;base64,${personProfileImg}` } : img1} />
+                <Image style={[styles.profileImage]} source={personProfileImg ? { uri: personProfileImg /*uri: `data:image/gif;base64,${personProfileImg}`*/ } : img1} />
                 <TouchableOpacity onPress={changeProfileImage} style={[styles.iconContainer]}>
                     <View>
                         <MaterialIcons name="edit" size={30} color="black" />
