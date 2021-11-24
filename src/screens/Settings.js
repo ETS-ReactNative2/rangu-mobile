@@ -7,8 +7,10 @@ import * as ImagePicker from 'expo-image-picker';
 import apiUsers from '../services/apiUsers.js';
 import { RNS3 } from 'react-native-aws3';
 import { optionsProfileS3 } from '../services/s3Config';
+import Lottie from 'lottie-react-native';
 
 import img1 from '../../assets/images/Profile/DefaultProfileImg.png';
+import animationDone from '../../assets/animations/done/done.json';
 
 /*const user =
 {
@@ -30,6 +32,10 @@ export default function HomeScreen({ navigation, route }) {
     const params = route.params;
     const [fromScan, setfromScan] = useState(false);
 
+    const [uploadProgress, setuploadProgress] = useState();
+    const [uploadComplete, setuploadComplete] = useState(true);
+    const [profileLoaded, setprofileLoaded] = useState(false);
+
     const [personProfileImg, setpersonProfileImg] = useState();
     const [personName, setpersonName] = useState('....');
     const [personEmail, setpersonEmail] = useState('....');
@@ -41,7 +47,7 @@ export default function HomeScreen({ navigation, route }) {
     const [personCity, setpersonCity] = useState('....');
 
     let userId = '';
-    let profileImgLoaded = false;
+
 
     useEffect(() => {
 
@@ -74,7 +80,8 @@ export default function HomeScreen({ navigation, route }) {
             setpersonState(response.data.address.state);
             setpersonZip(response.data.address.postalCode);
             setpersonCity(response.data.address.city);
-            profileImgLoaded = true;
+
+            setprofileLoaded(true);
 
         } catch (error) {
             console.log(error);
@@ -88,137 +95,148 @@ export default function HomeScreen({ navigation, route }) {
     // }, [personProfileImg, personName, personEmail, personPhone, personPhone, personStreet, personDistrict, personState, personZip, personCity]);
 
     function haddleScanScreen() {
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 1,
-                routes: [{ name: 'ScanScreen' },
-                ],
-            })
-        )
+        if (uploadComplete) {
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 1,
+                    routes: [{ name: 'ScanScreen' },
+                    ],
+                })
+            )
+        }
+
     }
 
     async function LogOut() {
-        await AsyncStorage.removeItem('token');
-        await AsyncStorage.removeItem('userid');
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 1,
-                routes: [{ name: 'StartScreen', params: { loading: false } },
-                ],
-            }))
+        if (uploadComplete) {
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('userid');
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 1,
+                    routes: [{ name: 'StartScreen', params: { loading: false } },
+                    ],
+                }))
+        }
+
     }
 
     function haddleEdit(item, id, currentValue) {
-        navigation.push('EditInfoScreen', { item: item, id: id, currentValue: currentValue, preParams: params, getback: (value, id) => editProfile(value, id) })
+        if (profileLoaded) {
+            navigation.push('EditInfoScreen', { item: item, id: id, currentValue: currentValue, preParams: params, getback: (value, id) => editProfile(value, id) })
+        }
     }
 
     async function editProfile(value, id) {
 
-        //if (profileImgLoaded) {
+        if (profileLoaded) {
 
-        let personProfileImgLet = personProfileImg;
-        let personNameLet = personName;
-        let personEmailLet = personEmail;
-        let personPhoneLet = personPhone;
-        let personStreetLet = personStreet;
-        let personDistrictLet = personDistrict;
-        let personStateLet = personState;
-        let personZipLet = personZip;
-        let personCityLet = personCity;
+            let personProfileImgLet = personProfileImg;
+            let personNameLet = personName;
+            let personEmailLet = personEmail;
+            let personPhoneLet = personPhone;
+            let personStreetLet = personStreet;
+            let personDistrictLet = personDistrict;
+            let personStateLet = personState;
+            let personZipLet = personZip;
+            let personCityLet = personCity;
 
-        if (value || !value === '') {
-            console.log('Editando Infos');
-            switch (id) {
-                case 0:
-                    setpersonName(value);
-                    personNameLet = value;
-                    break;
+            if (value || !value === '') {
+                console.log('Editing Infos');
+                switch (id) {
+                    case 0:
+                        setpersonName(value);
+                        personNameLet = value;
+                        break;
 
-                case 1:
-                    setpersonEmail(value);
-                    personEmailLet = value;
-                    break;
+                    case 1:
+                        setpersonEmail(value);
+                        personEmailLet = value;
+                        break;
 
-                case 2:
-                    setpersonPhone(value);
-                    personPhoneLet = value;
-                    break;
+                    case 2:
+                        setpersonPhone(value);
+                        personPhoneLet = value;
+                        break;
 
-                case 3:
-                    setpersonStreet(value);
-                    personStreetLet = value;
-                    break;
+                    case 3:
+                        setpersonStreet(value);
+                        personStreetLet = value;
+                        break;
 
-                case 4:
-                    setpersonDistrict(value);
-                    personDistrictLet = value;
-                    break;
+                    case 4:
+                        setpersonDistrict(value);
+                        personDistrictLet = value;
+                        break;
 
-                case 5:
-                    setpersonState(value);
-                    personStateLet = value;
-                    break;
+                    case 5:
+                        setpersonState(value);
+                        personStateLet = value;
+                        break;
 
-                case 6:
-                    setpersonZip(value);
-                    personZipLet = value;
-                    break;
+                    case 6:
+                        setpersonZip(value);
+                        personZipLet = value;
+                        break;
 
-                case 7:
-                    setpersonCity(value);
-                    personCityLet = value;
-                    break;
-                case 8:
-                    setpersonProfileImg(value);
-                    personProfileImgLet = value;
-                    console.log('Image Update: ', personProfileImgLet);
-                    break;
+                    case 7:
+                        setpersonCity(value);
+                        personCityLet = value;
+                        break;
+                    case 8:
+                        setpersonProfileImg(value);
+                        personProfileImgLet = value;
+                        console.log('Image Update: ', personProfileImgLet);
+                        break;
 
-                default:
-                    console.log('Id Inexisteste')
-                    break;
-            }
-
-            try {
-                await AsyncStorage.getItem('userid')
-                    .then(value => {
-                        userId = value;
-
-                    }).catch(err => {
-                        console.log(err);
-
-                    });
-
-                let response
-                response = await apiUsers.put('/clients/' + userId, {
-                    addressUpdate: {
-                        city: personCityLet,
-                        district: personDistrictLet,
-                        number: "0000",
-                        postalCode: personZipLet,
-                        state: personStateLet,
-                        street: personStreetLet,
-                    },
-                    name: personNameLet,
-                    phone: personPhoneLet,
-                    picture: personProfileImgLet,
+                    default:
+                        console.log('Id Inexisteste')
+                        break;
                 }
-                );
-                console.log(response.status);
 
-            } catch (error) {
-                console.log(error.response.data.code);
+                try {
+                    await AsyncStorage.getItem('userid')
+                        .then(value => {
+                            userId = value;
+
+                        }).catch(err => {
+                            console.log(err);
+
+                        });
+
+                    let response
+                    response = await apiUsers.put('/clients/' + userId, {
+                        addressUpdate: {
+                            city: personCityLet,
+                            district: personDistrictLet,
+                            number: "0000",
+                            postalCode: personZipLet,
+                            state: personStateLet,
+                            street: personStreetLet,
+                        },
+                        name: personNameLet,
+                        phone: personPhoneLet,
+                        picture: personProfileImgLet,
+                    }
+                    );
+                    console.log('Done Editing Infos');
+                    setuploadComplete(true);
+
+                } catch (error) {
+                    console.log(error.response.data.code);
+                }
+
             }
-
         }
-        // }
 
     }
 
 
     async function changeProfileImage() {
+        if (profileLoaded && uploadComplete) {
 
-        //if (profileImgLoaded) {
+            setuploadComplete(false);
+
             if (Platform.OS !== 'web') {
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (status !== 'granted') {
@@ -247,38 +265,50 @@ export default function HomeScreen({ navigation, route }) {
 
                     });
 
-                let currentName = personProfileImg;
-                let numberFoto = currentName.replace('https://rangu-ohio.s3.amazonaws.com/profileImg%2F' + userId, "").replace(".jpg","").replace("-","");
-                numberFoto ++;
+
+                let numberImg
+                if (personProfileImg) {
+                    let currentName = personProfileImg;
+                    numberImg = currentName.replace('https://rangu-ohio.s3.amazonaws.com/profileImg%2F' + userId, "").replace(".jpg", "").replace("-", "");
+                    numberImg++;
+                }
+                else {
+                    numberImg = 0;
+                }
 
                 setpersonProfileImg(result.uri);
 
                 const file = {
                     uri: result.uri,
-                    name: userId + '-' + numberFoto + '.jpg',
+                    name: userId + '-' + numberImg + '.jpg',
                     type: "image/jpeg"
                 }
                 console.log('Eviando imagem para S3');
 
                 try {
 
-                    await RNS3.put(file, optionsProfileS3).progress((progress) =>
-                        console.log('Uploading: ', progress.percent))
+                    await RNS3.put(file, optionsProfileS3).progress((progress) => {
+                        console.log('Uploading: ', progress.percent)
+                        if (progress.percent) {
+                            setuploadProgress(progress.percent);
+                        }
+                    })
                         .then(response => {
                             if (response.status !== 201) {
-                                //throw new Error("Failed to upload image to S3");
+                                console.log("Failed to upload image to S3");
                             }
                             console.log(response.percent);
-                            editProfile(response.body.postResponse.location, 8)
-                        });
+                            editProfile(response.body.postResponse.location, 8);
+                            setTimeout(() => {
+                                setuploadProgress();
+                            }, 2000);
 
+                        });
                 } catch (error) {
                     console.log(error);
                 }
-
-
             }
-       // }
+        }
 
     }
 
@@ -317,8 +347,16 @@ export default function HomeScreen({ navigation, route }) {
             <View style={styles.profileImageContainer}>
                 <Image style={[styles.profileImage]} source={personProfileImg ? { uri: personProfileImg /*uri: `data:image/gif;base64,${personProfileImg}`*/ } : img1} />
                 <TouchableOpacity onPress={changeProfileImage} style={[styles.iconContainer]}>
-                    <View>
-                        <MaterialIcons name="edit" size={30} color="black" />
+                    <View style={styles.icon}>
+                        {uploadProgress ?
+                            uploadProgress === 1 ?
+                                <Lottie style={styles.animDone} source={animationDone} autoPlay loop={false} />
+                                :
+                                <Text style={styles.percentValueText}>{(uploadProgress * 100).toFixed(0)}<Text style={styles.percentCharText}>%</Text></Text>
+                            :
+                            <MaterialIcons name="edit" size={30} color="black" />
+                        }
+
                     </View>
                 </TouchableOpacity>
             </View>
@@ -450,6 +488,27 @@ const styles = StyleSheet.create({
         height: "25%",
         alignSelf: 'flex-end',
         bottom: "5%",
+    },
+    icon: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    animDone: {
+        height: '120%',
+        width: '120%',
+        left: -1.2,
+        top: -1.35
+    },
+    percentValueText: {
+        fontSize: 16,
+        fontWeight: '900',
+        textAlign: 'center'
+    },
+    percentCharText: {
+        fontSize: 9,
+        fontWeight: '900',
     },
     scroll:
     {
