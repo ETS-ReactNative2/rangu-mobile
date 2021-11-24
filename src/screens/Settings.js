@@ -108,7 +108,7 @@ export default function HomeScreen({ navigation, route }) {
     }
 
     async function LogOut() {
-        if (uploadComplete) {
+        if (profileLoaded && uploadComplete) {
             await AsyncStorage.removeItem('token');
             await AsyncStorage.removeItem('userid');
             navigation.dispatch(
@@ -122,7 +122,7 @@ export default function HomeScreen({ navigation, route }) {
     }
 
     function haddleEdit(item, id, currentValue) {
-        if (profileLoaded) {
+        if (profileLoaded && uploadComplete) {
             navigation.push('EditInfoScreen', { item: item, id: id, currentValue: currentValue, preParams: params, getback: (value, id) => editProfile(value, id) })
         }
     }
