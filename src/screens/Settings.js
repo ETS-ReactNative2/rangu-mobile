@@ -251,7 +251,7 @@ export default function HomeScreen({ navigation, route }) {
                 quality: 1,
             });
 
-            console.log(result);
+            //console.log(result);
 
             if (!result.cancelled) {
 
