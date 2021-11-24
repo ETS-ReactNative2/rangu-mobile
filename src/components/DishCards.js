@@ -3,6 +3,9 @@ import { AntDesign, Entypo } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
 import apiMenu from '../services/apiMenu.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Lottie from 'lottie-react-native';
+
+import animationLoading from '../../assets/animations/loading/generic/loadingSpinner.json';
 
 
 // import img1 from '../../assets/images/Food/o-lanche-big-mac-do-mcdonalds-1574807643968_v2_450x337.png';
@@ -89,6 +92,7 @@ export default function DishCards(props) {
     const [BearerToken, setBearerToken] = useState();
     const [foods, setFoods] = useState([]);
     const [categorys, setcategorys] = useState([]);
+    const [loading, setloading] = useState(true);
     let categorysLet;
     let foodsLet;
 
@@ -120,78 +124,92 @@ export default function DishCards(props) {
             //console.log(categorysLet);
             setcategorys(categorysLet);
 
+            setloading(false);
+
         } catch (error) {
             console.log(error);
         }
     }
 
-
-
-    return (
-        <View style={{ marginBottom: 55 }}>
-            <ScrollView>
-
-                {categorys.map((category, index) => (
-                    <View key={index}>
-
-                        <View style={styles.container} key={index}>
-                            <View style={styles.cardCategory}>
-                                <Text style={styles.textCategoryName} numberOfLines={3}>{category}</Text>
-                            </View>
-                        </View>
-
-                        {foods.filter(food => food.category === category).map((food, index) => (
+    if(loading)
+    {
+        return (
+            <View style={styles.loadingContainer}>
+                <Lottie style={styles.loadingAnim } source={animationLoading} autoPlay loop />
+            </View>
+        );
+    }
+    else
+    {
+        return (
+            <View style={{ marginBottom: 55 }}>
+                <ScrollView>
+    
+                    {categorys.map((category, index) => (
+                        <View key={index}>
+    
                             <View style={styles.container} key={index}>
-                                <View style={styles.card}>
-                                    <View style={styles.cardHeader}>
-                                        <Image style={styles.foodImage} source={{ uri: food.image }} />
-                                        <View style={styles.foodName}>
-                                            <Text style={styles.textFoodName} numberOfLines={3}>{food.name}</Text>
-                                        </View>
-
-                                        <View>
-                                            <TouchableOpacity onPress={() => props.dishDetailsCallBack(food)}>
-                                                <AntDesign name="pluscircle" color="#D7233C" size={35} />
-                                            </TouchableOpacity>
-                                        </View>
-
-                                    </View>
-                                    {food.description !== '' ?
-                                        <View style={styles.cardBody}>
-                                            <Text style={styles.textDescription} numberOfLines={4}>{food.description}</Text>
-                                        </View>
-                                        : null}
-
-                                    <View style={styles.cardFooter}>
-                                        <View style={styles.price}>
-                                            <Text style={styles.textPrice}>Price:</Text>
-
-                                            <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>R$ {food.price ? food.price.toFixed(2) : '????'}</Text>
-
-                                        </View>
-                                        <View style={styles.price}>
-                                            <Entypo name="time-slot" color="#fff" size={14} />
-                                            <Text style={styles.textEta}>{food.estimatedTime}</Text>
-                                        </View>
-
-                                    </View>
-
+                                <View style={styles.cardCategory}>
+                                    <Text style={styles.textCategoryName} numberOfLines={3}>{category}</Text>
                                 </View>
-
                             </View>
+    
+                            {foods.filter(food => food.category === category).map((food, index) => (
+                                <View style={styles.container} key={index}>
+                                    <View style={styles.card}>
+                                        <View style={styles.cardHeader}>
+                                            <Image style={styles.foodImage} source={{ uri: food.image }} />
+                                            <View style={styles.foodName}>
+                                                <Text style={styles.textFoodName} numberOfLines={3}>{food.name}</Text>
+                                            </View>
+    
+                                            <View>
+                                                <TouchableOpacity onPress={() => props.dishDetailsCallBack(food)}>
+                                                    <AntDesign name="pluscircle" color="#D7233C" size={35} />
+                                                </TouchableOpacity>
+                                            </View>
+    
+                                        </View>
+                                        {food.description !== '' ?
+                                            <View style={styles.cardBody}>
+                                                <Text style={styles.textDescription} numberOfLines={4}>{food.description}</Text>
+                                            </View>
+                                            : null}
+    
+                                        <View style={styles.cardFooter}>
+                                            <View style={styles.price}>
+                                                <Text style={styles.textPrice}>Price:</Text>
+    
+                                                <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>R$ {food.price ? food.price.toFixed(2) : '????'}</Text>
+    
+                                            </View>
+                                            <View style={styles.price}>
+                                                <Entypo name="time-slot" color="#fff" size={14} />
+                                                <Text style={styles.textEta}>{food.estimatedTime}</Text>
+                                            </View>
+    
+                                        </View>
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
+        );
+    }
 
-                        ))}
-                    </View>
-                ))}
-
-            </ScrollView>
-
-        </View>
-
-    );
+    
 }
 
 const styles = StyleSheet.create({
+    loadingContainer:{
+        height:'100%',
+         width:'100%'
+    },
+    loadingAnim:{
+        marginBottom: 55,
+    },
     container: {
         paddingLeft: 16,
         paddingRight: 16,
