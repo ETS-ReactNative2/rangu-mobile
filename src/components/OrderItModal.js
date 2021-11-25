@@ -3,29 +3,34 @@ import { Ionicons, SimpleLineIcons, MaterialIcons, AntDesign } from '@expo/vecto
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, SafeAreaView, TextInput } from "react-native";
 import apiOrders from '../services/apiOrders.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Lottie from 'lottie-react-native';
+
+import animationLoading from '../../assets/animations/waiting/order-completed.json';
+import animation from '../../assets/animations/loading/generic/food-loading.json';
 
 export default function OrderItModal(props) {
 
     const [BearerToken, setBearerToken] = useState();
     const [userId, setUserId] = useState();
     const [comment, onChangeComment] = useState('');
+    const [sending, setsending] = useState(false);
 
     useEffect(() => {
 
         AsyncStorage.getItem('token')
             .then(value => {
                 setBearerToken(value);
-                console.log('BearerToken: ' + value);
+                //console.log('BearerToken: ' + value);
 
             }).catch(err => {
                 console.log(err);
 
             });
 
-            AsyncStorage.getItem('userid')
+        AsyncStorage.getItem('userid')
             .then(value => {
                 setUserId(value);
-                console.log('UserId: ' + value);
+                //console.log('UserId: ' + value);
 
             }).catch(err => {
                 console.log(err);
@@ -41,17 +46,23 @@ export default function OrderItModal(props) {
 
     async function confirmOrder() {
 
-        
+
         try {
-            console.log('UserId Request: ' + userId);
-            let response = await apiOrders.post('/orders',{ dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": userId, "restaurantId": "3ce10558-5de9-42f1-8317-28aaa94268d4", "tableId": "25916895-3216-4c6a-a165-4b0851e81f94" } })
-            console.log(response.data);
+            console.log('UserId: ' + userId);
+            console.log('Request: ' + props.displayInfo.id);
+            console.log('Comment: ' + comment);
+            setsending(true);
+            let response = await apiOrders.post('/orders', { dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": userId, "restaurantId": "30face97-6047-46a7-a092-1888c945ac2a", "tableId": "7f7a37df-b629-41e7-a588-914c3cbdeb7a" } })
+            console.log(response.data);            
 
         } catch (error) {
             console.log(error);
         }
 
-        props.orderConfirmed()
+        setTimeout(() => {
+            props.orderConfirmed();
+        }, 2000);
+        
     }
 
     return (
@@ -61,31 +72,38 @@ export default function OrderItModal(props) {
                 <View style={styles.foodName}>
                     <Text style={styles.textFoodName} numberOfLines={3}>{props.displayInfo.name}</Text>
                 </View>
+                {sending ?
+                    <View style={styles.containerAnim}>
+                        <Lottie  resizemode="center" speed={0.3} source={animationLoading} autoPlay loop={false}/>
+                    </View>
+                    :
+                    <View style={{ height: 290,}}>
+                        <View style={styles.containerTextInput}>
+                            <TextInput
+                                multiline
+                                numberOfLines={4}
+                                onChangeText={text => onChangeComment(text)}
+                                value={comment}
+                                style={styles.textInput}
+                                editable
+                                maxLength={255}
+                                blurOnSubmit
+                                placeholder={'Additional infos'}
+                                placeholderTextColor={"#1e222b"}
+                                keyboardAppearance={'dark'}>
+                            </TextInput>
+                        </View>
 
-                <View style={styles.containerTextInput}>
-                    <TextInput
-                        multiline
-                        numberOfLines={4}
-                        onChangeText={text => onChangeComment(text)}
-                        value={comment}
-                        style={styles.textInput}
-                        editable
-                        maxLength={255}
-                        blurOnSubmit
-                        placeholder={'Additional infos'}
-                        placeholderTextColor={"#1e222b"}
-                        keyboardAppearance={'dark'}>
-                    </TextInput>
-                </View>
-
-                <View style={[styles.containerOrderButtons]}>
-                    <TouchableOpacity onPress={confirmOrder} style={styles.btnOrderIt} >
-                        <Text style={styles.textOrderIt}>Order It</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={closePopUp} style={styles.btnCancel} >
-                        <Text style={styles.textCancel}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
+                        <View style={[styles.containerOrderButtons]}>
+                            <TouchableOpacity onPress={confirmOrder} style={styles.btnOrderIt} >
+                                <Text style={styles.textOrderIt}>Order It</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={closePopUp} style={styles.btnCancel} >
+                                <Text style={styles.textCancel}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                }
 
             </View>
         </SafeAreaView>
@@ -109,6 +127,10 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         overflow: 'scroll',
+    },
+    containerAnim:{
+        height: '100%',
+        width: '100%'
     },
     containerTextInput: {
         backgroundColor: '#3C404A',
