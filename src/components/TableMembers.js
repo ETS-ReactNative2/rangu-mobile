@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
+import apiOrchestrate from '../services/apiOrchestrate.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import imgDefault from '../../assets/images/Profile/DefaultProfileImg.png';
 
 import img1 from '../../assets/images/Profile/FotoPerfil2_Cortada.jpg';
 import img2 from '../../assets/images/Profile/40037515.jpg';
@@ -75,14 +78,55 @@ const people = [
 ];
 
 export default function Suggestions() {
+
+    const [TableInfo, setTableInfo] = useState({tableMembers:[]});
+
+    let userId = '';
+    
+    useEffect(() => {
+
+        AsyncStorage.getItem('token').then(value => {
+
+        })
+            .catch(err => {
+                console.log(err);
+            });
+
+        LoadTableMembers();
+
+    }, []);
+
+    async function LoadTableMembers() {
+        try {
+
+            await AsyncStorage.getItem('userid')
+                .then(value => {
+                    userId = value;
+                    //console.log('UserId: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
+
+            let response = await apiOrchestrate.get('/tableDetails', { headers: { tableId: "7f7a37df-b629-41e7-a588-914c3cbdeb7a" } })
+
+            //console.log(response.data);
+            setTableInfo(response.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <ScrollView style={styles.container} horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingLeft: 16, }}>
-            {people.map((person) => (
-                <TouchableOpacity style={styles.person} key={person.key}>
-                    <Image style={[styles.profileImage, person.autorized == false ? {borderColor: '#D9AC25' } : person.owner == true ? {borderColor: '#0ABF04' } : {borderColor: 'transparent', },  ] } source={person.personProfileImg}/>
+            {TableInfo.tableMembers.map((person) => (
+                <TouchableOpacity style={styles.person} key={person.id}>
+                    <Image style={[styles.profileImage, person.accepted == false ? { borderColor: '#D9AC25' } : person.owner == true ? { borderColor: '#0ABF04' } : { borderColor: '#fff',borderWidth: 0.5, },]} source={person.picture ?{uri: person.picture}: imgDefault} />
 
-                    {person.autorized == false ?
-                        <View style={[styles.iconContainer, {backgroundColor: '#D9AC25'}]}>
+                    {person.accepted == false ?
+                        <View style={[styles.iconContainer, { backgroundColor: '#D9AC25' }]}>
                             <FontAwesome name="exclamation" size={20} color="white" />
                         </View>
                         :
@@ -90,7 +134,7 @@ export default function Suggestions() {
                     }
 
                     {person.owner == true ?
-                        <View style={[styles.iconContainer, {backgroundColor: '#0ABF04'}]}>
+                        <View style={[styles.iconContainer, { backgroundColor: '#0ABF04' }]}>
                             {/* <FontAwesome5 name="crown" size={15} color="#FFF" /> */}
                             <MaterialCommunityIcons name="crown" size={20} color="white" />
                         </View>
@@ -98,7 +142,7 @@ export default function Suggestions() {
                         <></>
                     }
 
-                    <Text style={styles.name}>{person.personName}</Text>
+                    <Text style={styles.name} numberOfLines={1} >{person.name.split(" ")[0]}</Text>
                 </TouchableOpacity>
             ))}
         </ScrollView >
@@ -116,7 +160,7 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         height: 80,
         width: 80,
-        borderWidth:3,
+        borderWidth: 3,
     },
     person: {
         width: 80,
@@ -129,12 +173,12 @@ const styles = StyleSheet.create({
         marginTop: 8,
         fontSize: 14,
     },
-    iconContainer:{
-        borderRadius:100,
+    iconContainer: {
+        borderRadius: 100,
         position: 'absolute',
         alignItems: 'center',
-        justifyContent:'center',
-        width:"30%",
+        justifyContent: 'center',
+        width: "30%",
         height: "18%",
         alignSelf: 'flex-end',
         bottom: "19%",

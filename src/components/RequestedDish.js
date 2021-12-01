@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { Feather, Ionicons, AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
 import Lottie from 'lottie-react-native';
+
+import apiOrchestrate from '../services/apiOrchestrate.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import anim from '../../assets/animations/which-one/healthy-or-junk-food.json';
 import img1 from '../../assets/images/Profile/FotoPerfil2_Cortada.jpg';
@@ -90,9 +93,50 @@ let dishes = [
 
 ];
 
-
 export default function RequestedDish() {
-  if (dishes.length === 0) {
+
+  const [TableOrders, setTableOrders] = useState([]);
+
+  let userId = '';
+
+  useEffect(() => {
+
+    AsyncStorage.getItem('token').then(value => {
+
+    })
+      .catch(err => {
+        console.log(err);
+      });
+
+      LoadTableDishes();
+
+  }, []);
+
+  async function LoadTableDishes() {
+    try {
+
+      await AsyncStorage.getItem('userid')
+        .then(value => {
+          userId = value;
+          //console.log('UserId: ' + value);
+
+        }).catch(err => {
+          console.log(err);
+
+        });
+
+
+      let response = await apiOrchestrate.get('/tableOrders', { headers: { clientTable: "7f7a37df-b629-41e7-a588-914c3cbdeb7a" } })
+
+      console.log(response.data);
+      setTableOrders(response.data);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  if (TableOrders.length === 0) {
     return (
 
       <View style={styles.animContainer} >
@@ -105,34 +149,46 @@ export default function RequestedDish() {
   else {
     return (
       <ScrollView>
-        {dishes.map((dishe) => (
-          <View style={styles.container} key={dishe.key}>
+        {TableOrders.map((order) => (
+          <View style={styles.container} key={order.id}>
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Image style={styles.profileImage} source={dishe.personProfileImg} />
+                <Image style={styles.profileImage} source={ order.dishes.map((dish,index) => {if(index == 0){return { uri: dish.image}}}) } />
                 <Text style={styles.textDescription}>
-                  <Text style={styles.bold}>{dishe.personName}</Text> ordered <Text style={styles.bold}>{dishe.dishName}</Text>
+                  <Text style={styles.bold}>{order.clientName.split(" ")[0]}</Text> ordered <Text style={styles.bold}>{order.dishes.map((dish,index) => {if(index == 0){return dish.name }})}</Text>
                 </Text>
               </View>
-              {dishe.comment !== '' ?
+              {order.comment !== '' ?
                 <View style={styles.cardBody}>
-                  <Text style={styles.observation}>{dishe.comment}</Text>
+                  <Text style={styles.observation}>{order.comment}</Text>
                 </View>
                 : null}
 
               <View style={styles.cardFooter}>
                 <View style={styles.status}>
                   <Text style={styles.textStatus}>Status:</Text>
-                  {dishe.statusDone == true ?
+                  {order.status == 'DONE' ?
                     <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Ready</Text>
                     :
-                    <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Preparing</Text>
+                    order.status == 'PREPARING' ?
+                    <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparing</Text>
+                    :
+                    order.status == 'SUBMITTED' ?
+                    <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Submitted</Text>
+                    :
+                    order.status == 'TAKING' ?
+                    <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Taking</Text>
+                    :
+                    order.status == 'CANCEL' ?
+                    <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancel</Text>
+                    :
+                    null
                   }
 
                 </View>
                 <View style={styles.status}>
                   <Ionicons name="ios-time-outline" color="#fff" size={18} />
-                  <Text style={styles.textTime}>{dishe.orderHour}</Text>
+                  <Text style={styles.textTime}>{order.orderHour}</Text>
                 </View>
               </View>
             </View>

@@ -3,9 +3,13 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, SafeAreaView, Image, Scro
 import { CommonActions } from '@react-navigation/native';
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons, Feather, AntDesign } from '@expo/vector-icons';
 import Hoshi from '../inputTexts/Hoshi';
+import { LogBox } from 'react-native';
+
 
 
 export default function HomeScreen({ navigation, route, props }) {
+
+    LogBox.ignoreLogs(['Non-serializable values were found in the navigation state',]);
 
     const [fromScan, setfromScan] = useState(false);
     const params = route.params;
