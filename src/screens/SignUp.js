@@ -232,7 +232,8 @@ export default function LogintScreen({ navigation }) {
             });
 
             if (canSignUp) {
-                //await AsyncStorage.setItem('token', response.data.token);
+                await AsyncStorage.setItem('token', response.data.token);
+                await AsyncStorage.setItem('userid', response.data.userId);
                 setTimeout(haddleScan, 0);
             }
 

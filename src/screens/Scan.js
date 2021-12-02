@@ -8,10 +8,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiUsers from '../services/apiUsers.js';
+import apiMenu from '../services/apiMenu.js';
 
 import QrCodeScanner from '../components/QrCodeScanner';
 
+let userId = '';
 
 const images = [
     require("../../assets/images/icon0_alpha.png"),
@@ -19,13 +20,6 @@ const images = [
 
 
 export default function ScanScreen({ navigation }) {
-
-    const [BearerToken, setBearerToken] = useState();
-    useEffect(() => {
-        (async () => {
-            setBearerToken(await AsyncStorage.getItem('token'));
-        })();
-    },);
 
     const modalizeRef = useRef(null);
 
@@ -50,30 +44,38 @@ export default function ScanScreen({ navigation }) {
     }
 
     async function ScanComplete(data) {
-        console.log(data);
-        console.log(BearerToken);
 
-        // let response;
-        // response = await apiUsers.post(
-        //     '/login', 
-        //     {
-        //         email,
-        //         password,
-        //         type
-        //     },
-        //     {
-        //         headers: { Authorization: BearerToken }
-        //     }
-        // ).catch(error => {
-        //     //console.log(error.response.data)
-        //     canLogin = false;
-        //     if (error.response.data.code == "422.3") {
-        //         setErrorMessage("E-mail or password is invalid.");
-        //         console.log(error.response.data.description);
-        //     }
-        // });
+        //Exemplo '{"tableId": "03af2e27-c118-45c9-9d9c-a0691c9c67bf"}'
+        try {
+            console.log(data);
+            let qrCodeInfo = JSON.parse('{"tableId": "03af2e27-c118-45c9-9d9c-a0691c9c67bf"}');
+            console.log(qrCodeInfo.tableId);
+            
+        } catch (error) {
+            console.log('Invalid QrCode');
+        }
 
-        setTimeout(haddleRestaurant, 0);
+
+        try {
+            await AsyncStorage.getItem('userid')
+                .then(value => {
+                    userId = value;
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+            let response = await apiMenu.post('/clientTables',  { tableId: qrCodeInfo.tableId}, { headers: { clientId : userId } })
+            console.log(response.data);
+            await AsyncStorage.setItem('tableId', qrCodeInfo.tableId);
+
+            setTimeout(haddleRestaurant, 0);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+
     }
 
     function OpenModalScanner() {
