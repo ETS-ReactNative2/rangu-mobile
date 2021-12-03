@@ -81,7 +81,7 @@ export default function Suggestions() {
 
     const [TableInfo, setTableInfo] = useState({tableMembers:[]});
 
-    let userId = '';
+    let tableId = '';
     
     useEffect(() => {
 
@@ -99,18 +99,17 @@ export default function Suggestions() {
     async function LoadTableMembers() {
         try {
 
-            await AsyncStorage.getItem('userid')
+            await AsyncStorage.getItem('tableId')
                 .then(value => {
-                    userId = value;
-                    //console.log('UserId: ' + value);
+                    tableId = value;
+                    console.log('TableMembers TableId: ' + value);
 
                 }).catch(err => {
                     console.log(err);
 
                 });
 
-
-            let response = await apiOrchestrate.get('/tableDetails', { headers: { tableId: "7f7a37df-b629-41e7-a588-914c3cbdeb7a" } })
+            let response = await apiOrchestrate.get('/tableDetails', { headers: { tableId: tableId } })
 
             //console.log(response.data);
             setTableInfo(response.data);

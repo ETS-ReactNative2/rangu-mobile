@@ -10,32 +10,16 @@ import animation from '../../assets/animations/loading/generic/food-loading.json
 
 export default function OrderItModal(props) {
 
-    const [BearerToken, setBearerToken] = useState();
-    const [userId, setUserId] = useState();
     const [comment, onChangeComment] = useState('');
     const [sending, setsending] = useState(false);
 
+    let tableId;
+    let restaurantId;
+    let userId;
+
     useEffect(() => {
 
-        AsyncStorage.getItem('token')
-            .then(value => {
-                setBearerToken(value);
-                //console.log('BearerToken: ' + value);
 
-            }).catch(err => {
-                console.log(err);
-
-            });
-
-        AsyncStorage.getItem('userid')
-            .then(value => {
-                setUserId(value);
-                //console.log('UserId: ' + value);
-
-            }).catch(err => {
-                console.log(err);
-
-            });
 
     }, []);
 
@@ -48,12 +32,45 @@ export default function OrderItModal(props) {
 
 
         try {
+            await AsyncStorage.getItem('restaurantId')
+                .then(value => {
+                    restaurantId = value;
+                    console.log('OrderItModal RestaurantId: ' + value);
+                    //console.log('BearerToken: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
+            await AsyncStorage.getItem('tableId')
+                .then(value => {
+                    tableId = value;
+                    console.log('OrderItModal TableId: ' + value);
+                    //console.log('BearerToken: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
+            await AsyncStorage.getItem('userid')
+                .then(value => {
+                    userId = value;
+                    console.log('OrderItModal UserId: ' + value);
+                    //console.log('UserId: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
             console.log('UserId: ' + userId);
             console.log('Request: ' + props.displayInfo.id);
             console.log('Comment: ' + comment);
             setsending(true);
-            let response = await apiOrders.post('/orders', { dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": userId, "restaurantId": "30face97-6047-46a7-a092-1888c945ac2a", "tableId": "7f7a37df-b629-41e7-a588-914c3cbdeb7a" } })
-            console.log(response.data);            
+            let response = await apiOrders.post('/orders', { dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": userId, "restaurantId": restaurantId, "tableId": tableId } })
+            console.log(response.data);
 
         } catch (error) {
             console.log(error);
@@ -62,7 +79,7 @@ export default function OrderItModal(props) {
         setTimeout(() => {
             props.orderConfirmed();
         }, 2000);
-        
+
     }
 
     return (
@@ -74,10 +91,10 @@ export default function OrderItModal(props) {
                 </View>
                 {sending ?
                     <View style={styles.containerAnim}>
-                        <Lottie  resizemode="center" speed={0.3} source={animationLoading} autoPlay loop={false}/>
+                        <Lottie resizemode="center" speed={0.3} source={animationLoading} autoPlay loop={false} />
                     </View>
                     :
-                    <View style={{ height: 290,}}>
+                    <View style={{ height: 290, }}>
                         <View style={styles.containerTextInput}>
                             <TextInput
                                 multiline
@@ -128,7 +145,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         overflow: 'scroll',
     },
-    containerAnim:{
+    containerAnim: {
         height: '100%',
         width: '100%'
     },

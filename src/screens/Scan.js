@@ -45,11 +45,11 @@ export default function ScanScreen({ navigation }) {
 
     async function ScanComplete(data) {
 
+        let qrCodeInfo
         //Exemplo '{"tableId": "03af2e27-c118-45c9-9d9c-a0691c9c67bf"}'
         try {
-            console.log(data);
-            let qrCodeInfo = JSON.parse('{"tableId": "03af2e27-c118-45c9-9d9c-a0691c9c67bf"}');
-            console.log(qrCodeInfo.tableId);
+            console.log("Qrcode info: ",data);
+            qrCodeInfo = JSON.parse(data);
             
         } catch (error) {
             console.log('Invalid QrCode');
@@ -67,7 +67,8 @@ export default function ScanScreen({ navigation }) {
                 });
             let response = await apiMenu.post('/clientTables',  { tableId: qrCodeInfo.tableId}, { headers: { clientId : userId } })
             console.log(response.data);
-            await AsyncStorage.setItem('tableId', qrCodeInfo.tableId);
+            await AsyncStorage.setItem('tableId', response.data.id);
+            await AsyncStorage.setItem('restaurantId', response.data.restaurantId);
 
             setTimeout(haddleRestaurant, 0);
 

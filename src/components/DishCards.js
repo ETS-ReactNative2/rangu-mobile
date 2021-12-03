@@ -89,24 +89,17 @@ import animationLoading from '../../assets/animations/loading/generic/loadingSpi
 
 export default function DishCards(props) {
 
-    const [BearerToken, setBearerToken] = useState();
     const [foods, setFoods] = useState([]);
     const [categorys, setcategorys] = useState([]);
     const [loading, setloading] = useState(true);
+
+    let restaurantId;
     let categorysLet;
     let foodsLet;
 
 
     useEffect(() => {
 
-        AsyncStorage.getItem('token').then(value => {
-            setBearerToken(value);
-        })
-            .catch(err => {
-                console.log(err);
-            });
-
-        //console.log(BearerToken);
 
         LoadDishes();
 
@@ -114,7 +107,18 @@ export default function DishCards(props) {
 
     async function LoadDishes() {
         try {
-            let response = await apiMenu.get('/dishes', { headers: { restaurantId: "30face97-6047-46a7-a092-1888c945ac2a" } })
+
+            await AsyncStorage.getItem('restaurantId')
+            .then(value => {
+                restaurantId = value;
+                console.log('DishCards RestaurantId: ' + value);
+
+            }).catch(err => {
+                console.log(err);
+
+            });
+
+            let response = await apiMenu.get('/dishes', { headers: { restaurantId: restaurantId } })
 
             foodsLet = response.data;
             //console.log(foodsLet);

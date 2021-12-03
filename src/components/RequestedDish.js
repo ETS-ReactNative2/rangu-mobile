@@ -97,7 +97,7 @@ export default function RequestedDish() {
 
   const [TableOrders, setTableOrders] = useState([]);
 
-  let userId = '';
+  let tableId = '';
 
   useEffect(() => {
 
@@ -115,10 +115,10 @@ export default function RequestedDish() {
   async function LoadTableDishes() {
     try {
 
-      await AsyncStorage.getItem('userid')
+      await AsyncStorage.getItem('tableId')
         .then(value => {
-          userId = value;
-          //console.log('UserId: ' + value);
+          tableId = value;
+          console.log('RequestedDish TableId: ' + value);
 
         }).catch(err => {
           console.log(err);
@@ -126,7 +126,7 @@ export default function RequestedDish() {
         });
 
 
-      let response = await apiOrchestrate.get('/tableOrders', { headers: { clientTable: "7f7a37df-b629-41e7-a588-914c3cbdeb7a" } })
+      let response = await apiOrchestrate.get('/tableOrders', { headers: { clientTable: tableId } })
 
       console.log(response.data);
       setTableOrders(response.data);

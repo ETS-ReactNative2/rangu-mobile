@@ -297,7 +297,6 @@ export default function HomeScreen({ navigation, route }) {
                             if (response.status !== 201) {
                                 console.log("Failed to upload image to S3");
                             }
-                            console.log(response.percent);
                             editProfile(response.body.postResponse.location, 8);
                             setTimeout(() => {
                                 setuploadProgress();
