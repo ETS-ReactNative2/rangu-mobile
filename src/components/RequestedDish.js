@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { Feather, Ionicons, AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components/native';
-import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
+import { StyleSheet, Image, ScrollView, TouchableWithoutFeedback, Text, View, RefreshControl } from "react-native";
 import Lottie from 'lottie-react-native';
 
 import apiOrchestrate from '../services/apiOrchestrate.js';
@@ -96,6 +96,7 @@ let dishes = [
 export default function RequestedDish() {
 
   const [TableOrders, setTableOrders] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   let tableId = '';
 
@@ -108,8 +109,13 @@ export default function RequestedDish() {
         console.log(err);
       });
 
-      LoadTableDishes();
+    LoadTableDishes();
 
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    LoadTableDishes().then(() => setRefreshing(false));
   }, []);
 
   async function LoadTableDishes() {
@@ -128,7 +134,7 @@ export default function RequestedDish() {
 
       let response = await apiOrchestrate.get('/tableOrders', { headers: { clientTable: tableId } })
 
-      console.log(response.data);
+      //console.log(response.data);
       setTableOrders(response.data);
 
     } catch (error) {
@@ -139,23 +145,24 @@ export default function RequestedDish() {
   if (TableOrders.length === 0) {
     return (
 
-      <View style={styles.animContainer} >
-
-        <Lottie source={anim} autoPlay loop />
-
+      <View style={styles.animContainer}>
+        <TouchableWithoutFeedback onPress={LoadTableDishes}  >
+          <Lottie source={anim} autoPlay loop />
+        </TouchableWithoutFeedback>
       </View>
+
     );
   }
   else {
     return (
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff' />}>
         {TableOrders.map((order) => (
           <View style={styles.container} key={order.id}>
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Image style={styles.profileImage} source={ order.dishes.map((dish,index) => {if(index == 0){return { uri: dish.image}}}) } />
+                <Image style={styles.profileImage} source={order.dishes.map((dish, index) => { if (index == 0) { return { uri: dish.image } } })} />
                 <Text style={styles.textDescription}>
-                  <Text style={styles.bold}>{order.clientName.split(" ")[0]}</Text> ordered <Text style={styles.bold}>{order.dishes.map((dish,index) => {if(index == 0){return dish.name }})}</Text>
+                  <Text style={styles.bold}>{order.clientName.split(" ")[0]}</Text> ordered <Text style={styles.bold}>{order.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</Text>
                 </Text>
               </View>
               {order.comment !== '' ?
@@ -171,18 +178,18 @@ export default function RequestedDish() {
                     <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Ready</Text>
                     :
                     order.status == 'PREPARING' ?
-                    <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparing</Text>
-                    :
-                    order.status == 'SUBMITTED' ?
-                    <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Submitted</Text>
-                    :
-                    order.status == 'TAKING' ?
-                    <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Taking</Text>
-                    :
-                    order.status == 'CANCEL' ?
-                    <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancel</Text>
-                    :
-                    null
+                      <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparing</Text>
+                      :
+                      order.status == 'SUBMITTED' ?
+                        <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Submitted</Text>
+                        :
+                        order.status == 'TAKING' ?
+                          <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Taking</Text>
+                          :
+                          order.status == 'CANCEL' ?
+                            <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancel</Text>
+                            :
+                            null
                   }
 
                 </View>
@@ -267,7 +274,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   animContainer: {
-    flex: 1
+    flex: 1,
   },
 
 

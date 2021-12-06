@@ -1,6 +1,6 @@
 import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View } from "react-native";
+import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, RefreshControl} from "react-native";
 import apiMenu from '../services/apiMenu.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Lottie from 'lottie-react-native';
@@ -92,11 +92,11 @@ export default function DishCards(props) {
     const [foods, setFoods] = useState([]);
     const [categorys, setcategorys] = useState([]);
     const [loading, setloading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     let restaurantId;
     let categorysLet;
     let foodsLet;
-
 
     useEffect(() => {
 
@@ -104,6 +104,12 @@ export default function DishCards(props) {
         LoadDishes();
 
     }, []);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        LoadDishes().then(() => setRefreshing(false));
+      }, []);
+
 
     async function LoadDishes() {
         try {
@@ -147,7 +153,7 @@ export default function DishCards(props) {
     {
         return (
             <View style={{ marginBottom: 55 }}>
-                <ScrollView>
+                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff'/>}>
     
                     {categorys.map((category, index) => (
                         <View key={index}>

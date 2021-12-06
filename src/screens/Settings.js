@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, SafeAreaView, Image, ScrollView, TouchableOpacity, ImageBackground, Animated, Platform, } from "react-native";
+import { StyleSheet, Text, View, KeyboardAvoidingView, SafeAreaView, Image, ScrollView, TouchableOpacity, ImageBackground, Animated, Platform, RefreshControl } from "react-native";
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,6 +35,7 @@ export default function HomeScreen({ navigation, route }) {
     const [uploadProgress, setuploadProgress] = useState();
     const [uploadComplete, setuploadComplete] = useState(true);
     const [profileLoaded, setprofileLoaded] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     const [personProfileImg, setpersonProfileImg] = useState();
     const [personName, setpersonName] = useState('....');
@@ -52,16 +53,21 @@ export default function HomeScreen({ navigation, route }) {
     useEffect(() => {
 
 
-        LoadClient();
+        LoadUserProfile();
 
     }, []);
 
-    async function LoadClient() {
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        LoadUserProfile().then(() => setRefreshing(false));
+      }, []);
+
+    async function LoadUserProfile() {
         try {
             await AsyncStorage.getItem('userid')
                 .then(value => {
                     userId = value;
-                    //console.log('UserId: ' + value);
+                    console.log('Settings UserId: ' + value);
 
                 }).catch(err => {
                     console.log(err);
@@ -360,7 +366,7 @@ export default function HomeScreen({ navigation, route }) {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView style={[styles.scroll]} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
+            <ScrollView style={[styles.scroll]} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff'/>}>
 
                 <View style={styles.body}>
                     <View style={styles.celulaContainer}>

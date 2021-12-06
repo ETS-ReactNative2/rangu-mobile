@@ -77,9 +77,9 @@ const people = [
     },
 ];
 
-export default function Suggestions() {
+export default function TableMembers() {
 
-    const [TableInfo, setTableInfo] = useState({tableMembers:[]});
+    const [TableInfo, setTableInfo] = useState({tableMembers:[{accepted: true, id:0, name: '....', owner: false, picture:''}]});
 
     let tableId = '';
     
