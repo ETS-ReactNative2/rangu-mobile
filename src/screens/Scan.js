@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TextInput, TouchableOpacity, ImageBackground, Animated, Platform, SafeAreaView } from "react-native";
 import Lottie from 'lottie-react-native';
 //import NfcAnim from '../../assets/animations/nfc/phone-tap.json'
@@ -21,6 +21,8 @@ const images = [
 
 export default function ScanScreen({ navigation }) {
 
+    const [errorOpacityAnim] = useState(new Animated.Value(0));
+    const [errorMessage, setErrorMessage] = useState('Erro');
     const modalizeRef = useRef(null);
 
     function haddleRestaurant() {
@@ -48,11 +50,18 @@ export default function ScanScreen({ navigation }) {
         let qrCodeInfo
         //Exemplo '{"tableId": "03af2e27-c118-45c9-9d9c-a0691c9c67bf"}'
         try {
-            console.log("Qrcode info: ",data);
+            console.log("Scan Qrcode info: ", data);
             qrCodeInfo = JSON.parse(data);
-            
+
         } catch (error) {
-            console.log('Invalid QrCode');
+            console.log('QRCode not recognized');
+
+            setErrorMessage('QRCode not recognized');
+            Animated.timing(errorOpacityAnim, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start()
         }
 
 
@@ -65,8 +74,9 @@ export default function ScanScreen({ navigation }) {
                     console.log(err);
 
                 });
-            let response = await apiMenu.post('/clientTables',  { tableId: qrCodeInfo.tableId}, { headers: { clientId : userId } })
-            console.log(response.data);
+            let response = await apiMenu.post('/clientTables', { tableId: qrCodeInfo.tableId }, { headers: { clientId: userId } })
+            console.log('Scan TableId: ', response.data.id);
+            console.log('Scan RestaurantId: ', response.data.restaurantId);
             await AsyncStorage.setItem('tableId', response.data.id);
             await AsyncStorage.setItem('restaurantId', response.data.restaurantId);
 
@@ -74,6 +84,12 @@ export default function ScanScreen({ navigation }) {
 
         } catch (error) {
             console.log(error);
+            setErrorMessage('Invalid QrCode');
+            Animated.timing(errorOpacityAnim, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start()
         }
 
 
@@ -88,35 +104,38 @@ export default function ScanScreen({ navigation }) {
     }
 
     return (
-      
-        <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} >
-            
-                <Animated.View style={styles.container} >
-                    <Animated.View style={[styles.containeSettings]}>
-                        <TouchableOpacity onPress={haddleSettings}>
-                            <AntDesign name="setting" size={45} color="white" />
-                        </TouchableOpacity>
-                    </Animated.View>
-                    <TouchableOpacity styles={styles.touch} onPress={haddleRestaurant}>
-                        <Lottie style={[styles.anim]} source={NfcAnim} autoPlay loop />
-                    </TouchableOpacity>
-                    <Animated.View style={[styles.containeQrBt]}>
-                        <TouchableOpacity style={styles.qrButton} onPress={OpenModalScanner}>
-                            <MaterialCommunityIcons name="qrcode-scan" size={60} color="white" />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.qrButton}/*onPress={BackScreen}*/>
-                            <MaterialCommunityIcons name="qrcode-edit" size={60} color="white" />
-                        </TouchableOpacity>
-                    </Animated.View>
 
+        <LinearGradient style={styles.background} colors={["#D7233C", "#E65F4C"]} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} >
+
+            <Animated.View style={styles.container} >
+                <Animated.View style={[styles.containeSettings]}>
+                    <TouchableOpacity onPress={haddleSettings}>
+                        <AntDesign name="setting" size={45} color="white" />
+                    </TouchableOpacity>
+                </Animated.View>
+                <TouchableOpacity styles={styles.touch} onPress={haddleRestaurant}>
+                    <Lottie style={[styles.anim]} source={NfcAnim} autoPlay loop />
+                </TouchableOpacity>
+                <Animated.View style={[styles.containerError, { opacity: errorOpacityAnim }]}>
+                        <Text style={styles.textError}>{errorMessage}</Text>
+                    </Animated.View>
+                <Animated.View style={[styles.containeQrBt]}>
+                    <TouchableOpacity style={styles.qrButton} onPress={OpenModalScanner}>
+                        <MaterialCommunityIcons name="qrcode-scan" size={60} color="white" />
+                    </TouchableOpacity>
+                    {/* <TouchableOpacity style={styles.qrButton}>
+                        <MaterialCommunityIcons name="qrcode-edit" size={60} color="white" />
+                    </TouchableOpacity> */}
                 </Animated.View>
 
-                <Modalize modalStyle={styles.modal} ref={modalizeRef} /*modalHeight={770} onClose={ }*/ scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: false, }}>
-                    <QrCodeScanner CodeScanned={ScanComplete} closeModal={CloseModalScanner} />
-                </Modalize>
-            
+            </Animated.View>
+
+            <Modalize modalStyle={styles.modal} ref={modalizeRef} /*modalHeight={770} onClose={ }*/ scrollViewProps={{ showsVerticalScrollIndicator: false, scrollEnabled: false, }}>
+                <QrCodeScanner CodeScanned={ScanComplete} closeModal={CloseModalScanner} />
+            </Modalize>
+
         </LinearGradient>
-       
+
     );
 }
 
@@ -152,6 +171,19 @@ const styles = StyleSheet.create({
     },
     containeQrBt: {
         flexDirection: 'row',
+    },
+    containerError: {
+        backgroundColor: "#FFF",
+        height: 40,
+        width: 330,
+        marginBottom: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 80,
+    },
+    textError: {
+        color: "#E65F4C",
+        fontWeight: "bold",
     },
     qrButton: {
         padding: "10%"
