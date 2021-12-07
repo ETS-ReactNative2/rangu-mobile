@@ -102,13 +102,6 @@ export default function RequestedDish() {
 
   useEffect(() => {
 
-    AsyncStorage.getItem('token').then(value => {
-
-    })
-      .catch(err => {
-        console.log(err);
-      });
-
     LoadTableDishes();
 
   }, []);

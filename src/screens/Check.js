@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, SafeAreaView, TouchableOpacity, ImageBackground, Animated, Platform, } from "react-native";
+import apiOrchestrate from '../services/apiOrchestrate.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -64,6 +66,57 @@ const command = [
 ];
 
 export default function CheckScreen({ navigation }) {
+
+    const [Payment, setPayment] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+
+    let tableId = '';
+    let userid = '';
+
+    useEffect(() => {
+
+        LoadPayment();
+
+    }, []);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        LoadPayment().then(() => setRefreshing(false));
+    }, []);
+
+    async function LoadPayment() {
+        try {
+
+            await AsyncStorage.getItem('tableId')
+                .then(value => {
+                    tableId = value;
+                    console.log('Check TableId: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
+            await AsyncStorage.getItem('userid')
+                .then(value => {
+                    userid = value;
+                    console.log('Check UserId: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
+
+            let response = await apiOrchestrate.get('/payments', { headers: { clientTableId: tableId, clientId: userid  } })
+
+            console.log(response.data);
+            setPayment(response.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <SafeAreaView style={[styles.background]} >
@@ -231,10 +284,10 @@ const styles = StyleSheet.create({
     },
     containerPayButtons: {
         marginTop: 'auto',
-        marginBottom:20,
+        marginBottom: 20,
         flexDirection: 'row',
-        width:'100%',
-        justifyContent:'space-around'
+        width: '100%',
+        justifyContent: 'space-around'
     },
     btnPayTable: {
         backgroundColor: "#2B7320",
