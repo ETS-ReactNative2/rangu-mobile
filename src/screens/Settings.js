@@ -115,7 +115,6 @@ export default function HomeScreen({ navigation, route }) {
 
     async function LogOut() {
         if (profileLoaded && uploadComplete) {
-            await AsyncStorage.removeItem('token');
             await AsyncStorage.removeItem('userid');
             navigation.dispatch(
                 CommonActions.reset({
