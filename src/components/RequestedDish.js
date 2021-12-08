@@ -106,7 +106,7 @@ export default function RequestedDish() {
 
     var intervalId = setInterval(function () {
 
-      LoadTableDishes();
+      //LoadTableDishes();
 
     }, 5 * 1000);
 

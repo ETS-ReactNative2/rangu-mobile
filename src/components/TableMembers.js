@@ -79,20 +79,20 @@ const people = [
 
 export default function TableMembers() {
 
-    const [TableInfo, setTableInfo] = useState({tableMembers:[{accepted: true, id:0, name: '....', owner: false, picture:''}]});
+    const [TableInfo, setTableInfo] = useState({ tableMembers: [{ accepted: true, id: 0, name: '....', owner: false, picture: '' }] });
 
     let tableId = '';
-    
+
     useEffect(() => {
 
-        AsyncStorage.getItem('token').then(value => {
-
-        })
-            .catch(err => {
-                console.log(err);
-            });
-
         LoadTableMembers();
+
+        var intervalId = setInterval(function () {
+
+            //LoadTableMembers();
+            
+
+        }, 5 * 1000);
 
     }, []);
 
@@ -122,7 +122,7 @@ export default function TableMembers() {
         <ScrollView style={styles.container} horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingLeft: 16, }}>
             {TableInfo.tableMembers.map((person) => (
                 <TouchableOpacity style={styles.person} key={person.id}>
-                    <Image style={[styles.profileImage, person.accepted == false ? { borderColor: '#D9AC25' } : person.owner == true ? { borderColor: '#0ABF04' } : { borderColor: '#fff',borderWidth: 0.5, },]} source={person.picture ?{uri: person.picture}: imgDefault} />
+                    <Image style={[styles.profileImage, person.accepted == false ? { borderColor: '#D9AC25' } : person.owner == true ? { borderColor: '#0ABF04' } : { borderColor: '#fff', borderWidth: 0.5, },]} source={person.picture ? { uri: person.picture } : imgDefault} />
 
                     {person.accepted == false ?
                         <View style={[styles.iconContainer, { backgroundColor: '#D9AC25' }]}>

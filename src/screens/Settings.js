@@ -313,6 +313,10 @@ export default function HomeScreen({ navigation, route }) {
                     console.log(error);
                 }
             }
+            else
+            {
+                setuploadComplete(true);
+            }
         }
 
     }

@@ -231,9 +231,9 @@ export default function LogintScreen({ navigation }) {
 
             });
 
+            //console.log(response.data);
             if (canSignUp) {
-                await AsyncStorage.setItem('token', response.data.token);
-                await AsyncStorage.setItem('userid', response.data.userId);
+                await AsyncStorage.setItem('userid', response.data.id);
                 setTimeout(haddleScan, 0);
             }
 
