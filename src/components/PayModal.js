@@ -1,0 +1,185 @@
+import React, { useReducer, useRef, useState, useEffect } from 'react';
+import { Ionicons, SimpleLineIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, SafeAreaView, TextInput, Clipboard } from "react-native";
+import apiOrders from '../services/apiOrders.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Lottie from 'lottie-react-native';
+
+import animationLoadingPayment from '../../assets/animations/waiting/loading-payment.json';
+import animationPaymentConfirmation from '../../assets/animations/done/scan-payment-confirmation.json';
+import animationLoading from '../../assets/animations/waiting/order-completed.json';
+
+export default function OrderItModal(props) {
+
+    const [comment, onChangeComment] = useState('');
+    const [pixCode, setPixCode] = useState('00020126580014br.gov.bcb.pix0136333eb13c-8993-4e16-8cc7-798561d906bc52040000530398654042.005802BR5925GIANRAPHAELMARTINSDACOSTA6009Sao Paulo62240520mpqrinter1867842838063048636');
+    const [payed, setPayed] = useState(false);
+
+    let userId;
+
+    useEffect(() => {
+
+
+
+    }, []);
+
+    function closePopUp() {
+
+        props.closeModalPopUp()
+    }
+
+    async function confirmOrder() {
+
+        try {
+            await AsyncStorage.getItem('userid')
+                .then(value => {
+                    userId = value;
+                    console.log('PayModal UserId: ' + value);
+                    //console.log('UserId: ' + value);
+
+                }).catch(err => {
+                    console.log(err);
+
+                });
+
+            setPayed(true);
+            let response = await apiOrders.post('/orders', { dishes: [], comment: comment }, { headers: { clientId: userId, } })
+            console.log(response.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        setTimeout(() => {
+            props.PaymentConfirmed();
+        }, 2000);
+
+    }
+
+    const copyToClipboard = () => {
+        Clipboard.setString(pixCode);
+    }
+
+    return (
+
+        <View style={styles.container}>
+
+            <View style={styles.foodName}>
+                <Text style={styles.textFoodName} numberOfLines={3}>Pay Table Total</Text>
+            </View>
+            {payed ?
+                <View style={styles.containerAnim}>
+                    <Lottie speed={0.8} source={animationPaymentConfirmation} autoPlay loop={false} />
+                </View>
+                :
+                <View>
+                    <View style={styles.containerPix}>
+                        <Text numberOfLines={3} style={styles.textPix}>{pixCode}</Text>
+                    </View>
+
+                    <View style={styles.containerAnimLoadingPayment}>
+                        <Lottie resizemode="center" speed={1} source={animationLoadingPayment} autoPlay loop={true} />
+                    </View>
+
+                    <View style={styles.containertextWaitingforPayment}>
+                        <Text numberOfLines={3} style={styles.textWaitingforPayment}>Waiting for Payment</Text>
+                    </View>
+
+                    <View style={[styles.containerOrderButtons]}>
+                        <TouchableOpacity onPress={copyToClipboard} style={styles.btnCopyCode} >
+                            <Text style={styles.textCopyCode}>Copy Code</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={closePopUp} style={styles.btnCancel} >
+                            <Text style={styles.textCancel}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            }
+
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "#1e222b",
+        borderRadius: 10,
+        height: 460,
+        alignItems: 'center'
+
+    },
+    foodName: {
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 5,
+    },
+    textFoodName: {
+        color: '#fff',
+        fontSize: 25,
+        fontWeight: 'bold',
+        overflow: 'scroll',
+    },
+    containerAnim: {
+        height: '100%',
+        width: '100%',
+        marginTop: -40,
+    },
+    containerPix: {
+        margin: 15,
+        borderRadius: 10,
+        backgroundColor: '#3C404A',
+    },
+    textPix: {
+        padding: 10,
+        fontSize: 16,
+    },
+    containerAnimLoadingPayment: {
+        flex: 1,
+        marginTop: -30,
+
+    },
+    containertextWaitingforPayment: {
+        margin: 15,
+        borderRadius: 10,
+        backgroundColor: '#3C404A',
+    },
+    textWaitingforPayment: {
+        color: '#fff',
+        padding: 10,
+        fontSize: 16,
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    containerOrderButtons: {
+        marginTop: 'auto',
+        marginBottom: 70,
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-around'
+    },
+    btnCopyCode: {
+        backgroundColor: "#2B7320",
+        width: "45%",
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 40,
+    },
+    textCopyCode: {
+        color: "#FFF",
+        fontSize: 20,
+    },
+    btnCancel: {
+        backgroundColor: "#D7233C",
+        width: "45%",
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 40,
+    },
+    textCancel: {
+        color: "#FFF",
+        fontSize: 20,
+    },
+
+});

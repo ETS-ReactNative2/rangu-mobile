@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, SafeAreaView, TouchableOpacity, ImageBackground, Animated, Platform, } from "react-native";
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, SafeAreaView, TouchableOpacity, ImageBackground, Animated, Platform, RefreshControl, } from "react-native";
 import apiOrchestrate from '../services/apiOrchestrate.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Modal from "react-native-modal";
+
+import PayModal from '../components/PayModal';
 
 
 
@@ -67,24 +70,47 @@ const command = [
 
 export default function CheckScreen({ navigation }) {
 
-    const [Payment, setPayment] = useState([]);
+    const [Checkout, setCheckout] = useState({allOrders: []});
     const [refreshing, setRefreshing] = useState(false);
-
+    const [myTotal, setmyTotalg] = useState();
+    const [tableTotal, setTableTotalg] = useState();
+    const modalizeRef = useRef(null);
+    const [isModalPopUpVisible, setModalPopUpVisible] = useState(false);
+    const [animationOut, setanimationOut] = useState("slideOutDown");
+    
     let tableId = '';
     let userid = '';
 
     useEffect(() => {
 
-        LoadPayment();
+        LoadCheckout();
 
     }, []);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        LoadPayment().then(() => setRefreshing(false));
+        LoadCheckout().then(() => setRefreshing(false));
     }, []);
 
-    async function LoadPayment() {
+    function closeModalPopUp() {
+        setModalPopUpVisible(false);
+    }
+
+    function openModalPopUp() {
+        setModalPopUpVisible(true);
+    }
+
+    function PaymentConfirmed() {
+        setanimationOut("slideOutUp");
+        closeModalPopUp();
+        closeModal();
+
+        setTimeout(() => {
+            setanimationOut("slideOutDown");
+        }, 500);
+    }
+
+    async function LoadCheckout() {
         try {
 
             await AsyncStorage.getItem('tableId')
@@ -107,16 +133,40 @@ export default function CheckScreen({ navigation }) {
 
                 });
 
-
-            let response = await apiOrchestrate.get('/payments', { headers: { clientTableId: tableId, clientId: userid  } })
+            let response = await apiOrchestrate.get('/checkout', { headers: { clientTableId: tableId, clientId: userid  } })
 
             console.log(response.data);
-            setPayment(response.data);
+            setCheckout(response.data);
+            CalculateTotals(response.data);
 
         } catch (error) {
             console.log(error);
         }
     }
+
+    function PayTableTotalPress(){
+
+        openModalPopUp();
+    }
+
+    
+    function PayMyTotalPress(){
+
+
+    }
+
+    function CalculateTotals(values){
+
+        let LocalMyTotal = 0;
+        let LocalTableTotal = 0;
+
+        values.allOrders.map(value => LocalMyTotal += value.totalPrice );
+        values.clientOrders.map(value => LocalTableTotal += value.totalPrice );
+
+        setmyTotalg(LocalMyTotal);
+        setTableTotalg(LocalTableTotal);
+    }
+
 
     return (
         <SafeAreaView style={[styles.background]} >
@@ -129,16 +179,17 @@ export default function CheckScreen({ navigation }) {
             </View>
 
             <View style={[styles.containerCommand]}>
-                <ScrollView>
-                    {command.map((food) => (
-                        <View style={styles.celulaContainer} key={food.key}>
+                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff' />}>
+                    {Checkout.allOrders.map((food) => (
+                        <View style={styles.celulaContainer} key={food.id}>
                             <View style={styles.celula}>
-                                <Image style={styles.foodImage} source={food.foodImg} />
+                                <Image style={styles.foodImage} source={food.dishes.map((dish, index) => { if (index == 0) { return { uri: dish.image } } })} />
                                 <View style={styles.foodName}>
-                                    <Text style={styles.textFoodName} numberOfLines={3}>{food.dishName}</Text>
+                                    <Text style={styles.textFoodName} numberOfLines={3}>{food.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</Text>
+                                    <Text style={styles.textClientName} numberOfLines={3}>{food.clientName}</Text>
                                 </View>
                                 <View style={styles.price}>
-                                    <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>{food.price}</Text>
+                                    <Text style={[styles.textActualPrice, Checkout.clientOrders.filter(order => order.id === food.id).length == 0 ? { color: '#00fc6c', } : { color: '#D7233C', } ]}>R$ {food.totalPrice ? food.totalPrice.toFixed(2) : '????'}</Text>
                                 </View>
                             </View>
 
@@ -151,22 +202,27 @@ export default function CheckScreen({ navigation }) {
             <View style={[styles.containerTotal]}>
                 <View style={[styles.containerTableTotal]}>
                     <Text style={styles.textTableTotal} numberOfLines={3}>Table total :</Text>
-                    <Text style={styles.textActualTableTotal} numberOfLines={3}>R$: 459.90</Text>
+                    <Text style={styles.textActualTableTotal} numberOfLines={3}>R$ {tableTotal ? tableTotal.toFixed(2) : '????'}</Text>
                 </View>
                 <View style={[styles.containerMyTotal]}>
                     <Text style={styles.textMyTotal} numberOfLines={3}>My total :</Text>
-                    <Text style={styles.textActualMyTotal} numberOfLines={3}>R$: 129.28</Text>
+                    <Text style={styles.textActualMyTotal} numberOfLines={3}>R$ {myTotal ? myTotal.toFixed(2) : '????'}</Text>
                 </View>
             </View>
 
             <View style={[styles.containerPayButtons]}>
-                <TouchableOpacity style={styles.btnPayTable} >
+                <TouchableOpacity onPress={PayTableTotalPress} style={styles.btnPayTable} >
                     <Text style={styles.textPayTable}>Pay Table Total</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnPayMy} >
+                <TouchableOpacity onPress={PayMyTotalPress}  style={styles.btnPayMy} >
                     <Text style={styles.textPayMy}>Pay My Total</Text>
                 </TouchableOpacity>
             </View>
+
+
+            <Modal animationOut={animationOut} isVisible={isModalPopUpVisible} avoidKeyboard={true} animationInTiming={400} animationOutTiming={400} >
+                <PayModal closeModalPopUp={closeModalPopUp} PaymentConfirmed={PaymentConfirmed} />
+            </Modal>
 
         </SafeAreaView >
     );
@@ -231,6 +287,14 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
         fontWeight: 'bold',
+        overflow: 'scroll',
+    },
+    textClientName:{
+        color: '#fff',
+        fontSize: 10,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 5,
         overflow: 'scroll',
     },
     price: {
