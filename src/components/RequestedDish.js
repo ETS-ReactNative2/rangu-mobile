@@ -104,6 +104,12 @@ export default function RequestedDish() {
 
     LoadTableDishes();
 
+    var intervalId = setInterval(function () {
+
+      LoadTableDishes();
+
+    }, 5 * 1000);
+
   }, []);
 
   const onRefresh = React.useCallback(() => {
@@ -168,7 +174,7 @@ export default function RequestedDish() {
                 <View style={styles.status}>
                   <Text style={styles.textStatus}>Status:</Text>
                   {order.status == 'DONE' ?
-                    <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Ready</Text>
+                    <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Finished</Text>
                     :
                     order.status == 'PREPARING' ?
                       <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparing</Text>
@@ -177,7 +183,7 @@ export default function RequestedDish() {
                         <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Submitted</Text>
                         :
                         order.status == 'TAKING' ?
-                          <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Taking</Text>
+                          <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Sended</Text>
                           :
                           order.status == 'CANCEL' ?
                             <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancel</Text>
@@ -188,7 +194,7 @@ export default function RequestedDish() {
                 </View>
                 <View style={styles.status}>
                   <Ionicons name="ios-time-outline" color="#fff" size={18} />
-                  <Text style={styles.textTime}>{order.orderHour}</Text>
+                  <Text style={styles.textTime}>{new Date(order.orderHour).toLocaleTimeString()}</Text>
                 </View>
               </View>
             </View>
