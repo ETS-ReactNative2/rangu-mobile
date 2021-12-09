@@ -14,28 +14,33 @@ export default function OrderItModal(props) {
     const [comment, onChangeComment] = useState('');
     const [pixCode, setPixCode] = useState('...............................................................................................................................................................................................................................................................................................................');
     const [payed, setPayed] = useState(false);
-    const [pulling, setPulling] = useState(true);
+    const [pulling, setPulling] = useState(false);
+    const [paymentMode, setPaymentMode] = useState('');
+    const [intervalID, setInterID] = useState();
 
-    var intervalId;
     let userId;
     // let pixId = '18704245508';
     let pixId;
 
     useEffect(() => {
 
+        setPaymentMode(props.paymentMode);
+
         gerarPix();
 
-        intervalId = setInterval(function () {
+        let letintervalId;
+        letintervalId = setInterval(function () {
             if (pulling) {
                 verifyPix();
             }
         }, 5 * 1000);
+        setInterID(letintervalId);
 
     }, []);
 
     function closePopUp() {
 
-        clearInterval(intervalId);
+        clearInterval(intervalID);
         props.closeModalPopUp()
 
     }
@@ -70,14 +75,14 @@ export default function OrderItModal(props) {
 
         try {
 
-            console.log('Pulling pixId: ' + pixId );
+            console.log('Pulling pixId: ' + pixId);
             let response = await apiOrchestrate.post('/valid-payments/' + pixId, {},)
             //console.log(response.data);
 
-            console.log('Status: ' + response.data.status );
+            console.log('Status: ' + response.data.status);
             if (response.data.status != "pending") {
                 setPayed(true);
-                clearInterval(intervalId);
+                clearInterval(intervalID);
                 setTimeout(() => {
                     props.PaymentConfirmed();
                 }, 6000);
@@ -98,7 +103,7 @@ export default function OrderItModal(props) {
         <View style={styles.container}>
 
             <View style={styles.foodName}>
-                <Text style={styles.textFoodName} numberOfLines={3}>Pay Table Total</Text>
+                <Text style={styles.textFoodName} numberOfLines={3}>{paymentMode}</Text>
             </View>
             {payed ?
                 <View style={styles.containerAnim}>

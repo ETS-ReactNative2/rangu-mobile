@@ -81,6 +81,7 @@ export default function CheckScreen({ navigation }) {
     const [isModalPopUpVisible, setModalPopUpVisible] = useState(false);
     const [animationOut, setanimationOut] = useState("slideOutDown");
     const [loading, setloading] = useState(true);
+    const [paymentMode, setPaymentMode] = useState('');
 
     let tableId = '';
     let userid = '';
@@ -108,6 +109,18 @@ export default function CheckScreen({ navigation }) {
 
     function openModalPopUp() {
         setModalPopUpVisible(true);
+    }
+
+    function PayTableTotalPress() {
+        setPaymentMode('Pay Table Total');
+        openModalPopUp();
+    }
+
+
+    function PayMyTotalPress() {
+        setPaymentMode('Pay My Total');
+        openModalPopUp();
+
     }
 
     async function PaymentConfirmed() {
@@ -162,17 +175,6 @@ export default function CheckScreen({ navigation }) {
         } catch (error) {
             console.log(error);
         }
-    }
-
-    function PayTableTotalPress() {
-
-        openModalPopUp();
-    }
-
-
-    function PayMyTotalPress() {
-
-
     }
 
     function CalculateTotals(values) {
@@ -250,7 +252,7 @@ export default function CheckScreen({ navigation }) {
 
 
             <Modal animationOut={animationOut} isVisible={isModalPopUpVisible} avoidKeyboard={true} animationInTiming={400} animationOutTiming={400} >
-                <PayModal closeModalPopUp={closeModalPopUp} PaymentConfirmed={PaymentConfirmed} />
+                <PayModal paymentMode ={paymentMode} closeModalPopUp={closeModalPopUp} PaymentConfirmed={PaymentConfirmed} />
             </Modal>
 
         </SafeAreaView >
