@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { StyleSheet, ScrollView, SafeAreaView, View, Text } from 'react-native';
 
@@ -9,16 +9,18 @@ import RequestedDish from '../components/RequestedDish';
 
 export default function HomeScreen({ navigation }) {
 
+    const [TableNumber, setTableNumber] = useState('');
+
     return (
 
         <SafeAreaView style={styles.background}>
             <View style={styles.header}>
                 <View>
-                    <Text style={styles.textTableMembers}>Table Members</Text>
+                    <Text style={styles.textTableMembers}>Table {TableNumber ? TableNumber : '??'} Members</Text>
                 </View>
             </View>
             <View>
-                <Members />
+                <Members tableNumber={(number) => setTableNumber(number)} />
             </View>
             <View style={styles.TableActivity}>
                 <Text style={styles.textTableActivity}>Table Activity</Text>

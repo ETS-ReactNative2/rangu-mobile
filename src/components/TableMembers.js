@@ -77,7 +77,7 @@ const people = [
     },
 ];
 
-export default function TableMembers() {
+export default function TableMembers(props) {
 
     const [TableInfo, setTableInfo] = useState({ tableMembers: [{ accepted: true, id: 0, name: '....', owner: false, picture: '' }] });
 
@@ -112,6 +112,7 @@ export default function TableMembers() {
 
             //console.log(response.data);
             setTableInfo(response.data);
+            props.tableNumber(response.data.number);
 
         } catch (error) {
             console.log(error);
