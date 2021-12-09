@@ -118,18 +118,18 @@ export default function CheckScreen({ navigation }) {
     }
 
     function PayTableTotalPress() {
-        setPaymentMode('Pay Table Total');
+        setPaymentMode(0);
         openModalPopUp();
     }
 
 
     function PayMyTotalPress() {
-        setPaymentMode('Pay My Total');
+        setPaymentMode(1);
         openModalPopUp();
 
     }
 
-    async function PaymentConfirmed() {
+    async function LeaveTable() {
         global.stopPullingToLeave = true;
         setanimationOut("slideOutUp");
         closeModalPopUp();
@@ -258,7 +258,7 @@ export default function CheckScreen({ navigation }) {
 
 
             <Modal animationOut={animationOut} isVisible={isModalPopUpVisible} avoidKeyboard={true} animationInTiming={400} animationOutTiming={400} >
-                <PayModal paymentMode={paymentMode} closeModalPopUp={closeModalPopUp} PaymentConfirmed={PaymentConfirmed} />
+                <PayModal paymentMode={paymentMode} closeModalPopUp={closeModalPopUp} LeaveTable={LeaveTable} />
             </Modal>
 
         </SafeAreaView >
