@@ -163,7 +163,7 @@ export default function OrderItModal(props) {
         <View style={styles.container}>
 
             <View style={styles.foodName}>
-                <Text style={styles.textFoodName} numberOfLines={3}>{paymentMode === 0 ? 'Pay Table Total' : 'Pay My Total'}</Text>
+                <Text style={styles.textFoodName} numberOfLines={3}>{paymentMode === 0 ? 'Pagar total da mesa' : 'Pagar meu total'}</Text>
             </View>
             {payed ?
                 <View style={styles.containerPayed}>
