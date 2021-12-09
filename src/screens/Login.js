@@ -106,7 +106,7 @@ export default function LogintScreen({ navigation }) {
             password,
             type
         }).catch(error => {
-            //console.log(error.response.data)
+            console.log(error.response.data)
             canLogin = false;
             if (error.response.data.code == "422.3") {
                 setErrorMessage("E-mail or password is invalid.");

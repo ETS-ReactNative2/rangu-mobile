@@ -87,12 +87,11 @@ export default function TableMembers() {
 
         LoadTableMembers();
 
-        var intervalId = setInterval(function () {
-
-            //LoadTableMembers();
-            
-
-        }, 5 * 1000);
+        if (global.pulling) {
+            var intervalId = setInterval(function () {
+                LoadTableMembers();
+            }, 5 * 1000);
+        }
 
     }, []);
 

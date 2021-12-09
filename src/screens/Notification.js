@@ -7,6 +7,28 @@ import animation from '../../assets/animations/general/rising-hand.json';
 
 export default function HomeScreen({ navigation }) {
 
+    const [infoMessage, setInfoMessage] = useState('Erro');
+    const [errorOpacityAnim] = useState(new Animated.Value(0));
+
+    function CallWaiter() {
+        setInfoMessage('A Waiter was called to the table');
+        Animated.timing(errorOpacityAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start()
+
+        setTimeout(() => {
+
+            Animated.timing(errorOpacityAnim, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true,
+            }).start()
+
+        }, 8000);
+    }
+
     return (
 
 
@@ -18,9 +40,12 @@ export default function HomeScreen({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
+            <Animated.View style={[styles.containerInfo, { opacity: errorOpacityAnim }]}>
+                <Text style={styles.textInfo}>{infoMessage}</Text>
+            </Animated.View>
             <Lottie resizemode="contain" source={animation} autoPlay loop />
 
-            <TouchableOpacity style={styles.btnWaiter} >
+            <TouchableOpacity onPress={CallWaiter} style={styles.btnWaiter} >
                 <Text style={styles.textCallWaiter}>Call Waiter</Text>
             </TouchableOpacity>
         </SafeAreaView >
@@ -48,14 +73,28 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    containerInfo: {
+        backgroundColor: "#FFF",
+        height: 40,
+        width: 330,
+        marginBottom: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 80,
+        marginTop: 50
+    },
+    textInfo: {
+        color: "#E65F4C",
+        fontWeight: "bold",
+    },
     btnWaiter: {
         backgroundColor: "#DF4445",
         width: "90%",
-        height:60,
+        height: 60,
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 40,
-        marginTop: "140%"
+        marginTop: "125%"
     },
     textCallWaiter: {
         color: "#FFF",

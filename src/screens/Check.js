@@ -3,8 +3,10 @@ import { StyleSheet, Text, View, ScrollView, Image, SafeAreaView, TouchableOpaci
 import apiOrchestrate from '../services/apiOrchestrate.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from "react-native-modal";
+import Lottie from 'lottie-react-native';
 
 import PayModal from '../components/PayModal';
+import animationLoading from '../../assets/animations/loading/generic/loadingSpinner.json';
 
 
 
@@ -70,20 +72,27 @@ const command = [
 
 export default function CheckScreen({ navigation }) {
 
-    const [Checkout, setCheckout] = useState({allOrders: []});
+    const [Checkout, setCheckout] = useState({ allOrders: [] });
     const [refreshing, setRefreshing] = useState(false);
     const [myTotal, setmyTotalg] = useState();
     const [tableTotal, setTableTotalg] = useState();
     const modalizeRef = useRef(null);
     const [isModalPopUpVisible, setModalPopUpVisible] = useState(false);
     const [animationOut, setanimationOut] = useState("slideOutDown");
-    
+    const [loading, setloading] = useState(true);
+
     let tableId = '';
     let userid = '';
 
     useEffect(() => {
 
         LoadCheckout();
+
+        if (global.pulling) {
+            var intervalId = setInterval(function () {
+                LoadCheckout();
+            }, 10 * 1000);
+        }
 
     }, []);
 
@@ -133,10 +142,11 @@ export default function CheckScreen({ navigation }) {
 
                 });
 
-            let response = await apiOrchestrate.get('/checkout', { headers: { clientTableId: tableId, clientId: userid  } })
+            let response = await apiOrchestrate.get('/checkout', { headers: { clientTableId: tableId, clientId: userid } })
 
-            console.log(response.data);
+            //console.log(response.data);
             setCheckout(response.data);
+            setloading(false);
             CalculateTotals(response.data);
 
         } catch (error) {
@@ -144,24 +154,25 @@ export default function CheckScreen({ navigation }) {
         }
     }
 
-    function PayTableTotalPress(){
+    function PayTableTotalPress() {
 
         openModalPopUp();
     }
 
-    
-    function PayMyTotalPress(){
+
+    function PayMyTotalPress() {
 
 
     }
 
-    function CalculateTotals(values){
+    function CalculateTotals(values) {
 
+        console.log(values);
         let LocalMyTotal = 0;
         let LocalTableTotal = 0;
 
-        values.allOrders.map(value => LocalMyTotal += value.totalPrice );
-        values.clientOrders.map(value => LocalTableTotal += value.totalPrice );
+        values.clientOrders.map(value => LocalMyTotal += value.totalPrice);
+        values.allOrders.map(value => LocalTableTotal += value.totalPrice);
 
         setmyTotalg(LocalMyTotal);
         setTableTotalg(LocalTableTotal);
@@ -179,25 +190,33 @@ export default function CheckScreen({ navigation }) {
             </View>
 
             <View style={[styles.containerCommand]}>
-                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff' />}>
-                    {Checkout.allOrders.map((food) => (
-                        <View style={styles.celulaContainer} key={food.id}>
-                            <View style={styles.celula}>
-                                <Image style={styles.foodImage} source={food.dishes.map((dish, index) => { if (index == 0) { return { uri: dish.image } } })} />
-                                <View style={styles.foodName}>
-                                    <Text style={styles.textFoodName} numberOfLines={3}>{food.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</Text>
-                                    <Text style={styles.textClientName} numberOfLines={3}>{food.clientName}</Text>
+                {loading ?
+                    <View style={styles.loadingContainer}>
+                        <Lottie style={styles.loadingAnim} source={animationLoading} autoPlay loop />
+                    </View>
+                    :
+                    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff' />}>
+                        {Checkout.allOrders.map((food) => (
+                            <View style={styles.celulaContainer} key={food.id}>
+                                <View style={styles.celula}>
+                                    <Image style={styles.foodImage} source={food.dishes.map((dish, index) => { if (index == 0) { return { uri: dish.image } } })} />
+                                    <View style={styles.foodName}>
+                                        <Text style={styles.textFoodName} numberOfLines={3}>{food.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</Text>
+                                        <Text style={styles.textClientName} numberOfLines={3}>{food.clientName}</Text>
+                                    </View>
+                                    <View style={styles.price}>
+                                        <Text style={[styles.textActualPrice, Checkout.clientOrders.filter(order => order.id === food.id).length == 0 ? { color: '#00fc6c', } : { color: '#D7233C', }]}>R$ {food.totalPrice ? food.totalPrice.toFixed(2) : '????'}</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.price}>
-                                    <Text style={[styles.textActualPrice, Checkout.clientOrders.filter(order => order.id === food.id).length == 0 ? { color: '#00fc6c', } : { color: '#D7233C', } ]}>R$ {food.totalPrice ? food.totalPrice.toFixed(2) : '????'}</Text>
-                                </View>
+
                             </View>
 
-                        </View>
+                        ))}
 
-                    ))}
+                    </ScrollView>
 
-                </ScrollView>
+                }
+
             </View>
             <View style={[styles.containerTotal]}>
                 <View style={[styles.containerTableTotal]}>
@@ -214,7 +233,7 @@ export default function CheckScreen({ navigation }) {
                 <TouchableOpacity onPress={PayTableTotalPress} style={styles.btnPayTable} >
                     <Text style={styles.textPayTable}>Pay Table Total</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={PayMyTotalPress}  style={styles.btnPayMy} >
+                <TouchableOpacity onPress={PayMyTotalPress} style={styles.btnPayMy} >
                     <Text style={styles.textPayMy}>Pay My Total</Text>
                 </TouchableOpacity>
             </View>
@@ -257,6 +276,13 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'flex-end',
     },
+    loadingContainer: {
+        height: '100%',
+        width: '100%'
+    },
+    loadingAnim: {
+        marginBottom: 0,
+    },
     celulaContainer:
     {
         marginVertical: 10
@@ -289,7 +315,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         overflow: 'scroll',
     },
-    textClientName:{
+    textClientName: {
         color: '#fff',
         fontSize: 10,
         marginLeft: 15,

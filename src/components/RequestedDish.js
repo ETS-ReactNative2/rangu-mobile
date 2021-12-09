@@ -104,11 +104,11 @@ export default function RequestedDish() {
 
     LoadTableDishes();
 
-    var intervalId = setInterval(function () {
-
-      //LoadTableDishes();
-
-    }, 5 * 1000);
+    if (global.pulling) {
+      var intervalId = setInterval(function () {
+        LoadTableDishes();
+      }, 5 * 1000);
+    }
 
   }, []);
 

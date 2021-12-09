@@ -2,6 +2,7 @@ import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { Ionicons, SimpleLineIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, SafeAreaView, TextInput } from "react-native";
 import apiOrders from '../services/apiOrders.js';
+import apiOrchestrate from '../services/apiOrchestrate.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Lottie from 'lottie-react-native';
 
@@ -69,8 +70,8 @@ export default function OrderItModal(props) {
             console.log('Request: ' + props.displayInfo.id);
             console.log('Comment: ' + comment);
             setsending(true);
-            let response = await apiOrders.post('/orders', { dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": userId, "restaurantId": restaurantId, "tableId": tableId } })
-            console.log(response.data);
+            let response = await apiOrchestrate.post('/orders', { dishes: [props.displayInfo.id], comment: comment }, { headers: { "clientId": userId, "restaurantId": restaurantId, "tableId": tableId } })
+            //console.log(response.data);
 
         } catch (error) {
             console.log(error);
@@ -78,7 +79,7 @@ export default function OrderItModal(props) {
 
         setTimeout(() => {
             props.orderConfirmed();
-        }, 2000);
+        }, 1800);
 
     }
 
@@ -91,7 +92,7 @@ export default function OrderItModal(props) {
                 </View>
                 {sending ?
                     <View style={styles.containerAnim}>
-                        <Lottie resizemode="center" speed={0.3} source={animationLoading} autoPlay loop={false} />
+                        <Lottie resizemode="center" speed={0.2} source={animationLoading} autoPlay loop={false} />
                     </View>
                     :
                     <View style={{ height: 290, }}>

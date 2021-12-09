@@ -22,7 +22,7 @@ const images = [
 export default function ScanScreen({ navigation }) {
 
     const [errorOpacityAnim] = useState(new Animated.Value(0));
-    const [errorMessage, setErrorMessage] = useState('Erro');
+    const [infoMessage, setInfoMessage] = useState('Erro');
     const modalizeRef = useRef(null);
 
     function haddleRestaurant() {
@@ -45,6 +45,10 @@ export default function ScanScreen({ navigation }) {
         )
     }
 
+    function Bypass() {
+        ScanComplete('{"tableId": "fe720e33-c7a7-462d-9e0f-a2e3c5e8b20f"}')
+    }
+
     async function ScanComplete(data) {
 
         let qrCodeInfo
@@ -56,7 +60,7 @@ export default function ScanScreen({ navigation }) {
         } catch (error) {
             console.log('QRCode not recognized');
 
-            setErrorMessage('QRCode not recognized');
+            setInfoMessage('QRCode not recognized');
             Animated.timing(errorOpacityAnim, {
                 toValue: 1,
                 duration: 300,
@@ -66,6 +70,13 @@ export default function ScanScreen({ navigation }) {
 
 
         try {
+            setInfoMessage('Connecting you to the table...');
+            Animated.timing(errorOpacityAnim, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start()
+
             await AsyncStorage.getItem('userid')
                 .then(value => {
                     userId = value;
@@ -84,7 +95,7 @@ export default function ScanScreen({ navigation }) {
 
         } catch (error) {
             console.log(error);
-            setErrorMessage('Invalid QrCode');
+            setInfoMessage('Invalid QrCode');
             Animated.timing(errorOpacityAnim, {
                 toValue: 1,
                 duration: 300,
@@ -113,12 +124,12 @@ export default function ScanScreen({ navigation }) {
                         <AntDesign name="setting" size={45} color="white" />
                     </TouchableOpacity>
                 </Animated.View>
-                <TouchableOpacity styles={styles.touch} onPress={haddleRestaurant}>
+                <TouchableOpacity styles={styles.touch} onPress={Bypass}>
                     <Lottie style={[styles.anim]} source={NfcAnim} autoPlay loop />
                 </TouchableOpacity>
-                <Animated.View style={[styles.containerError, { opacity: errorOpacityAnim }]}>
-                        <Text style={styles.textError}>{errorMessage}</Text>
-                    </Animated.View>
+                <Animated.View style={[styles.containerInfo, { opacity: errorOpacityAnim }]}>
+                    <Text style={styles.textInfo}>{infoMessage}</Text>
+                </Animated.View>
                 <Animated.View style={[styles.containeQrBt]}>
                     <TouchableOpacity style={styles.qrButton} onPress={OpenModalScanner}>
                         <MaterialCommunityIcons name="qrcode-scan" size={60} color="white" />
@@ -172,7 +183,7 @@ const styles = StyleSheet.create({
     containeQrBt: {
         flexDirection: 'row',
     },
-    containerError: {
+    containerInfo: {
         backgroundColor: "#FFF",
         height: 40,
         width: 330,
@@ -181,7 +192,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         borderRadius: 80,
     },
-    textError: {
+    textInfo: {
         color: "#E65F4C",
         fontWeight: "bold",
     },
