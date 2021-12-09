@@ -342,7 +342,7 @@ export default function HomeScreen({ navigation, route }) {
             <View style={styles.header}>
                 <View>
                     <TouchableOpacity>
-                        <Text style={styles.textSettings}>Settings</Text>
+                        <Text style={styles.textSettings}>Configurações</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -368,7 +368,7 @@ export default function HomeScreen({ navigation, route }) {
                 <View style={styles.body}>
                     <View style={styles.celulaContainer}>
                         <View style={styles.celula}>
-                            <Text style={styles.text}>Name:</Text>
+                            <Text style={styles.text}>Nome:</Text>
                             <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Name', 0, personName)}>
                                 <Text style={styles.textInfo} numberOfLines={1}>{personName}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
@@ -382,7 +382,7 @@ export default function HomeScreen({ navigation, route }) {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
-                            <Text style={styles.text}>Phone:</Text>
+                            <Text style={styles.text}>Telefone:</Text>
                             <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Phone', 2, personPhone)}>
                                 <Text style={styles.textInfo} numberOfLines={1}>{personPhone}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
@@ -394,21 +394,21 @@ export default function HomeScreen({ navigation, route }) {
                 <View style={styles.nextBody}>
                     <View style={styles.celulaContainer}>
                         <View style={styles.celula}>
-                            <Text style={styles.text}>Street:</Text>
+                            <Text style={styles.text}>Endereço:</Text>
                             <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('Street', 3, personStreet)}>
                                 <Text style={styles.textInfo} numberOfLines={1}>{personStreet}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
-                            <Text style={styles.text}>District:</Text>
+                            <Text style={styles.text}>Bairro:</Text>
                             <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('District', 4, personDistrict)}>
                                 <Text style={styles.textInfo} numberOfLines={1}>{personDistrict}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
-                            <Text style={styles.text}>State:</Text>
+                            <Text style={styles.text}>Estado:</Text>
                             <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('State', 5, personState)}>
                                 <Text style={styles.textInfo} numberOfLines={1}>{personState}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />
@@ -422,7 +422,7 @@ export default function HomeScreen({ navigation, route }) {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.celula}>
-                            <Text style={styles.text}>City:</Text>
+                            <Text style={styles.text}>Cidade:</Text>
                             <TouchableOpacity style={styles.editBtn} onPress={() => haddleEdit('City', 7, personCity)}>
                                 <Text style={styles.textInfo} numberOfLines={1}>{personCity}</Text>
                                 <AntDesign name="right" size={20} color="#535357" />

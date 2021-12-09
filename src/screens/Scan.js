@@ -61,7 +61,7 @@ export default function ScanScreen({ navigation }) {
         } catch (error) {
             console.log('QRCode not recognized');
 
-            setInfoMessage('QRCode not recognized');
+            setInfoMessage('QRCode não reconhecdo');
             Animated.timing(errorOpacityAnim, {
                 toValue: 1,
                 duration: 300,
@@ -71,7 +71,7 @@ export default function ScanScreen({ navigation }) {
 
 
         try {
-            setInfoMessage('Connecting you to the table...');
+            setInfoMessage('Conectando você à mesa...');
             Animated.timing(errorOpacityAnim, {
                 toValue: 1,
                 duration: 300,
@@ -96,7 +96,7 @@ export default function ScanScreen({ navigation }) {
 
         } catch (error) {
             console.log(error);
-            setInfoMessage('Invalid QrCode');
+            setInfoMessage('QrCode inválido');
             Animated.timing(errorOpacityAnim, {
                 toValue: 1,
                 duration: 300,

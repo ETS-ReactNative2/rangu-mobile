@@ -112,8 +112,8 @@ export default function OrderItModal(props) {
             {payed ?
                 <View style={styles.containerPayed}>
                     <View style={styles.containerPayedMsg}>
-                        <Text style={styles.textPayedMsg} numberOfLines={3}>Payment confirmed!</Text>
-                        <Text style={styles.textPayedMsg} numberOfLines={3}>Show this screen to a waiter before leaving</Text>
+                        <Text style={styles.textPayedMsg} numberOfLines={3}>Pagamento Confirmado!</Text>
+                        <Text style={styles.textPayedMsg} numberOfLines={3}>Mostre esta tela para um garçom antes de sair</Text>
                     </View>
 
 
@@ -124,7 +124,7 @@ export default function OrderItModal(props) {
                     </View>
                     <View style={[styles.containerOrderButtons]}>
                         <TouchableOpacity onPress={leaveBtn} style={styles.btnLeave} >
-                            <Text style={styles.textCancel}>Leave</Text>
+                            <Text style={styles.textCancel}>Sair</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -139,15 +139,15 @@ export default function OrderItModal(props) {
                     </View>
 
                     <View style={styles.containertextWaitingforPayment}>
-                        <Text numberOfLines={3} style={styles.textWaitingforPayment}>Waiting for Payment</Text>
+                        <Text numberOfLines={3} style={styles.textWaitingforPayment}>Aguardando Pagamento</Text>
                     </View>
 
                     <View style={[styles.containerOrderButtons]}>
                         <TouchableOpacity onPress={copyToClipboard} style={styles.btnCopyCode} >
-                            <Text style={styles.textCopyCode}>Copy Code</Text>
+                            <Text style={styles.textCopyCode}>Copiar Código</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={closePopUp} style={styles.btnCancel} >
-                            <Text style={styles.textCancel}>Cancel</Text>
+                            <Text style={styles.textCancel}>Cancelar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

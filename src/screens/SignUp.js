@@ -24,8 +24,8 @@ export default function LogintScreen({ navigation }) {
     const [NamesOffSet] = useState(new Animated.Value(0));
     const [AdressOffSet] = useState(new Animated.Value(500));
     const [signUpLoad, setSignUpLoad] = useState(false);
-    const [btText, setBtText] = useState("Next");
-    const [errorMessage, setErrorMessage] = useState('All fields must be filled');
+    const [btText, setBtText] = useState("Próximo");
+    const [errorMessage, setErrorMessage] = useState('Todos os campos devem ser preenchidos');
 
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -144,7 +144,7 @@ export default function LogintScreen({ navigation }) {
     async function SignUpPress() {
         if (!btpressed) {
             btpressed = true
-            setBtText("Sign Up")
+            setBtText("Cadastrar-se")
             Animated.parallel([
                 Animated.spring(NamesOffSet, {
                     toValue: -500,
@@ -205,7 +205,7 @@ export default function LogintScreen({ navigation }) {
                 */
                 setTimeout(() => {
                     btpressed = false;
-                    setBtText("Next");
+                    setBtText("Próximo");
                     setSignUpLoad(false);
 
                     Animated.timing(opacityAnim, {
@@ -302,33 +302,33 @@ export default function LogintScreen({ navigation }) {
                 <KeyboardAvoidingView style={styles.KeyboardAvoidingView} behavior="padding" keyboardVerticalOffset={keyboardOffsetPlataform}>
                     <Animated.View style={[styles.containerInputs, { opacity: opacityAnim }]}>
                         <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'Name'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setName(value)} boardType={'default'} />
+                            <Hoshi style={styles.input} label={'Nome'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setName(value)} boardType={'default'} />
                             <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]} >
-                                <Hoshi style={styles.input} label={'Street'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setStreet(value)} boardType={'default'} />
+                                <Hoshi style={styles.input} label={'Endereço'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setStreet(value)} boardType={'default'} />
                             </Animated.View>
                         </Animated.View>
                         <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
                             <Hoshi style={styles.input} label={'E-Mail'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setEmail(value)} boardType={'email-address'} />
                             <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                                <Hoshi style={styles.input} label={'District'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setDistrict(value)} boardType={'default'} />
+                                <Hoshi style={styles.input} label={'Bairro'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setDistrict(value)} boardType={'default'} />
                             </Animated.View>
                         </Animated.View>
                         <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'Phone'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPhone(value)} boardType={'numeric'} />
+                            <Hoshi style={styles.input} label={'Telefone'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPhone(value)} boardType={'numeric'} />
                             <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                                <Hoshi style={styles.input} label={'State'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setState(value)} boardType={'default'} />
+                                <Hoshi style={styles.input} label={'Estado'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setState(value)} boardType={'default'} />
                             </Animated.View>
                         </Animated.View>
                         <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
+                            <Hoshi style={styles.input} label={'Senha'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
                             <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                                <Hoshi style={styles.input} label={'Postal Code'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPostalCode(value)} boardType={'numeric'} />
+                                <Hoshi style={styles.input} label={'CEP'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPostalCode(value)} boardType={'numeric'} />
                             </Animated.View>
                         </Animated.View>
                         <Animated.View style={[styles.containerInputtext, { transform: [{ translateX: NamesOffSet }], }]}>
-                            <Hoshi style={styles.input} label={'Repeat Password'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setRePassword(value)} secureTextEntry={true} boardType={'visible-password'} />
+                            <Hoshi style={styles.input} label={'Repita a senha'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setRePassword(value)} secureTextEntry={true} boardType={'visible-password'} />
                             <Animated.View style={[styles.containerInputtextAdress, { transform: [{ translateX: AdressOffSet }], }]}>
-                                <Hoshi style={styles.input} label={'City'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setCity(value)} boardType={'default'} />
+                                <Hoshi style={styles.input} label={'Cidade'} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setCity(value)} boardType={'default'} />
                             </Animated.View>
                         </Animated.View>
 
@@ -339,7 +339,7 @@ export default function LogintScreen({ navigation }) {
                 <Animated.View style={[styles.ContainerbtAlreadyHave, { opacity: opacityAnim }]}>
 
                     <TouchableOpacity style={styles.btAlreadyHave} onPress={AlreadyHavePress}>
-                        <Text style={styles.textAlreadyHave}>Already have an account?</Text>
+                        <Text style={styles.textAlreadyHave}>Já possui uma conta?</Text>
                     </TouchableOpacity>
 
                 </Animated.View>

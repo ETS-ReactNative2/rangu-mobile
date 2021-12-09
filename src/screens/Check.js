@@ -118,13 +118,13 @@ export default function CheckScreen({ navigation }) {
     }
 
     function PayTableTotalPress() {
-        setPaymentMode('Pay Table Total');
+        setPaymentMode('Pagar Total da Mesa');
         openModalPopUp();
     }
 
 
     function PayMyTotalPress() {
-        setPaymentMode('Pay My Total');
+        setPaymentMode('Pagar Meu Total');
         openModalPopUp();
 
     }
@@ -238,21 +238,21 @@ export default function CheckScreen({ navigation }) {
             </View>
             <View style={[styles.containerTotal]}>
                 <View style={[styles.containerTableTotal]}>
-                    <Text style={styles.textTableTotal} numberOfLines={3}>Table total :</Text>
+                    <Text style={styles.textTableTotal} numberOfLines={3}>Total da mesa :</Text>
                     <Text style={styles.textActualTableTotal} numberOfLines={3}>R$ {tableTotal ? tableTotal.toFixed(2) : '????'}</Text>
                 </View>
                 <View style={[styles.containerMyTotal]}>
-                    <Text style={styles.textMyTotal} numberOfLines={3}>My total :</Text>
+                    <Text style={styles.textMyTotal} numberOfLines={3}>Meu total :</Text>
                     <Text style={styles.textActualMyTotal} numberOfLines={3}>R$ {myTotal ? myTotal.toFixed(2) : '????'}</Text>
                 </View>
             </View>
 
             <View style={[styles.containerPayButtons]}>
                 <TouchableOpacity onPress={PayTableTotalPress} style={styles.btnPayTable} >
-                    <Text style={styles.textPayTable}>Pay Table Total</Text>
+                    <Text style={styles.textPayTable}>Pagar total da mesa</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={PayMyTotalPress} style={styles.btnPayMy} >
-                    <Text style={styles.textPayMy}>Pay My Total</Text>
+                    <Text style={styles.textPayMy}>Pagar meu total</Text>
                 </TouchableOpacity>
             </View>
 

@@ -162,7 +162,7 @@ export default function StartScreen({ navigation, route }) {
                 <Animated.View style={[styles.containerSingUp, { opacity: opacityAnim, transform: [{ translateY: offset.y }, { translateX: lateralSlideRight.x }] },]}>
 
                     <TouchableOpacity style={styles.btnSingup} onPress={signUpPress}>
-                        <Text style={styles.textSingup}>Sign Up</Text>
+                        <Text style={styles.textSingup}>Cadastrar-se</Text>
                     </TouchableOpacity>
 
                 </Animated.View>

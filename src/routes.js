@@ -89,7 +89,7 @@ export function Navigation() {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                    title: 'Home',
+                    title: 'Início',
                 }}
             />
             <Tab.Screen
@@ -111,14 +111,14 @@ export function Navigation() {
                 name="Notifications"
                 component={NotificationScreen}
                 options={{
-                    title: 'Help',
+                    title: 'Ajuda',
                 }}
             />
             <Tab.Screen
                 name="Settings"
                 component={SettingsScreen}
                 options={{
-                    title: 'Settings',
+                    title: 'Configurações',
                 }}
             />
         </Tab.Navigator>

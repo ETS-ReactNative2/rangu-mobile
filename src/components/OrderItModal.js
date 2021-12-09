@@ -106,7 +106,7 @@ export default function OrderItModal(props) {
                                 editable
                                 maxLength={255}
                                 blurOnSubmit
-                                placeholder={'Additional infos'}
+                                placeholder={'Informações adicionais'}
                                 placeholderTextColor={"#1e222b"}
                                 keyboardAppearance={'dark'}>
                             </TextInput>
@@ -114,10 +114,10 @@ export default function OrderItModal(props) {
 
                         <View style={[styles.containerOrderButtons]}>
                             <TouchableOpacity onPress={confirmOrder} style={styles.btnOrderIt} >
-                                <Text style={styles.textOrderIt}>Order It</Text>
+                                <Text style={styles.textOrderIt}>Pedir</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={closePopUp} style={styles.btnCancel} >
-                                <Text style={styles.textCancel}>Cancel</Text>
+                                <Text style={styles.textCancel}>Cancelar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

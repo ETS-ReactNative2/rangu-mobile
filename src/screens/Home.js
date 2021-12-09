@@ -31,14 +31,14 @@ export default function HomeScreen({ navigation }) {
         <SafeAreaView style={styles.background}>
             <View style={styles.header}>
                 <View>
-                    <Text style={styles.textTableMembers}>Table {TableNumber ? TableNumber : '??'} Members</Text>
+                    <Text style={styles.textTableMembers}>Membros da Mesa {TableNumber ? TableNumber : '??'}</Text>
                 </View>
             </View>
             <View>
                 <Members leaveTable={forcedLeaveTabel} tableNumber={(number) => setTableNumber(number)} />
             </View>
             <View style={styles.TableActivity}>
-                <Text style={styles.textTableActivity}>Table Activity</Text>
+                <Text style={styles.textTableActivity}>Atividade da Mesa</Text>
             </View>
             <RequestedDish />
         </SafeAreaView>

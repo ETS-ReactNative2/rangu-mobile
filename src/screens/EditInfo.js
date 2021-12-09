@@ -37,17 +37,17 @@ export default function HomeScreen({ navigation, route, props }) {
 
     useEffect(() => {
         if (params.preParams !== undefined) {
-           
+
             if (params.preParams.fromScan) {
                 setfromScan(true);
             }
         }
 
         setValue(params.currentValue);
-        
+
     }, []);
 
-    function editCallBck(){
+    function editCallBck() {
 
         params.getback(value, params.id);
         navigation.pop();
@@ -65,7 +65,7 @@ export default function HomeScreen({ navigation, route, props }) {
             <View style={styles.header}>
                 <View>
                     <TouchableOpacity>
-                        <Text style={styles.textEdit}>Edit Info</Text>
+                        <Text style={styles.textEdit}>Editar Informação</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -74,10 +74,10 @@ export default function HomeScreen({ navigation, route, props }) {
                     <Hoshi style={styles.input} label={params.item} value={value} borderColor={'#fff'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setValue(value)} boardType={'default'} />
                 </View>
                 <View style={[styles.textInfoContainer]} >
-                    <Text style={[styles.textInfo]}>Change the information you want and click the save button</Text>
+                    <Text style={[styles.textInfo]}>Troque a informação que desejar, e clique no botão Salvar</Text>
                 </View>
                 <TouchableOpacity onPress={editCallBck} style={[styles.saveBtn]}>
-                    <Text style={[styles.textSave]}>Save</Text>
+                    <Text style={[styles.textSave]}>Salvar</Text>
                 </TouchableOpacity>
             </ScrollView>
 
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         alignItems: "center",
         width: "100%",
-        marginTop:20,
+        marginTop: 20,
     },
     input: {
         width: "90%",
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     textInfoContainer:
     {
         marginBottom: 30,
-        marginTop:10,
+        marginTop: 10,
         textAlign: 'left',
     },
     textInfo:

@@ -1,6 +1,6 @@
 import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, RefreshControl} from "react-native";
+import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, RefreshControl } from "react-native";
 import apiMenu from '../services/apiMenu.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Lottie from 'lottie-react-native';
@@ -108,21 +108,21 @@ export default function DishCards(props) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         LoadDishes().then(() => setRefreshing(false));
-      }, []);
+    }, []);
 
 
     async function LoadDishes() {
         try {
 
             await AsyncStorage.getItem('restaurantId')
-            .then(value => {
-                restaurantId = value;
-                console.log('DishCards RestaurantId: ' + value);
+                .then(value => {
+                    restaurantId = value;
+                    console.log('DishCards RestaurantId: ' + value);
 
-            }).catch(err => {
-                console.log(err);
+                }).catch(err => {
+                    console.log(err);
 
-            });
+                });
 
             let response = await apiMenu.get('/dishes', { headers: { restaurantId: restaurantId } })
 
@@ -141,29 +141,27 @@ export default function DishCards(props) {
         }
     }
 
-    if(loading)
-    {
+    if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <Lottie style={styles.loadingAnim } source={animationLoading} autoPlay loop />
+                <Lottie style={styles.loadingAnim} source={animationLoading} autoPlay loop />
             </View>
         );
     }
-    else
-    {
+    else {
         return (
             <View style={{ marginBottom: 55 }}>
-                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff'/>}>
-    
+                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff' />}>
+
                     {categorys.map((category, index) => (
                         <View key={index}>
-    
+
                             <View style={styles.container} key={index}>
                                 <View style={styles.cardCategory}>
                                     <Text style={styles.textCategoryName} numberOfLines={3}>{category}</Text>
                                 </View>
                             </View>
-    
+
                             {foods.filter(food => food.category === category).map((food, index) => (
                                 <View style={styles.container} key={index}>
                                     <View style={styles.card}>
@@ -172,32 +170,32 @@ export default function DishCards(props) {
                                             <View style={styles.foodName}>
                                                 <Text style={styles.textFoodName} numberOfLines={3}>{food.name}</Text>
                                             </View>
-    
+
                                             <View>
                                                 <TouchableOpacity onPress={() => props.dishDetailsCallBack(food)}>
                                                     <AntDesign name="pluscircle" color="#D7233C" size={35} />
                                                 </TouchableOpacity>
                                             </View>
-    
+
                                         </View>
                                         {food.description !== '' ?
                                             <View style={styles.cardBody}>
                                                 <Text style={styles.textDescription} numberOfLines={4}>{food.description}</Text>
                                             </View>
                                             : null}
-    
+
                                         <View style={styles.cardFooter}>
                                             <View style={styles.price}>
-                                                <Text style={styles.textPrice}>Price:</Text>
-    
+                                                <Text style={styles.textPrice}>Valor:</Text>
+
                                                 <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>R$ {food.price ? food.price.toFixed(2) : '????'}</Text>
-    
+
                                             </View>
                                             <View style={styles.price}>
                                                 <Entypo name="time-slot" color="#fff" size={14} />
                                                 <Text style={styles.textEta}>{food.estimatedTime}</Text>
                                             </View>
-    
+
                                         </View>
                                     </View>
                                 </View>
@@ -209,15 +207,15 @@ export default function DishCards(props) {
         );
     }
 
-    
+
 }
 
 const styles = StyleSheet.create({
-    loadingContainer:{
-        height:'100%',
-         width:'100%'
+    loadingContainer: {
+        height: '100%',
+        width: '100%'
     },
-    loadingAnim:{
+    loadingAnim: {
         marginBottom: 55,
     },
     container: {

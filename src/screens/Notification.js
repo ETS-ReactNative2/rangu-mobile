@@ -11,7 +11,7 @@ export default function HomeScreen({ navigation }) {
     const [errorOpacityAnim] = useState(new Animated.Value(0));
 
     function CallWaiter() {
-        setInfoMessage('A Waiter was called to the table');
+        setInfoMessage('Um garçom foi chamado à mesa');
         Animated.timing(errorOpacityAnim, {
             toValue: 1,
             duration: 300,
@@ -36,7 +36,7 @@ export default function HomeScreen({ navigation }) {
             <View style={styles.header}>
                 <View>
                     <TouchableOpacity>
-                        <Text style={styles.textHelp}>Help</Text>
+                        <Text style={styles.textHelp}>Ajuda</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -46,7 +46,7 @@ export default function HomeScreen({ navigation }) {
             <Lottie resizemode="contain" source={animation} autoPlay loop />
 
             <TouchableOpacity onPress={CallWaiter} style={styles.btnWaiter} >
-                <Text style={styles.textCallWaiter}>Call Waiter</Text>
+                <Text style={styles.textCallWaiter}>Chamar Garçom</Text>
             </TouchableOpacity>
         </SafeAreaView >
 

@@ -109,19 +109,19 @@ export default function LogintScreen({ navigation }) {
             console.log(error.response.data)
             canLogin = false;
             if (error.response.data.code == "422.3") {
-                setErrorMessage("E-mail or password is invalid.");
+                setErrorMessage("E-mail ou senha invalidos.");
                 console.log(error.response.data.description);
             }
             else if (error.response.data.code == "422.5") {
-                setErrorMessage("User is not active.");
+                setErrorMessage("Usuário não ativo.");
                 console.log(error.response.data.description);
             }
             else if (error.response.data.code == "412.5") {
-                setErrorMessage("Password is required.");
+                setErrorMessage("Senha é nescessária.");
                 console.log(error.response.data.description);
             }
             else if (error.response.data.code == "412.2") {
-                setErrorMessage("E-mail is required.");
+                setErrorMessage("E-mail é nescessária.");
                 console.log(error.response.data.description);
             }
             setTimeout(() => {
@@ -180,11 +180,11 @@ export default function LogintScreen({ navigation }) {
                                 <Hoshi label={'E-Mail'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setEmail(value)} boardType={'email-address'} />
                             </View>
                             <View style={styles.containerInputtext}>
-                                <Hoshi label={'Password'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
+                                <Hoshi label={'Senha'} borderColor={'#FFF'} borderHeight={3} inputPadding={16} backgroundColor={'transparent'} onChangeText={(value) => setPassword(value)} secureTextEntry={true} boardType={'visible-password'} />
                             </View>
                             <Animated.View style={styles.Containerbtforgotpassword}>
                                 <TouchableOpacity >
-                                    <Text style={styles.textforgotpassword}>Forgot your password?</Text>
+                                    <Text style={styles.textforgotpassword}>Esqueceu sua Senha?</Text>
                                 </TouchableOpacity>
                             </Animated.View>
                         </Animated.View>

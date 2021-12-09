@@ -167,7 +167,7 @@ export default function RequestedDish() {
               <View style={styles.cardHeader}>
                 <Image style={styles.profileImage} source={order.dishes.map((dish, index) => { if (index == 0) { return { uri: dish.image } } })} />
                 <Text style={styles.textDescription}>
-                  <Text style={styles.bold}>{order.clientName.split(" ")[0]}</Text> ordered <Text style={styles.bold}>{order.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</Text>
+                  <Text style={styles.bold}>{order.clientName.split(" ")[0]}</Text> pediu <Text style={styles.bold}>{order.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</Text>
                 </Text>
               </View>
               {order.comment !== '' ?
@@ -180,22 +180,22 @@ export default function RequestedDish() {
                 <View style={styles.status}>
                   <Text style={styles.textStatus}>Status:</Text>
                   {order.status == 'PAID' ?
-                    <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Paid</Text>
+                    <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Pago</Text>
                     :
                     order.status == 'DONE' ?
-                      <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Delivered</Text>
+                      <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Entregue</Text>
                       :
                       order.status == 'PREPARING' ?
-                        <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparing</Text>
+                        <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparando</Text>
                         :
                         order.status == 'SUBMITTED' ?
-                          <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Submitted</Text>
+                          <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Solicitado</Text>
                           :
                           order.status == 'TAKING' ?
-                            <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Sended</Text>
+                            <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Enviado</Text>
                             :
                             order.status == 'CANCEL' ?
-                              <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancel</Text>
+                              <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancelado</Text>
                               :
                               null
                   }

@@ -17,7 +17,7 @@ export default function DishInfo(props) {
 
 
             <View style={styles.foodImageContainer}>
-                <Image style={styles.foodImage} source={{uri:props.displayInfo.image}} />
+                <Image style={styles.foodImage} source={{ uri: props.displayInfo.image }} />
             </View>
 
             <View style={styles.description}>
@@ -32,7 +32,7 @@ export default function DishInfo(props) {
                 </View>
 
                 <View style={styles.price}>
-                    <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>R$ {props.displayInfo.price ? props.displayInfo.price.toFixed(2):'????'}</Text>
+                    <Text style={[styles.textActualPrice, { color: '#00fc6c', }]}>R$ {props.displayInfo.price ? props.displayInfo.price.toFixed(2) : '????'}</Text>
                 </View>
 
             </View>
@@ -40,7 +40,7 @@ export default function DishInfo(props) {
             <View style={styles.cardFooter}>
 
                 <View style={styles.order}>
-                    <Text style={styles.textOrder}>Order this Dish</Text>
+                    <Text style={styles.textOrder}>Pedir esse Prato</Text>
                 </View>
 
                 <TouchableOpacity onPress={order} >
