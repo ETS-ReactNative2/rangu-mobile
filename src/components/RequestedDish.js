@@ -106,7 +106,13 @@ export default function RequestedDish() {
 
     if (global.pulling) {
       var intervalId = setInterval(function () {
-        LoadTableDishes();
+        if (global.stopPullingToLeave) {
+          clearInterval(intervalId);
+        }
+        else {
+          LoadTableDishes();
+        }
+
       }, 5 * 1000);
     }
 
@@ -173,22 +179,25 @@ export default function RequestedDish() {
               <View style={styles.cardFooter}>
                 <View style={styles.status}>
                   <Text style={styles.textStatus}>Status:</Text>
-                  {order.status == 'DONE' ?
-                    <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Finished</Text>
+                  {order.status == 'PAID' ?
+                    <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Paid</Text>
                     :
-                    order.status == 'PREPARING' ?
-                      <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparing</Text>
+                    order.status == 'DONE' ?
+                      <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Delivered</Text>
                       :
-                      order.status == 'SUBMITTED' ?
-                        <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Submitted</Text>
+                      order.status == 'PREPARING' ?
+                        <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Preparing</Text>
                         :
-                        order.status == 'TAKING' ?
-                          <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Sended</Text>
+                        order.status == 'SUBMITTED' ?
+                          <Text style={[styles.textActualStatus, { color: '#F5982E', }]}>Submitted</Text>
                           :
-                          order.status == 'CANCEL' ?
-                            <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancel</Text>
+                          order.status == 'TAKING' ?
+                            <Text style={[styles.textActualStatus, { color: '#00fc6c', }]}>Sended</Text>
                             :
-                            null
+                            order.status == 'CANCEL' ?
+                              <Text style={[styles.textActualStatus, { color: '#D7233C', }]}>Cancel</Text>
+                              :
+                              null
                   }
 
                 </View>

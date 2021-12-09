@@ -60,7 +60,7 @@ export default function HomeScreen({ navigation, route }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         LoadUserProfile().then(() => setRefreshing(false));
-      }, []);
+    }, []);
 
     async function LoadUserProfile() {
         try {
@@ -94,12 +94,6 @@ export default function HomeScreen({ navigation, route }) {
         }
     }
 
-
-    // useEffect(() => {
-
-
-    // }, [personProfileImg, personName, personEmail, personPhone, personPhone, personStreet, personDistrict, personState, personZip, personCity]);
-
     function haddleScanScreen() {
         if (uploadComplete) {
             navigation.dispatch(
@@ -115,6 +109,7 @@ export default function HomeScreen({ navigation, route }) {
 
     async function LogOut() {
         if (profileLoaded && uploadComplete) {
+            global.stopPullingToLeave = true;
             await AsyncStorage.removeItem('userid');
             navigation.dispatch(
                 CommonActions.reset({
@@ -312,8 +307,7 @@ export default function HomeScreen({ navigation, route }) {
                     console.log(error);
                 }
             }
-            else
-            {
+            else {
                 setuploadComplete(true);
             }
         }
@@ -369,7 +363,7 @@ export default function HomeScreen({ navigation, route }) {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView style={[styles.scroll]} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff'/>}>
+            <ScrollView style={[styles.scroll]} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors='#fff' tintColor='#fff' />}>
 
                 <View style={styles.body}>
                     <View style={styles.celulaContainer}>

@@ -92,7 +92,13 @@ export default function CheckScreen({ navigation }) {
 
         if (global.pulling) {
             var intervalId = setInterval(function () {
-                LoadCheckout();
+                if (global.stopPullingToLeave) {
+                    clearInterval(intervalId);
+                }
+                else {
+                    LoadCheckout();
+                }
+
             }, 10 * 1000);
         }
 
@@ -124,11 +130,11 @@ export default function CheckScreen({ navigation }) {
     }
 
     async function PaymentConfirmed() {
+        global.stopPullingToLeave = true;
         setanimationOut("slideOutUp");
         closeModalPopUp();
-
-        await AsyncStorage.removeItem('restaurantId');
-        await AsyncStorage.removeItem('tableId');
+        //await AsyncStorage.removeItem('restaurantId');
+        //await AsyncStorage.removeItem('tableId');
 
         setanimationOut("slideOutDown");
 
@@ -252,7 +258,7 @@ export default function CheckScreen({ navigation }) {
 
 
             <Modal animationOut={animationOut} isVisible={isModalPopUpVisible} avoidKeyboard={true} animationInTiming={400} animationOutTiming={400} >
-                <PayModal paymentMode ={paymentMode} closeModalPopUp={closeModalPopUp} PaymentConfirmed={PaymentConfirmed} />
+                <PayModal paymentMode={paymentMode} closeModalPopUp={closeModalPopUp} PaymentConfirmed={PaymentConfirmed} />
             </Modal>
 
         </SafeAreaView >

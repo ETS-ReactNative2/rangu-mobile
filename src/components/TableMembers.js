@@ -89,7 +89,13 @@ export default function TableMembers(props) {
 
         if (global.pulling) {
             var intervalId = setInterval(function () {
-                LoadTableMembers();
+                if (global.stopPullingToLeave) {
+                    clearInterval(intervalId);
+                }
+                else {
+                    LoadTableMembers();
+                }
+
             }, 5 * 1000);
         }
 
@@ -112,6 +118,10 @@ export default function TableMembers(props) {
 
             //console.log(response.data);
             setTableInfo(response.data);
+            if (response.data.tableMembers === []) {
+                props.leaveTable();
+
+            }
             props.tableNumber(response.data.number);
 
         } catch (error) {

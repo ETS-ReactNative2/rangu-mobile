@@ -14,13 +14,13 @@ export default function OrderItModal(props) {
     const [comment, onChangeComment] = useState('');
     const [pixCode, setPixCode] = useState('...............................................................................................................................................................................................................................................................................................................');
     const [payed, setPayed] = useState(false);
-    const [pulling, setPulling] = useState(false);
     const [paymentMode, setPaymentMode] = useState('');
     const [intervalID, setInterID] = useState();
 
     let userId;
     // let pixId = '18704245508';
     let pixId;
+    let letintervalId;
 
     useEffect(() => {
 
@@ -28,19 +28,23 @@ export default function OrderItModal(props) {
 
         gerarPix();
 
-        let letintervalId;
+
         letintervalId = setInterval(function () {
-            if (pulling) {
+            if (global.stopPullingToLeave) {
+                clearInterval(letintervalId);
+            }
+            else {
                 verifyPix();
             }
-        }, 5 * 1000);
+
+        }, 6 * 1000);
         setInterID(letintervalId);
 
     }, []);
 
     function closePopUp() {
 
-        clearInterval(intervalID);
+        clearInterval(letintervalId);
         props.closeModalPopUp()
 
     }
@@ -64,7 +68,6 @@ export default function OrderItModal(props) {
             //console.log(response.data);
             pixId = response.data.id;
             setPixCode(response.data.point_of_interaction.transaction_data.qr_code);
-            setPulling(true);
 
         } catch (error) {
             console.log(error);
@@ -82,16 +85,17 @@ export default function OrderItModal(props) {
             console.log('Status: ' + response.data.status);
             if (response.data.status != "pending") {
                 setPayed(true);
-                clearInterval(intervalID);
-                setTimeout(() => {
-                    props.PaymentConfirmed();
-                }, 6000);
+                clearInterval(letintervalId);
 
             }
 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    function leaveBtn() {
+        props.PaymentConfirmed();
     }
 
     const copyToClipboard = () => {
@@ -106,8 +110,23 @@ export default function OrderItModal(props) {
                 <Text style={styles.textFoodName} numberOfLines={3}>{paymentMode}</Text>
             </View>
             {payed ?
-                <View style={styles.containerAnim}>
-                    <Lottie speed={0.8} source={animationPaymentConfirmation} autoPlay loop={false} />
+                <View style={styles.containerPayed}>
+                    <View style={styles.containerPayedMsg}>
+                        <Text style={styles.textPayedMsg} numberOfLines={3}>Payment confirmed!</Text>
+                        <Text style={styles.textPayedMsg} numberOfLines={3}>Show this screen to a waiter before leaving</Text>
+                    </View>
+
+
+                    <View style={styles.containerAnim}>
+
+                        <Lottie speed={0.5} source={animationPaymentConfirmation} autoPlay loop={false} />
+
+                    </View>
+                    <View style={[styles.containerOrderButtons]}>
+                        <TouchableOpacity onPress={leaveBtn} style={styles.btnLeave} >
+                            <Text style={styles.textCancel}>Leave</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 :
                 <View>
@@ -116,7 +135,7 @@ export default function OrderItModal(props) {
                     </View>
 
                     <View style={styles.containerAnimLoadingPayment}>
-                        <Lottie resizemode="center" speed={1} source={animationLoadingPayment} autoPlay loop={true} />
+                        <Lottie resizemode="contain" speed={1} source={animationLoadingPayment} autoPlay loop={true} />
                     </View>
 
                     <View style={styles.containertextWaitingforPayment}>
@@ -157,10 +176,34 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         overflow: 'scroll',
     },
-    containerAnim: {
+    textPayedMsg: {
+        color: '#fff',
+        fontSize: 15,
+        overflow: 'scroll',
+        margin: 10
+    },
+    containerPayed: {
         height: '100%',
         width: '100%',
-        marginTop: -40,
+    },
+    containerPayedMsg: {
+        alignItems: 'center',
+
+    },
+    containerAnim: {
+        height: '150%',
+        width: '150%',
+        marginTop: -225,
+        marginLeft: -85
+
+    },
+    btnLeave: {
+        backgroundColor: "#D7233C",
+        width: "90%",
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 40,
     },
     containerPix: {
         margin: 15,

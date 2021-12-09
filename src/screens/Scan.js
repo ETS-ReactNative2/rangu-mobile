@@ -26,6 +26,7 @@ export default function ScanScreen({ navigation }) {
     const modalizeRef = useRef(null);
 
     function haddleRestaurant() {
+        global.stopPullingToLeave = false;
         navigation.dispatch(
             CommonActions.reset({
                 index: 1,
