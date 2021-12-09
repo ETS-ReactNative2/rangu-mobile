@@ -21,6 +21,7 @@ export default function OrderItModal(props) {
     // let pixId = '18704245508';
     let pixId;
     let letintervalId;
+    let tableId;
 
     useEffect(() => {
 
@@ -94,8 +95,63 @@ export default function OrderItModal(props) {
         }
     }
 
-    function leaveBtn() {
-        props.PaymentConfirmed();
+    async function leaveBtn() {
+
+        if (paymentMode === 0) {
+
+            try {
+                await AsyncStorage.getItem('tableId')
+                    .then(value => {
+                        tableId = value;
+                        console.log('PayModal leaveBtn TableId: ' + value);
+
+                    }).catch(err => {
+                        console.log(err);
+
+                    });
+
+
+                let response = await apiOrchestrate.post('/payments/fishedAll', {}, { headers: { clientTableId: tableId } })
+                console.log(response.data);
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
+        else {
+            try {
+                await AsyncStorage.getItem('userid')
+                    .then(value => {
+                        userId = value;
+                        console.log('PayModal leaveBtn  UserId: ' + value);
+                        //console.log('UserId: ' + value);
+
+                    }).catch(err => {
+                        console.log(err);
+
+                    });
+
+                await AsyncStorage.getItem('tableId')
+                    .then(value => {
+                        tableId = value;
+                        console.log('PayModal leaveBtn TableId: ' + value);
+
+                    }).catch(err => {
+                        console.log(err);
+
+                    });
+
+
+                let response = await apiOrchestrate.post('/payments/fished', {}, { headers: { clientId: userId, clientTableId: tableId } })
+                console.log(response.data);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        props.LeaveTable();
     }
 
     const copyToClipboard = () => {
@@ -107,7 +163,7 @@ export default function OrderItModal(props) {
         <View style={styles.container}>
 
             <View style={styles.foodName}>
-                <Text style={styles.textFoodName} numberOfLines={3}>{paymentMode}</Text>
+                <Text style={styles.textFoodName} numberOfLines={3}>{paymentMode === 0 ? 'Pay Table Total' : 'Pay My Total'}</Text>
             </View>
             {payed ?
                 <View style={styles.containerPayed}>
