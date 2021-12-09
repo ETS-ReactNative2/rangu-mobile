@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, useState, useEffect } from 'react';
 import { Ionicons, SimpleLineIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Text, View, SafeAreaView, TextInput, Clipboard } from "react-native";
-import apiOrders from '../services/apiOrders.js';
+import apiOrchestrate from '../services/apiOrchestrate.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Lottie from 'lottie-react-native';
 
@@ -12,29 +12,41 @@ import animationLoading from '../../assets/animations/waiting/order-completed.js
 export default function OrderItModal(props) {
 
     const [comment, onChangeComment] = useState('');
-    const [pixCode, setPixCode] = useState('00020126580014br.gov.bcb.pix0136333eb13c-8993-4e16-8cc7-798561d906bc52040000530398654042.005802BR5925GIANRAPHAELMARTINSDACOSTA6009Sao Paulo62240520mpqrinter1867842838063048636');
+    const [pixCode, setPixCode] = useState('...............................................................................................................................................................................................................................................................................................................');
     const [payed, setPayed] = useState(false);
+    const [pulling, setPulling] = useState(true);
 
+    var intervalId;
     let userId;
+    // let pixId = '18704245508';
+    let pixId;
 
     useEffect(() => {
 
+        gerarPix();
 
+        intervalId = setInterval(function () {
+            if (pulling) {
+                verifyPix();
+            }
+        }, 5 * 1000);
 
     }, []);
 
     function closePopUp() {
 
+        clearInterval(intervalId);
         props.closeModalPopUp()
+
     }
 
-    async function confirmOrder() {
+    async function gerarPix() {
 
         try {
             await AsyncStorage.getItem('userid')
                 .then(value => {
                     userId = value;
-                    console.log('PayModal UserId: ' + value);
+                    console.log('PayModal gerarPix UserId: ' + value);
                     //console.log('UserId: ' + value);
 
                 }).catch(err => {
@@ -42,18 +54,39 @@ export default function OrderItModal(props) {
 
                 });
 
-            setPayed(true);
-            let response = await apiOrders.post('/orders', { dishes: [], comment: comment }, { headers: { clientId: userId, } })
-            console.log(response.data);
+
+            let response = await apiOrchestrate.post('/payments', {}, { headers: { clientId: userId, } })
+            //console.log(response.data);
+            pixId = response.data.id;
+            setPixCode(response.data.point_of_interaction.transaction_data.qr_code);
+            setPulling(true);
 
         } catch (error) {
             console.log(error);
         }
+    }
 
-        setTimeout(() => {
-            props.PaymentConfirmed();
-        }, 2000);
+    async function verifyPix() {
 
+        try {
+
+            console.log('Pulling pixId: ' + pixId );
+            let response = await apiOrchestrate.post('/valid-payments/' + pixId, {},)
+            //console.log(response.data);
+
+            console.log('Status: ' + response.data.status );
+            if (response.data.status != "pending") {
+                setPayed(true);
+                clearInterval(intervalId);
+                setTimeout(() => {
+                    props.PaymentConfirmed();
+                }, 6000);
+
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const copyToClipboard = () => {

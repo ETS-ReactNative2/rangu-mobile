@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, SafeAreaView, TouchableOpacity, ImageBackground, Animated, Platform, RefreshControl, } from "react-native";
+import { CommonActions } from '@react-navigation/native';
 import apiOrchestrate from '../services/apiOrchestrate.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from "react-native-modal";
@@ -109,14 +110,23 @@ export default function CheckScreen({ navigation }) {
         setModalPopUpVisible(true);
     }
 
-    function PaymentConfirmed() {
+    async function PaymentConfirmed() {
         setanimationOut("slideOutUp");
         closeModalPopUp();
-        closeModal();
 
-        setTimeout(() => {
-            setanimationOut("slideOutDown");
-        }, 500);
+        await AsyncStorage.removeItem('restaurantId');
+        await AsyncStorage.removeItem('tableId');
+
+        setanimationOut("slideOutDown");
+
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 1,
+                routes: [{ name: 'ScanScreen' },
+                ],
+            })
+        )
+
     }
 
     async function LoadCheckout() {
@@ -167,7 +177,7 @@ export default function CheckScreen({ navigation }) {
 
     function CalculateTotals(values) {
 
-        console.log(values);
+        //console.log(values);
         let LocalMyTotal = 0;
         let LocalTableTotal = 0;
 

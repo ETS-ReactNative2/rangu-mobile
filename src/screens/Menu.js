@@ -42,7 +42,6 @@ export default function HomeScreen({ navigation }) {
     function orderConfirmed() {
         setanimationOut("slideOutUp");
         closeModalPopUp();
-        closeModal();
 
         setTimeout(() => {
             setanimationOut("slideOutDown");
