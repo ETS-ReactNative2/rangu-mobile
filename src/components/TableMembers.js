@@ -118,7 +118,8 @@ export default function TableMembers(props) {
 
             //console.log(response.data);
             setTableInfo(response.data);
-            if (response.data.tableMembers === []) {
+            console.log(response.data.tableMembers.length);
+            if (response.data.tableMembers.length === 0) {
                 props.leaveTable();
 
             }

@@ -112,7 +112,7 @@ export default function OrderItModal(props) {
 
 
                 let response = await apiOrchestrate.post('/payments/fishedAll', {}, { headers: { clientTableId: tableId } })
-                console.log(response.data);
+                //console.log(response.data);
 
             } catch (error) {
                 console.log(error);
@@ -144,7 +144,7 @@ export default function OrderItModal(props) {
 
 
                 let response = await apiOrchestrate.post('/payments/fished', {}, { headers: { clientId: userId, clientTableId: tableId } })
-                console.log(response.data);
+                //console.log(response.data);
 
             } catch (error) {
                 console.log(error);
