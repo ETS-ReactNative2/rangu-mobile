@@ -3,8 +3,19 @@ This project aims to facilitate the orders of the customers of a restaurant, and
 # About
 It was developed using react native through Expo, and optimized only for iPhone Xs Max, as its goal was just to be part of my final paper.
 This is just the Mobile repository, the system still has a backend and a web fornt-end developed in React so that the restaurant can add items to the menu, see insights and etc.
+# Running locally
+
+1. Install dependecies:
+```bash
+npm install
+```
+2. Run front-end application
+```bash
+npm start
+```
+3. Follow Expo instructions in command prompt
 # Screenshots
-In Pt-BR
+Pt-BR
 <div>
 <img src="https://user-images.githubusercontent.com/19784248/167314211-80f44e5e-8970-4145-9fc7-cf305dd037e2.png" width="300">
 <img src="https://user-images.githubusercontent.com/19784248/167314696-d80774ae-818f-4392-86d4-ed2b26f6a916.png" width="300">
